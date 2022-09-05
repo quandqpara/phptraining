@@ -1,19 +1,19 @@
 <section class = "h-100 d-flex align-items-center justify-content-center">
-        <form method="POST" action="model\home.php>
+        <form method="POST" action="model\home.php" class="form-login">
             <!-- Email input -->
             <div class="form-outline mb-4">
-                <input type="email" id="email" class="form-control"/>
                 <label class="form-label" for="email">Email address</label>
+                <input type="email" id="email" class="form-control"/>
             </div>
 
             <!-- Password input -->
             <div class="form-outline mb-4">
-                <input type="password" id="password" class="form-control"/>
                 <label class="form-label" for="password">Password</label>
+                <input type="password" id="password" class="form-control"/>
             </div>
 
             <!-- Submit button -->
-            <button type="button" class="d-flex justify-content-center btn btn-primary btn-block mb-4 ">Sign in</button>
+            <button type="button" class="btn btn-primary btn-block mb-4 btn-submit">Sign in</button>
 
             <!-- Register buttons -->
             <div class="text-center">
