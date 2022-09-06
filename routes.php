@@ -1,10 +1,13 @@
 <?php
 $controllers = array(
-    'pages' => ['home', 'error']
+    'default' => ['index'],
+    'admin' => ['index', 'auth'],
+    'users' => ['index', 'auth', 'fbAuth'],
+    'error' => ['error']
 );
 
 if (!array_key_exists($controller, $controllers) || !in_array($action, $controllers[$controller])) {
-    $controller = 'home';
+    $controller = 'error';
     $action = 'error';
 }
 
