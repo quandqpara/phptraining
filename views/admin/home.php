@@ -1,6 +1,8 @@
-<header class="page-header">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+
+<header class="admin-page-header">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light float-right">
+        <div class="collapse navbar-collapse flex-row-reverse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -31,34 +33,42 @@
         </div>
     </nav>
 </header>
-<section class="h-100 flex-column">
-    <div class="notification"></div>
-    <div class="search-box">
-        <form method="POST" action="##" class="form-create">
+<section class="h-100 w-100 flex-column mb-auto admin-home-sect">
+    <div class="w-80 mt-3 mb-3 notification border border-success rounded">
+        <span class="noti-message h-100 d-flex align-text-center justify-content-center align-items-center">
+            <?php
+                if (isset($_SESSION['flash_message']['logged_in'])) {
+                    echo(handleFlashMessage('logged_in'));
+                }
+            ?>
+        </span>
+    </div>
+    <div class="mt-3 mb-3 search-box border border-dark">
+        <form method="POST" action="##" class=" m-4 form-create">
             <!-- Email input -->
-            <div class="row g-2 align-items-center">
-                <div class="col-auto">
+            <div class="row g-2 align-items-center mb-3 mt-3">
+                <div class="col-auto m-3">
                     <label for="inputEmail" class="col-form-label">Email</label>
                 </div>
-                <div class="col-auto">
+                <div class="col-auto m-3">
                     <input type="email" id="inputEmail" class="form-control">
                 </div>
             </div>
 
             <!-- Password input -->
-            <div class="row g-2 align-items-center">
-                <div class="col-auto">
+            <div class="row g-2 align-items-cente mb-3 mt-3">
+                <div class="col-auto m-3">
                     <label for="inputName" class="col-form-label">Name</label>
                 </div>
-                <div class="col-auto">
+                <div class="col-auto m-3">
                     <input type="text" id="inputName" class="form-control">
                 </div>
             </div>
 
             <!-- Buttons -->
-            <div class="row g-2 align-items-center">
+            <div class="d-flex justify-content-between row g-2 align-items-center">
                 <div class="col-auto">
-                    <button type="reset" class="btn btn-primary btn-block mb-4">Reset</button>
+                    <button type="reset" class="reset-button btn btn-primary btn-block mb-4">Reset</button>
                 </div>
                 <div class="col-auto">
                     <button type="submit" class="btn btn-primary btn-block mb-4 btn-submit">Search</button>
@@ -66,9 +76,9 @@
             </div>
         </form>
     </div>
-    <div class="result-box">
-        <div class="pagination-cover">
-            <nav aria-label="Page navigation example">
+    <div class="d-flex flex-column result-container mb-2 mt-2 p-3 border border-dark">
+        <div class="pagination-cover flex-row-reverse m-2">
+            <nav aria-label="Page navigation example" class="page-nav">
                 <ul class="pagination">
                     <li class="page-item"><a class="page-link" href="#">Previous</a></li>
                     <li class="page-item"><a class="page-link" href="#">1</a></li>
@@ -78,9 +88,9 @@
                 </ul>
             </nav>
         </div>
-        <div class="table-cover">
-            <table class="result-table">
-                <thread>
+        <div class="table-cover border border-dark">
+            <table class="result-table table table-striped table-bordered table-hover">
+                <thread class="thead-dark">
                     <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Avatar</th>

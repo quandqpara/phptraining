@@ -1,17 +1,13 @@
 <?php
 session_start();
-
-$_SESSION['error'] = [
-    'invalid_email' => 'Your email is invalid. PLease try again.',
-    'invalid_password' => 'Your password is incorrect. PLease try again.',
-    'invalid_account_status' => 'You has been banned. Contact for support.',
-];
-
+//session_destroy();
+//die();
 
 require_once('Helper/common.php');
 require_once('connection.php');
 
 define('SERVER_DOMAIN', $_SERVER['SERVER_NAME']);
+define('ROOT', dirname(__FILE__));
 
 $controller = 'default';
 $action = 'index';

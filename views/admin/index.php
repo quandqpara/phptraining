@@ -1,9 +1,23 @@
 <section class = "h-100 d-flex align-items-center justify-content-center">
+        <div class="error-message-box">
+            <p>
+                <?php
+                    $number_error = handleFlashMessage('number_of_error');
+                    $list_messages = implode('<br>',handleFlashMessage($_SESSION['flash_message']));
+
+                ?>
+            </p>
+        </div>
         <form method="POST" action="/admin/auth" class="form-login">
             <!-- Email input -->
             <div class="form-outline mb-4">
                 <label class="form-label" for="email">Email address</label>
-                <input type="email" id="email" name="email" class="form-control"/>
+                <input type="email"
+                       id="email"
+                       name="email"
+                       class="form-control"
+                       value="<?php echo oldData('email') ?>"
+                />
             </div>
 
             <!-- Password input -->

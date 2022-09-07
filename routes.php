@@ -1,8 +1,8 @@
 <?php
 $controllers = array(
     'default' => ['index'],
-    'admin' => ['index', 'auth'],
-    'users' => ['index', 'auth', 'fbAuth'],
+    'admin' => ['index', 'auth', 'home'],
+    'users' => ['index', 'auth', 'fbAuth', 'home'],
     'error' => ['error']
 );
 

@@ -2,6 +2,11 @@ body {
     height: 100vh;
 }
 
+.dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0;
+}
+
 .form-login .btn-submit {
     display: block;
     margin: 0 auto;
@@ -10,4 +15,30 @@ body {
 .page-header {
     border-color: white;
     border-width: medium;
+}
+
+.notification {
+    height: 50px;
+    color: white;
+    background-color: green;
+}
+
+.reset-button {
+    background-color: purple;
+}
+
+.page-nav {
+    float: right;
+}
+
+.result-table {
+    margin-bottom: 0;
+}
+
+.noti-message {
+    width: auto;
+}
+
+.admin-home-sect {
+    padding: inherit;
 }
