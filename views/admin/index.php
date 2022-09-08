@@ -1,32 +1,37 @@
-<section class = "h-100 d-flex align-items-center justify-content-center">
-        <div class="error-message-box">
-            <p>
-                <?php
-                    $number_error = handleFlashMessage('number_of_error');
-                    $list_messages = implode('<br>',handleFlashMessage($_SESSION['flash_message']));
+    <section class="h-100 d-flex flex-column align-items-center justify-content-center">
+        <div class="login-container">
+            <form method="POST" action="/admin/auth" class="form-login ">
+                <!-- Email input -->
+                <div class="d-flex flex-column form-outline">
+                    <label class="form-label" for="email">Email address</label>
+                    <input type="email"
+                           id="email"
+                           name="email"
+                           class="form-control"
+                           value="<?php echo oldData('email'); ?>"
+                    />
+                    <div class="error-holder m-3">
+                        <?php echo handleFlashMessage('email'); ?>
+                    </div>
+                </div>
 
-                ?>
-            </p>
+                <!-- Password input -->
+                <div class="d-flex flex-column form-outline">
+                    <label class="form-label" for="password">Password</label>
+                    <input type="password" id="password" name="password" class="form-control"/>
+                    <div class="error-holder m-3">
+                        <?php echo handleFlashMessage('password'); ?>
+                    </div>
+                </div>
+
+                <div class="error-holder mb-3">
+                    <p class="common-message-paragraph">
+                        <?php echo handleFlashMessage('common'); ?>
+                    </p>
+                </div>
+
+                <!-- Submit button -->
+                <button type="submit" class="btn btn-primary btn-block mb-4 btn-submit">Sign in</button>
+            </form>
         </div>
-        <form method="POST" action="/admin/auth" class="form-login">
-            <!-- Email input -->
-            <div class="form-outline mb-4">
-                <label class="form-label" for="email">Email address</label>
-                <input type="email"
-                       id="email"
-                       name="email"
-                       class="form-control"
-                       value="<?php echo oldData('email') ?>"
-                />
-            </div>
-
-            <!-- Password input -->
-            <div class="form-outline mb-4">
-                <label class="form-label" for="password">Password</label>
-                <input type="password" id="password" name="password" class="form-control"/>
-            </div>
-
-            <!-- Submit button -->
-            <button type="submit" class="btn btn-primary btn-block mb-4 btn-submit">Sign in</button>
-        </form>
-</section>
+    </section>

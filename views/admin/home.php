@@ -1,5 +1,3 @@
-
-
 <header class="admin-page-header">
     <nav class="navbar navbar-expand-lg navbar-light bg-light float-right">
         <div class="collapse navbar-collapse flex-row-reverse" id="navbarSupportedContent">
@@ -12,7 +10,7 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="#">Search</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Create</a>
+                        <a class="dropdown-item" href="/admin/createPage">Create</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -27,7 +25,7 @@
                     </div>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Log out <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/admin/logout">Log out </a>
                 </li>
             </ul>
         </div>
@@ -37,8 +35,8 @@
     <div class="w-80 mt-3 mb-3 notification border border-success rounded">
         <span class="noti-message h-100 d-flex align-text-center justify-content-center align-items-center">
             <?php
-                if (isset($_SESSION['flash_message']['logged_in'])) {
-                    echo(handleFlashMessage('logged_in'));
+                if (isset($_SESSION['flash_message']['login']['logged_in'])) {
+                    echo handleFlashMessage('login');
                 }
             ?>
         </span>
@@ -110,7 +108,7 @@
                         <td>
                             <div class="row g-2 align-items-center">
                                 <div class="col-auto">
-                                    <button type="reset" class="btn btn-primary btn-block mb-4">
+                                    <button type="submit" class="btn btn-primary btn-block mb-4">
                                         <a href="##"></a>
                                         Edit
                                     </button>

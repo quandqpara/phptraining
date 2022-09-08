@@ -2,6 +2,26 @@ body {
     height: 100vh;
 }
 
+.checkbox-round {
+    margin: auto;
+    padding: 10px;
+
+    width: 1.3em;
+    height: 1.3em;
+    background-color: white;
+    border-radius: 50%;
+    vertical-align: middle;
+    border: 1px solid #ddd;
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.checkbox-round:checked {
+    background-color: gray;
+}
+
 .dropdown:hover .dropdown-menu {
     display: block;
     margin-top: 0;
@@ -23,6 +43,10 @@ body {
     background-color: green;
 }
 
+.error-message-box {
+    background-color: red;
+}
+
 .reset-button {
     background-color: purple;
 }
@@ -41,4 +65,36 @@ body {
 
 .admin-home-sect {
     padding: inherit;
+}
+
+.login-container {
+    overflow: visible;
+    max-height: 350px;
+    max-width: 260px;
+}
+
+.common-message-paragraph {
+    max-width: fit-content;
+}
+
+.admin-create-section {
+    padding: 45px;
+}
+
+.admin-create-item {
+    margin: 1.5rem;
+    padding: 5px;
+}
+
+.admin-form-label {
+    margin-right: 20px;
+}
+
+.avatar-display {
+    margin-left: 5%;
+    border-width: thin;
+    border-color: black;
+    width: 80px;
+    height: 80px;
+    background-color: grey;
 }
