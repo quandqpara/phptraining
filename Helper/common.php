@@ -1,41 +1,50 @@
 <?php
 
-function setSessionAdmin($key, $value)
-{
-    $_SESSION['admin'][$key] = $value;
+function setSessionAdmin($role){
+    $_SESSION['admin'] = true;
+    $_SESSION['admin']['role'] = $role;
 }
 
-function getSessionAdmin($key)
-{
-    return $_SESSION['admin'][$key];
+function getAdminID(){
+    if($_SESSION['admin']){
+        return $_SESSION['session_user']['id'];
+    }
 }
 
-function setSessionUser($key, $value)
-{
-    $_SESSION['user'][$key] = $value;
+function getUserID(){
+    if($_SESSION['user']){
+        return $_SESSION['session_user']['id'];
+    }
 }
 
-function getSessionUser($key)
-{
-    return $_SESSION['user'][$key];
+function setSessionUser(){
+    $_SESSION['user'] = true;
 }
 
-function checkAdminLogin()
-{
-    return !empty(getSessionAdmin($_SESSION['session_user']['id']));
+function isAdmin(){
+    if($_SESSION['admin'])
+    {
+        return true;
+    }
+    return false;
 }
 
-function checkUserLogin()
-{
-    return !empty(getSessionUser($_SESSION['session_user']['id']));
+function isSuperAdmin(){
+    if($_SESSION['admin']['role'] == 2){
+        return true;
+    }
+    return false;
 }
 
-function basicUserSetter($data){
-    $_SESSION['session_user']['id'] = $data[0]['id'];
-    $_SESSION['session_user']['name'] = $data[0]['name'];
-    $_SESSION['session_user']['email'] = $data[0]['email'];
-    $_SESSION['session_user']['avatar'] = $data[0]['avatar'];
+function isUser(){
+    if($_SESSION['user'])
+    {
+        return true;
+    }
+    return false;
 }
+
+
 
 function isLoggedIn(){
     if (isset($_SESSION['admin'])) {
@@ -48,7 +57,14 @@ function isLoggedIn(){
         exit;
     }
 }
+function basicUserSetter($data){
+    $_SESSION['session_user']['id'] = $data[0]['id'];
+    $_SESSION['session_user']['name'] = $data[0]['name'];
+    $_SESSION['session_user']['email'] = $data[0]['email'];
+    $_SESSION['session_user']['avatar'] = $data[0]['avatar'];
+}
 
+//debug
 function showLog($data, $continue = false)
 {
     echo "<pre>";
@@ -60,6 +76,7 @@ function showLog($data, $continue = false)
     }
 }
 
+//helper functions
 function buildURL($url)
 {
     return getServerProtocol() . SERVER_DOMAIN . '/' . $url;
@@ -133,6 +150,14 @@ function handleFlashMessage($message)
     return $tempMessage;
 }
 
+function retrieveOldFormData(){
+    foreach ($_REQUEST as $item){
+        if(array_search($item, $_REQUEST) !== 'password'){
+            $_SESSION['old_data'][array_search($item, $_REQUEST)] = $item;
+        }
+    }
+}
+
 function handleOldData($targetInfo)
 {
     $tempInput = null;
@@ -149,3 +174,8 @@ function oldData($field, $default = '')
     $data = handleOldData($field);
     return isset($data) ? $data : $default;
 }
+
+function MBToByte($size){
+    return 1024 * 1024 * $size;
+}
+

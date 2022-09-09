@@ -4,28 +4,30 @@ include_once("model/BaseModel.php");
 
 class AdminModel extends BaseModel
 {
-    public $fillable = [
-        'id',
-        'name',
-        'del_flag',
-        'ins_id',
-        'ins_datetime',
-        'upd_id',
-        'upd_datetime'
-    ];
-
     function __construct()
     {
         $this->tableName = 'admin_table';
+        $this->fillable = [
+            'id',
+            'name',
+            'avatar',
+            'password',
+            'role_type',
+            'del_flag',
+            'ins_id',
+            'ins_datetime',
+            'upd_id',
+            'upd_datetime'
+        ];
+        $this->columnCreate = array('name', 'password', 'email', 'avatar', 'role_type', 'ins_id', 'ins_datetime');
+        $this->columnUpdate = array();
     }
 
-    static function admin_login($email, $password)
+    public function admin_login($email, $password)
     {
         $user_data = [];
-
         try {
-            $db = DB::getInstance();
-            $stmt = $db->prepare("SELECT id, name, email, avatar, role_type FROM admin WHERE email = :email AND password = :password AND del_flag = :flag");
+            $stmt = $this->conn->prepare("SELECT id, name, email, avatar, role_type FROM admin WHERE email = :email AND password = :password AND del_flag = :flag");
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':password', $password);
             $flag = DEL_FLAG_OFF;
@@ -39,5 +41,4 @@ class AdminModel extends BaseModel
 
         return $user_data;
     }
-
 }

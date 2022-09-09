@@ -34,7 +34,7 @@
 <section class="admin-create-section">
     <div class="admin-create-title m-2"><span><strong>Admin Create</strong></span></div>
     <div class="create-form-container m-2 border border-dark">
-        <form method="POST" action="/admin/create" class="form-create">
+        <form method="POST" action="/admin/create" class="form-create" enctype="multipart/form-data">
 
             <!-- Avatar input -->
             <div class="d-flex flex-row form-outline admin-create-item">
@@ -46,7 +46,10 @@
             </div>
             <div class="avatar-display border-round">
                 <span>
-                    <?php ?>
+                    <?php
+                    $imagePath = '';
+                        echo '<img src='.$imagePath.'';
+                    ?>
                 </span>
             </div>
 
@@ -79,8 +82,8 @@
 
             <!-- Password Confirm input -->
             <div class="d-flex flex-row form-outline admin-create-item">
-                <label class="form-label admin-form-label " for="password-confirm">Password Verify*</label>
-                <input type="password" id="password-confirm" name="password-confirm" class="form-control"/>
+                <label class="form-label admin-form-label " for="verify-password">Password Verify*</label>
+                <input type="password" id="verify-password" name="verify-password" class="form-control"/>
                 <div class="error-holder m-3">
                     <?php echo handleFlashMessage('verify_password'); ?>
                 </div>
@@ -90,12 +93,12 @@
             <div class="d-flex flex-row form-outline admin-create-item">
                 <label class="form-label admin-form-label" for="role">Role*</label>
                 <div>
-                    <input type="checkbox" id="admin" name="admin" class="checkbox-round form-control"/>
-                    <label class="form-label admin-form-label" for="admin">Admin</label>
+                    <input type="radio" id="admin" name="role_type" />
+                    <label class="form-label admin-form-label" for="admin" value="1">Admin</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="superadmin" name="superadmin" class="checkbox-round form-control"/>
-                    <label class="form-label admin-form-label" for="superadmin">Super Admin</label>
+                    <input type="radio" id="superadmin" name="role_type" />
+                    <label class="form-label admin-form-label" for="superadmin" value="2">Super Admin</label>
                 </div>
                 <div class="error-holder m-3">
                     <?php echo handleFlashMessage('role'); ?>
@@ -108,9 +111,9 @@
                     <button type="reset" class="btn btn-primary btn-block mb-4"> Reset</button>
                 </div>
                 <div class="col-auto">
-                    <button type="reset" class="btn btn-primary btn-block mb-4">
-                        <a href="##"></a>
-                        Delete
+                    <button type="submit" class="btn btn-primary btn-block mb-4">
+                        <a href="/admin/validate/"></a>
+                        Create
                     </button>
                 </div>
             </div>

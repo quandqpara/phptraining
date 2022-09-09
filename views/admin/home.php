@@ -8,9 +8,9 @@
                         Admin management
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Search</a>
+                        <a class="dropdown-item" href="/admin/home">Search</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="/admin/createPage">Create</a>
+                        <a class="dropdown-item" href="/admin/createPageAdmin">Create</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">

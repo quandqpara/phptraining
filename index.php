@@ -1,7 +1,5 @@
 <?php
 session_start();
-//session_destroy();
-//session_start();
 
 require_once('Helper/common.php');
 require_once('connection.php');
@@ -9,6 +7,7 @@ require_once ('Helper/define_const.php');
 
 define('SERVER_DOMAIN', $_SERVER['SERVER_NAME']);
 define('ROOT', dirname(__FILE__));
+
 
 $controller = 'default';
 $action = 'index';
