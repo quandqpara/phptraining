@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="4ffbe23c-1fb7-4eed-8404-eb6eb824b742" name="Changes" comment="Formatting validation.php&#10;SuperAdmin Create(Admin) functions&#10;Formatting Modulle - Controller (Admin)">
+      <change afterPath="$PROJECT_DIR$/log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Helper/common.php" beforeDir="false" afterPath="$PROJECT_DIR$/Helper/common.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/error_message.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/error_message.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controllers/admin_controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/admin_controller.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/AdminModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/model/AdminModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/BaseModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/model/BaseModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/interface/QueryInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/model/interface/QueryInterface.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/validation/validation.php" beforeDir="false" afterPath="$PROJECT_DIR$/validation/validation.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/admin/createAdmin.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/createAdmin.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/admin/createUser.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/createUser.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/admin/home.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/home.php" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
+  <component name="Git.Settings">
+    <excluded-from-favorite>
+      <branch-storage>
+        <map>
+          <entry type="LOCAL">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="master" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </excluded-from-favorite>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2EM9Zm8eMpenWrNK0Xfpma8kvNB" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/Users/oriol/Desktop/Training/PHP/New folder/oop",
+    "settings.editor.selected.configurable": "preferences.general",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\PHPtraining\views\admin" />
+      <recent name="C:\xampp\htdocs\PHPtraining\public" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\PHPtraining\validation" />
+      <recent name="C:\xampp\htdocs\PHPtraining\config" />
+      <recent name="C:\xampp\htdocs\PHPtraining\views\admin" />
+      <recent name="C:\xampp\htdocs\PHPtraining" />
+      <recent name="C:\xampp\htdocs\PHPtraining\views\login" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4ffbe23c-1fb7-4eed-8404-eb6eb824b742" name="Changes" comment="" />
+      <created>1662394648855</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1662394648855</updated>
+      <workItem from="1662394650073" duration="1360000" />
+      <workItem from="1662396432302" duration="111198000" />
+      <workItem from="1662726809974" duration="66263000" />
+    </task>
+    <task id="LOCAL-00001" summary="Create DB,&#10;Create Login Interface">
+      <created>1662418595991</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1662418595991</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Fixing Login Interface">
+      <created>1662420867841</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1662420867841</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Fixing Login methods, interfaces, routing from yesterday.&#10;Fixing incorrect MVC structure.">
+      <created>1662506933964</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1662506933964</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Fixing Interface for Admin home and login&#10;Completing login function for admin">
+      <created>1662593451745</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1662593451745</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Formatting previous codes to correct format.&#10;Finishing admin login(login with email and passowrd).&#10;Add user interface for admin create forms.">
+      <created>1662669243885</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1662669243885</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Formatting validation.php&#10;SuperAdmin Create(Admin) functions&#10;Formatting Modulle - Controller (Admin)">
+      <created>1662763546543</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1662763546544</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="true" />
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Create DB,&#10;Create Login Interface" />
+    <MESSAGE value="Fixing Login Interface" />
+    <MESSAGE value="Fixing Login methods, interfaces, routing from yesterday.&#10;Fixing incorrect MVC structure." />
+    <MESSAGE value="Fixing Interface for Admin home and login&#10;Completing login function for admin" />
+    <MESSAGE value="Formatting previous codes to correct format.&#10;Finishing admin login(login with email and passowrd).&#10;Add user interface for admin create forms." />
+    <MESSAGE value="Formatting validation.php&#10;SuperAdmin Create(Admin) functions&#10;Formatting Modulle - Controller (Admin)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Formatting validation.php&#10;SuperAdmin Create(Admin) functions&#10;Formatting Modulle - Controller (Admin)" />
+  </component>
+</project>
