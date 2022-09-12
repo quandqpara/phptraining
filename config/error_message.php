@@ -1,7 +1,7 @@
 <?php
 
 return [
-    //User Creation Messages
+    //Field Input Messages
     'email_empty' => 'Email must not be blank.',
     'invalid_email' => 'Your email is invalid. PLease try again.',
 
@@ -23,17 +23,24 @@ return [
     'avatar_over_size' => 'Avatar size must be <= 2MB',
 
     'verify_password' => 'Your Password Verify must match your password.',
+    'invalid_id' => 'ID must only contain numbers',
 
     //Module - Controller interaction Messages
     'create_success' => 'New account has been successfully created!',
     'create_failed' => 'Failed to create new account.',
     'update_success' => ' has been updated!',
     'update_failed' => ' has been failed updated!',
+    'delete_success' => 'Delete success!',
+    'delete_failed' => 'Delete failed!',
+
+    //Permission
+    'no_permission_admin' => 'You do not have ADMIN permission to process this action',
+    'no_permission_super_admin' => 'You do not have SUPER ADMIN permission to process this action',
 
 
     //Login Message
     'common_error' => 'Your email and password might be incorrect.',
-     'invalid_account_status' => 'You has been banned. Contact for support.',
+    'invalid_account_status' => 'You has been banned. Contact for support.',
     'login_success' => ' has been logged in.',
     'login_failed' => 'Your email or password might be incorrect.'
 ];

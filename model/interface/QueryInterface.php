@@ -2,8 +2,7 @@
 
 interface QueryInterface
 {
-    function getAll($fields);
-    function findById($id);
+    function findByEmailAndName($email,$name);
     function deleteById($id);
     function create($data);
     function update($id, $data);

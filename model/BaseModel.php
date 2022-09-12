@@ -9,25 +9,23 @@ abstract class BaseModel implements QueryInterface
     public $columnCreate;
     public $columnUpdate;
 
-
     function __construct(){
-        $this->conn = DB::getInstance();
     }
 
-    public function getAll($fields = [])
-    {
-        if (empty($fields)) {
-            $fields[] = 'id';
-        }
-
-        $sql = "SELECT {implode(',', $fields)} FROM {$this->tableName} where del_flag = " . DEL_FLAG_OFF;
-        return $sql;
+    function writeLog($log){
+        $logFile = fopen("log.txt", "w") or die("Unable to open file");
+        fwrite($logFile, $log);
+        fclose($logFile);
     }
 
     //helper
+    //Autobind:
+    //&$stmt that have value that need binding
+    //$needBinding array of key & value of corresponding value need in $stmt
+
     public function autoBind(&$stmt, $needBinding = []){
         foreach ($needBinding as $item){
-            $stmt->bindParam(':'.array_search($item).'', $item);
+            $stmt->bindParam(':'.array_search($item), $item);
         }
     }
 
@@ -40,6 +38,7 @@ abstract class BaseModel implements QueryInterface
         }
     }
 
+    //need 'name', 'password', 'email', 'avatar', 'role_type', 'ins_id', 'ins_datetime'
     public function create( $validatedDataFromInput = [])
     {
         // TODO: Implement create() method.
@@ -49,7 +48,7 @@ abstract class BaseModel implements QueryInterface
             'ins_datetime' => date('Y-m-d H:i:s')
         ]);
 
-        $this->checkFillable();
+        $this->checkFillable($validatedDataFromInput);
         //if checkFillable() removed some unnecessary data and that make
         //number of columns that need info is different from number of values provided.
         //do not create new account
@@ -58,19 +57,26 @@ abstract class BaseModel implements QueryInterface
             header('Location: admin/create/');
             exit;
         }
+        try {
+            $sql = "INSERT INTO {$this->tableName}( {implode(',', $this->columnCreate)},del_flag) VALUES ( :{implode(': ,', $validatedDataFromInput)},".DEL_FLAG_OFF.")";
+            $stmt = $this->conn->prepare($sql);
+            $this->autoBind($stmt, $validatedDataFromInput);
+            $stmt->execute();
 
-        $sql = "INSERT INTO {$this->tableName}( {implode(',', $this->columnCreate)} ) VALUES ( :{implode(': ,', $validatedDataFromInput)} )";
-        $stmt = $this->conn->prepare($sql);
-        $this->autoBind($stmt, $validatedDataFromInput);
-        $stmt->execute();
-
-        if($stmt->rowCount() == 0){
-            $_SESSION['flash_message']['create']['failed'] = getMessage('create_failed');
-        } else {
-            $_SESSION['flash_message']['create']['success'] = getMessage('create_success');
+            if ($stmt->rowCount() == 0) {
+                $_SESSION['flash_message']['create']['failed'] = getMessage('create_failed');
+            } else {
+                $_SESSION['flash_message']['create']['success'] = getMessage('create_success');
+            }
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
         }
+
+        $log = "ACTION: Create account at email ".$validatedDataFromInput['email']."- BY: ".$validatedDataFromInput['ins_id']." DATE: ".$validatedDataFromInput['ins_datetime'];
+        $this->writeLog($log);
     }
 
+    //need which row to update and its corresponding value and id
     public function update($id, $validatedInput)
     {
         // TODO: Implement create() method.
@@ -81,7 +87,7 @@ abstract class BaseModel implements QueryInterface
         ]);
 
         // check fillable
-        $this->checkFillable();
+        $this->checkFillable($validatedInput);
         //if checkFillable() removed some unnecessary data and that make
         //number of columns that need info is different from number of values provided.
         //do not create new account
@@ -91,24 +97,117 @@ abstract class BaseModel implements QueryInterface
             exit;
         }
 
-        // run exec insert db;
+        $columnArr = array();
+        foreach ($this->columnUpdate as $column){
+            $setKeyAndValue = ''.$column.' = :'.$column;               //"column = :column"
+            array_push($columnArr, $setKeyAndValue);
+        }
+
+        try {
+            $sql = "UPDATE {$this->tableName} SET {implode(',', $columnArr)} WHERE id = {$id}";
+            $stmt = $this->conn->prepare($sql);
+            $this->autoBind($stmt, $validatedInput);
+            $stmt->execute();
+
+            if ($stmt->rowCount() == 0) {
+                $_SESSION['flash_message']['update']['failed'] = getMessage('update_failed');
+            } else {
+                $_SESSION['flash_message']['update']['success'] = getMessage('update_success');
+            }
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+
+        $log = "ACTION: UPDATE account at id: ".$id." - BY: ".$data['ins_id']." DATE: ".$data['ins_datetime'];
+        $this->writeLog($log);
     }
 
-    public function findById($id)
+    //need email and name
+    public function findByEmailAndName($email, $name)
     {
-        // TODO: Implement findById() method.
+        $dataPackage = [];
+        $resultFromSearch = [];
+        $paginationInfo = [];
+
+        $data = array(
+            'email' => $email,
+            'name' => $name,
+            'search_id' => getAdminID(),
+            'search_datetime' => date('Y-m-d H:i:s')
+        );
+
+        $limit = 10;
+        $page = (isset($page)&&$page<10000) ? (int)$page : 1;
+        $start = $limit * int($page-1);
+        $total = 0;
+
+        try {
+            $sql = "SELECT id, avatar, name, email, role_type 
+                    FROM {$this->tableName} 
+                    WHERE email LIKE '%{$email}%' 
+                      AND name LIKE '%{$name}%' 
+                      AND del_flag = ".DEL_FLAG_OFF." 
+                      LIMIT ".$start.",".$limit;
+
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+
+            $resultFromSearch = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $dataPackage['data'] = $resultFromSearch;
+
+
+            $total = $stmt->rowCount();
+            $totalPages = ceil($total/ $limit);
+            $page = (isset($page)&&$page<10000) ? (int)$page : 1;
+            $start = $limit * ($page - 1);
+            $next = ($page > 1) ? $page + 1 : 1;
+            $prev = ($page < $total) ? $page - 1 : $total;
+
+            $paginationInfo = [
+                "page" => $page,
+                "start" => $start,
+                "totalPages" => $totalPages,
+                "next" => $next,
+                "prev" => $prev
+            ];
+
+            $dataPackage['pagination'] = $paginationInfo;
+
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+
+        $log = "ACTION: SEARCH email: ".$email." and name: ".$name." - BY: ".$data['search_id']." DATE: ".$data['search_datetime'];
+        $this->writeLog($log);
+
+        return $dataPackage;
     }
 
+    //need id
     public function deleteById($id)
     {
-        // TODO: Implement deleteById() method.
+        $data = array(
+            'id' => $id,
+            'upd_id' => getAdminID(),
+            'upd_datetime' => date('Y-m-d H:i:s')
+        );
+
+        try {
+            $sql = "UPDATE {$this->tableName} SET del_flag = ".DEL_FLAG_ON." WHERE id = ".$id;
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+
+            if ($stmt->rowCount() == 0) {
+                $_SESSION['flash_message']['update']['failed'] = getMessage('update_failed');
+            } else {
+                $_SESSION['flash_message']['update']['success'] = getMessage('update_success');
+            }
+
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+
+        $log = "ACTION: DELETE account at id ".$id." - BY: ".$data['ins_id']." DATE: ".$data['ins_datetime'];
+        $this->writeLog($log);
     }
-
-    public function runQuery($query, $conn, $data){
-        $stmt = $this->conn->prepare($query);
-        $dataStr = explode($data);
-
-    }
-
-
 }

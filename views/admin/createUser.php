@@ -3,25 +3,25 @@
         <div class="collapse navbar-collapse flex-row-reverse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Admin management
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Search</a>
+                        <a class="dropdown-item" href="/admin/home">Search</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Create</a>
+                        <a class="dropdown-item" href="/admin/createPageAdmin">Create</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         User management
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Search</a>
+                        <a class="dropdown-item" href="/admin/userSearchPage">Search</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Create</a>
+                        <a class="dropdown-item" href="/admin/userCreatePage">Create</a>
                     </div>
                 </li>
                 <li class="nav-item active">

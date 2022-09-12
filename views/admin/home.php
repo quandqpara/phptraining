@@ -3,7 +3,7 @@
         <div class="collapse navbar-collapse flex-row-reverse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Admin management
                     </a>
@@ -14,14 +14,14 @@
                     </div>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         User management
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Search</a>
+                        <a class="dropdown-item" href="/admin/userSearchPage">Search</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Create</a>
+                        <a class="dropdown-item" href="/admin/userCreatePage">Create</a>
                     </div>
                 </li>
                 <li class="nav-item active">
@@ -42,24 +42,34 @@
         </span>
     </div>
     <div class="mt-3 mb-3 search-box border border-dark">
-        <form method="POST" action="##" class=" m-4 form-create">
+        <form method="POST" action="/admin/searchAdmin" class=" m-4 form-create">
             <!-- Email input -->
             <div class="row g-2 align-items-center mb-3 mt-3">
                 <div class="col-auto m-3">
-                    <label for="inputEmail" class="col-form-label">Email</label>
+                    <label for="email" class="col-form-label">Email</label>
                 </div>
                 <div class="col-auto m-3">
-                    <input type="email" id="inputEmail" class="form-control">
+                    <input type="text"
+                           id="email"
+                           name="email"
+                           class="form-control"
+                           value="<?php echo oldData('email'); ?>"
+                    />
                 </div>
             </div>
 
             <!-- Password input -->
             <div class="row g-2 align-items-cente mb-3 mt-3">
                 <div class="col-auto m-3">
-                    <label for="inputName" class="col-form-label">Name</label>
+                    <label for="name" class="col-form-label">Name</label>
                 </div>
                 <div class="col-auto m-3">
-                    <input type="text" id="inputName" class="form-control">
+                    <input type="text"
+                           id="name"
+                           name="name"
+                           class="form-control"
+                           value="<?php echo oldData('name'); ?>"
+                    />
                 </div>
             </div>
 
@@ -86,6 +96,8 @@
                 </ul>
             </nav>
         </div>
+
+
         <div class="table-cover border border-dark">
             <table class="result-table table table-striped table-bordered table-hover">
                 <thread class="thead-dark">
@@ -126,4 +138,5 @@
             </table>
         </div>
     </div>
+
 </section>

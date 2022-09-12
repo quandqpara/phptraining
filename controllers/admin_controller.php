@@ -2,10 +2,12 @@
 require_once('controllers/base_controller.php');
 require_once('model/AdminModel.php');
 require_once('validation/validation.php');
-require_once ('Helper/common.php');
+require_once('Helper/common.php');
 
 class adminController extends BaseController
 {
+    public $dbResult=[];
+
     public function __construct()
     {
         $this->folder = 'admin';
@@ -22,11 +24,13 @@ class adminController extends BaseController
         return $this->render('home');
     }
 
-    public function createPageAdmin(){
+    public function createPageAdmin()
+    {
         return $this->render('createAdmin');
     }
 
-    public function createPageUser(){
+    public function createPageUser()
+    {
         return $this->render('createUser');
     }
 
@@ -34,25 +38,25 @@ class adminController extends BaseController
     public function auth()
     {
         $method = $_SERVER['REQUEST_METHOD'];
-        $request = $_REQUEST;
 
         //if the input failed the validate return to login
-        if (!validateLoginInput($method, $request)) {
+        if (!validateLoginInput($method)) {
             header('Location: /admin/index');
             exit;
         }
 
         //if it passed
-        if (validateLoginInput($method, $request)) {
-            $password = $request['password'];
-            $email = $request['email'];
+        if (validateLoginInput($method)) {
+            $password = $_REQUEST['password'];
+            $email = $_REQUEST['email'];
 
             //check account validity in DB
             //if return data contain data -> confirmed log in
             //....else no data found back to login
-            $returnData = $this->adminModel->admin_login($email, $password);
+            $returnData = $this->adminModel->adminLogin($email, $password);
+
             if ($this->checkReturnData($returnData)) {
-                setSessionAdmin();                                                    // set admin session.
+                setSessionAdmin($returnData[0]['role_type']);                                                           // set admin session.
                 $this->sessionAdminSetter($returnData);                                                                 // set admin info
                 $message = $_SESSION['session_user']['name'] . getMessage('login_success');
                 $_SESSION['flash_message']['login']['logged_in'] = $message;
@@ -68,13 +72,15 @@ class adminController extends BaseController
     }
 
     //set logged-in user data to session for later use
-    private function sessionAdminSetter($data) {
+    private function sessionAdminSetter($data)
+    {
         basicUserSetter($data);
         $_SESSION['session_user']['role_type'] = $data[0]['role_type'];
     }
 
-    private function checkReturnData($array){
-        if(!empty($array)){
+    private function checkReturnData($array)
+    {
+        if (!empty($array)) {
             return true;
         }
     }
@@ -88,41 +94,126 @@ class adminController extends BaseController
         exit;
     }
 
-    //create new admin
-    //Must be admin to create new admin
-    function createAdmin(){
-        if (!isSuperAdmin()) {
-            $_SESSION['flash_message']['permission']['no_permission'] = getMessage('no_permission');
-            header('Location: /');
+    function permissionCheck(){
+        if (!isAdmin()){
+            header('Location: /user/home');
         }
 
-        $method = $_SERVER['REQUEST_METHOD'];
-        $request = $_REQUEST;
+        if (!isSuperAdmin()) {
+            header('Location: /admin/createUser');
+        }
+        return true;
+    }
 
+
+    //create - ADMIN(super)
+    //Must be admin to create new admin
+    function createAdmin()
+    {
+        //check for permission
+        $this->permissionCheck();
+
+        $method = $_SERVER['REQUEST_METHOD'];
 
         //check validity of the input
         //if not pass return
-        //if paassed try to create
-        if (!validateAdminCreateForm($method, $request)) {
+        //if passed try to create
+        if (!validateAdminCreateForm($method, $_REQUEST)) {
             header('Location: /admin/createAdmin');
             exit;
         }
 
         //try to create (call create from module)
-        $this->adminModel->create($this->getInfoForCreateNewAdmin());
+        $infoArrayForCreateAccount = $this->getInfoForCreateNewAdmin();
+        $this->adminModel->create($infoArrayForCreateAccount);
 
-        //redirect to create Screen
+        //redirect to create Screen with messages
         retrieveOldFormData();
-        header('Location: home/createAdmin');
+        header('Location: /admin/createAdmin');
         exit;
     }
 
-    private function getInfoForCreateNewAdmin(){
+    //return array of key and corresponding value ('name', 'password', 'email', 'avatar', 'role_type', 'ins_id', 'ins_datetime')
+    private function getInfoForCreateNewAdmin()
+    {
         $infoArray = array();
-        $infoNeeded = array('name','password','email','avatar','role_type');
-        foreach ($infoNeeded as $item){
+        $infoNeeded = array('name', 'password', 'email', 'avatar', 'role_type');
+        foreach ($infoNeeded as $item) {
             array_push($infoArray, $_REQUEST[$item]);
         }
         return array_combine($infoNeeded, $infoArray);
     }
+
+    //update - ADMIN(super)
+    function updateAdmin()
+    {
+        $id = 0;
+
+        //permission check
+        $this->permissionCheck();
+
+        //validate input
+        $method = $_SERVER['REQUEST_METHOD'];
+
+        if (!validateUpdateForm($method, $request)){
+            header('Location: /admin/updateAdmin');
+            exit;
+        }
+
+        //try to update
+        $this->adminModel->update($method, $_REQUEST, $id);
+
+        retrieveOldFormData();
+        header('Location: /admin/updateAdmin');
+        exit;
+
+    }
+
+    //search - ADMIN(super)
+    function searchAdmin()
+    {
+        //permission check
+        $this->permissionCheck();
+
+        //validate input
+        $method = $_SERVER['REQUEST_METHOD'];
+
+        if (!validateSearchForm($method)){
+            header('Location: /admin/home');
+            exit;
+        }
+
+        //search
+        $result = $this->adminModel->findByEmailAndName($_REQUEST['email'],$_REQUEST['name']);
+        $this->render('home', ['data' => $result]);
+    }
+
+    //delete - ADMIN(super)
+    function deleteAdmin()
+    {
+        if (!isSuperAdmin()) {
+            setFlashMessage(getMessage('no_permission'));
+
+            header('Location: /');
+        }
+    }
+
+    //search - USER(admin)
+    function searchUser()
+    {
+
+    }
+
+    //edit/update - USER(admin)
+    function editUser()
+    {
+
+    }
+
+    //delete - USER(admin)
+    function deleteUser()
+    {
+
+    }
+
 }

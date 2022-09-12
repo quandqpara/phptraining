@@ -6,7 +6,7 @@ class AdminModel extends BaseModel
 {
     function __construct()
     {
-        $this->tableName = 'admin_table';
+        $this->tableName = 'admin';
         $this->fillable = [
             'id',
             'name',
@@ -21,13 +21,14 @@ class AdminModel extends BaseModel
         ];
         $this->columnCreate = array('name', 'password', 'email', 'avatar', 'role_type', 'ins_id', 'ins_datetime');
         $this->columnUpdate = array();
+        $this->conn = DB::getInstance();
     }
 
-    public function admin_login($email, $password)
+    public function adminLogin($email, $password)
     {
         $user_data = [];
         try {
-            $stmt = $this->conn->prepare("SELECT id, name, email, avatar, role_type FROM admin WHERE email = :email AND password = :password AND del_flag = :flag");
+            $stmt = $this->conn->prepare("SELECT id, name, email, avatar, role_type FROM ".$this->tableName." WHERE email = :email AND password = :password AND del_flag = :flag");
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':password', $password);
             $flag = DEL_FLAG_OFF;

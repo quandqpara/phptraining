@@ -1,8 +1,7 @@
 <?php
 
 function setSessionAdmin($role){
-    $_SESSION['admin'] = true;
-    $_SESSION['admin']['role'] = $role;
+    $_SESSION['admin']['role'] = (int)$role;
 }
 
 function getAdminID(){
@@ -25,15 +24,19 @@ function isAdmin(){
     if($_SESSION['admin'])
     {
         return true;
+    } else {
+        $_SESSION['flash_message']['permission']['no_permission_admin'] = getMessage('no_permission_admin');
+        return false;
     }
-    return false;
 }
 
 function isSuperAdmin(){
     if($_SESSION['admin']['role'] == 2){
         return true;
+    } else {
+        $_SESSION['flash_message']['permission']['no_permission_super_admin'] = getMessage('no_permission_super_admin');
+        return false;
     }
-    return false;
 }
 
 function isUser(){
@@ -124,6 +127,24 @@ function getMessage()
         $message = $message[$key];
     }
 }
+
+//function setFlashMessage($message, $grant = 'admin')
+//{
+//    if (empty($message)) {
+//        return;
+//    }
+//
+//    $_SESSION[$grant]['flash_message'] = $message;
+//}
+//
+//function getFlashMessage($grant = 'admin')
+//{
+//    $flashMessages = $_SESSION[$grant]['flash_message'];
+//
+//    unset($_SESSION[$grant]['flash_message']);
+//
+//    return $flashMessages;
+//}
 
 function handleFlashMessage($message)
 {

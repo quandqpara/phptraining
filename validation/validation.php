@@ -1,13 +1,14 @@
 <?php
-
-function flagCheck($flag){
-    if ($flag > 0){
-        header('Location: /admin/index');
-        exit;
+//validate input pre-access to database
+function validateID($id): int{
+    $flag = 0;
+    if(!is_numeric($id)){
+        $_SESSION['flash_message']['id']['invalid'] = getMessage('invalid_id');
+        $flag += 1;
     }
+    return $flag;
 }
 
-//validate input pre-access to database
 function validateEmail($email): int
 {
     $flag = 0;
@@ -168,38 +169,133 @@ function validateSubmitFormPostAndEmptyRequest($method, $request): int
     return $flag;
 }
 
-function validateAdminCreateForm($method, $request) {
-    showLog($request, true);
-    $error_flag = 0;
+function validateSubmitFormGetAndEmptyRequest($method, $request): int {
+    $flag = 0;
+    if ($method !== 'GET') {
+        $_SESSION['flash_message']['common']['failed'] = getMessage('common_error');
+        $flag += 1;
+    }
 
-    $error_flag += validateSubmitFormPostAndEmptyRequest($method, $request, $error_flag);
-
-    flagCheck($error_flag);
-
-    $error_flag += validateAvatar($request['avatar'], $request['email']);
-
-    $error_flag += validateName($request['name']);
-
-    $error_flag += validateEmail($request['email']);
-
-    $error_flag += validatePassword($request['password']);
-
-    $error_flag += validateVerifyPassword($request['password'], $request['verify_password']);
-
-    $error_flag += validateAdminRoles($request['role']);
+    if (empty($request)) {
+        $_SESSION['flash_message']['common']['failed'] = getMessage('common_error');
+        $flag += 1;
+    }
+    return $flag;
 }
 
-function validateLoginInput($method, $request) {
+//Function validate
+function flagCheck($flag, $user, $location){
+    if ($flag > 0){
+        header('Location: /'.$user.'/'.$location);
+        exit;
+    }
+}
+
+function validateAllInput()
+{
+    $flag = 0;
+    foreach ($_REQUEST as $item) {
+        switch ($item){
+            case 'avatar':
+                $flag += validateAvatar($_REQUEST['avatar'], $_REQUEST['email']);
+                break;
+            case 'name':
+                $flag += validateName($_REQUEST['name']);
+                break;
+            case 'email':
+                $flag += validateEmail($_REQUEST['email']);
+                break;
+            case 'password':
+                $flag += validatePassword($_REQUEST['password']);
+                break;
+            case 'verify':
+                $flag += validateVerifyPassword($_REQUEST['password'], $_REQUEST['verify']);
+                break;
+            case 'role':
+                $flag += validateAdminRoles($_REQUEST['role']);
+                break;
+        }
+    }
+    return $flag;
+}
+
+function validateAdminCreateForm($method) {
     $error_flag = 0;
 
-    $error_flag += validateSubmitFormPostAndEmptyRequest($method, $request);
+    $error_flag += validateSubmitFormPostAndEmptyRequest($method, $_REQUEST);
 
-    flagCheck($error_flag);
+    flagCheck($error_flag,'admin','createAdmin');
 
-    $error_flag += validateEmail($request['email']);
+    $error_flag += validateAllInput();
 
-    $error_flag += validatePassword($request['password']);
+    flagCheck($error_flag,'admin','createAdmin');
+    return true;
 
-    flagCheck($error_flag);
+}
+
+function validateLoginInput($method) {
+    $error_flag = 0;
+
+    $error_flag += validateSubmitFormPostAndEmptyRequest($method, $_REQUEST);
+
+    flagCheck($error_flag,'admin', 'index');
+
+    $error_flag += validateAllInput();
+
+    flagCheck($error_flag,'admin', 'index');
     return true;
 }
+
+function validateUpdateForm($method, $id) {
+    $error_flag = 0;
+
+    $error_flag += validateSubmitFormPostAndEmptyRequest($method, $_REQUEST);
+
+    flagCheck($error_flag,'admin', 'updateAdmin');
+
+    $error_flag += validateID($id);
+
+    flagCheck($error_flag,'admin', 'updateAdmin');
+
+    $error_flag += validateAllInput();
+
+    flagCheck($error_flag,'admin', 'updateAdmin');
+    return true;
+}
+
+function validateDeleteForm($method, $id) {
+    $error_flag = 0;
+
+    $error_flag += validateSubmitFormPostAndEmptyRequest($method, $_REQUEST);
+
+    flagCheck($error_flag,'admin','deleteAdmin');
+
+    $error_flag += validateID($id);
+
+    flagCheck($error_flag,'admin', 'deleteAdmin');
+
+    $error_flag += validateAllInput();
+
+    flagCheck($error_flag,'admin',  'deleteAdmin');
+    return true;
+}
+
+function validateSearchForm($method) {
+    $error_flag = 0;
+
+    $error_flag += validateSubmitFormPostAndEmptyRequest($method, $_REQUEST);
+
+    flagCheck($error_flag,'admin',  'home');
+
+    if(!isset($_REQUEST['email']) || !isset($_REQUEST['name'])){
+        $_SESSION['flash_message']['email']['empty'] = getMessage('email_empty');
+        $_SESSION['flash_message']['name']['empty'] = getMessage('name_empty');
+        return false;
+    }
+
+    $error_flag += validateAllInput($method);
+
+    flagCheck($error_flag,'admin',  'home');
+    return true;
+}
+
