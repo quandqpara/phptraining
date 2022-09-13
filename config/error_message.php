@@ -24,6 +24,7 @@ return [
 
     'verify_password' => 'Your Password Verify must match your password.',
     'invalid_id' => 'ID must only contain numbers',
+    'no_id_found' => 'Must provide a valid ID to update!',
 
     //Module - Controller interaction Messages
     'create_success' => 'New account has been successfully created!',
@@ -32,12 +33,11 @@ return [
     'update_failed' => ' has been failed updated!',
     'delete_success' => 'Delete success!',
     'delete_failed' => 'Delete failed!',
-    'search_success' => "Search completed",
+    'search_success' => "Search completed!",
 
     //Permission
     'no_permission_admin' => 'You do not have ADMIN permission to process this action',
     'no_permission_super_admin' => 'You do not have SUPER ADMIN permission to process this action',
-
 
     //Login Message
     'common_error' => 'Your email and password might be incorrect.',

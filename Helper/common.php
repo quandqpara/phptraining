@@ -168,9 +168,6 @@ function handleFlashMessage($message)
         unset($_SESSION['flash_message'][$message]);
     }
 
-    if(count($_SESSION['flash_message']) == 0){
-        unset($_SESSION['flash_message']);
-    }
     return $tempMessage;
 }
 

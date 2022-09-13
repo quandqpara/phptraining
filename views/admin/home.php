@@ -35,11 +35,14 @@
     <div class="w-80 mt-3 mb-3 notification border border-success rounded">
         <span class="noti-message h-100 d-flex align-text-center justify-content-center align-items-center">
             <?php
-            if (isset($_SESSION['flash_message']['login']['logged_in'])) {
+            if (isset($_SESSION['flash_message']['login'])) {
                 echo handleFlashMessage('login');
             }
-            if (isset($_SESSION['flash_message']['search']['success'])) {
+            if (isset($_SESSION['flash_message']['search'])) {
                 echo handleFlashMessage('search');
+            }
+            if (isset($_SESSION['flash_message']['update'])) {
+                echo handleFlashMessage('update');
             }
             //what messages will appear here? login, search complete?
             ?>
@@ -108,13 +111,15 @@
                 $href = rtrim("/admin/searchAdmin?" . $reloadUrl, '&');
 
                 //print Pagination
-                $pageLink = "<ul class='pagination'>";
-                $pageLink .= "<li class='page-item'><a class='page-link' href='" . $href . "&page=" . $data['pagination']['prev'] . "'>Previous</a></li>";
-                for ($i = 1; $i <= $data['pagination']['totalPages']; $i++) {
-                    $pageLink .= "<li class='page-item'><a class='page-link' href='" . $href . "&page=" . $i . "'>" . $i . "</a></li>";
+                if (!empty($data)){
+                    $pageLink = "<ul class='pagination'>";
+                    $pageLink .= "<li class='page-item'><a class='page-link' href='" . $href . "&page=" . $data['pagination']['prev'] . "'>Previous</a></li>";
+                    for ($i = 1; $i <= $data['pagination']['totalPages']; $i++) {
+                        $pageLink .= "<li class='page-item'><a class='page-link' href='" . $href . "&page=" . $i . "'>" . $i . "</a></li>";
+                    }
+                    $pageLink .= "<li class='page-item'><a class='page-link' href='" . $href . "&page=" . $data['pagination']['next'] . "'>Next</a></li>";
+                    echo $pageLink . "</ul>";
                 }
-                $pageLink .= "<li class='page-item'><a class='page-link' href='" . $href . "&page=" . $data['pagination']['next'] . "'>Next</a></li>";
-                echo $pageLink . "</ul>";
                 ?>
             </nav>
         </div>
@@ -132,29 +137,35 @@
                     </tr>
                 </thread>
                 <tbody>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>
-                        <div class="row g-2 align-items-center">
-                            <div class="col-auto">
-                                <button type="submit" class="btn btn-primary btn-block mb-4">
-                                    <a href="##"></a>
-                                    Edit
-                                </button>
+                <?php
+                if (!isset($data['data']) || count($data['data']) == 0) {
+                    $searchTable = "<tr>";
+                    $searchTable .= "<td colspan='6'><span>No Results Found!</span></td>";
+                    echo $searchTable . "</tr>";
+                }
+                else {
+                    $searchTable = "<tr>";
+
+                    foreach ($data['data'] as $result){
+                        $searchTable .= "<td><span>".$result['id']."</span></td>";
+                        $searchTable .= "<td><span>".$result['avatar']."</span></td>";
+                        $searchTable .= "<td><span>".$result['name']."</span></td>";
+                        $searchTable .= "<td><span>".$result['email']."</span></td>";
+                        $searchTable .= "<td><span>".$result['role_type']."</span></td>";
+                        $searchTable .= " <td>
+                        <div class=\"row g-2 align-items-center\">
+                            <div class=\"col-auto\">
+                                    <a class=\"disguised-button\" href=\"/admin/editPageAdmin?id=".$result['id']."\">Edit</a> 
                             </div>
-                            <div class="col-auto">
-                                <button type="reset" class="btn btn-primary btn-block mb-4">
-                                    <a href="##"></a>
-                                    Delete
-                                </button>
+                            <div class=\"col-auto\">
+                                    <a class=\"disguised-button\" href=\"/admin/delete?id=".$result['id']."\">Delete</a>
                             </div>
                         </div>
-                    </td>
-                </tr>
+                    </td>";
+                    }
+                    echo $searchTable . "</tr>";
+                }
+                ?>
                 </tbody>
             </table>
         </div>

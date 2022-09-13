@@ -14,6 +14,7 @@ class adminController extends BaseController
         $this->adminModel = new AdminModel();
     }
 
+    //-----------------------------------------------------VIEW SECTION-------------------------------------------------
     public function index()
     {
         return $this->render('index');
@@ -34,6 +35,17 @@ class adminController extends BaseController
         return $this->render('createUser');
     }
 
+    public function editPageAdmin()
+    {
+        return $this->render('editAdmin');
+    }
+
+    public function editPageUser()
+    {
+        return $this->render('editUser');
+    }
+
+    //-----------------------------------------------------AUTH SECTION-------------------------------------------------
     //login
     public function auth()
     {
@@ -96,6 +108,7 @@ class adminController extends BaseController
         exit;
     }
 
+    //----------------------------------------------------ADMIN SECTION-------------------------------------------------
     function permissionCheck()
     {
         if (!isAdmin()) {
@@ -107,7 +120,6 @@ class adminController extends BaseController
         }
         return true;
     }
-
 
     //create - ADMIN(super)
     //Must be admin to create new admin
@@ -148,28 +160,34 @@ class adminController extends BaseController
     }
 
     //update - ADMIN(super)
-    function updateAdmin()
+    function editAdmin()
     {
-        $id = 0;
-
         //permission check
         $this->permissionCheck();
 
         //validate input
         $method = $_SERVER['REQUEST_METHOD'];
+        $request = $_POST;
 
-        if (!validateUpdateForm($method, $request)) {
-            header('Location: /admin/updateAdmin');
+        if (!isset($_SESSION['flash_message']['update_target']['id'])){
+            $_SESSION['flash_message']['update_id']['not_found'] = getMessage('no_id_found');
+        }
+        $id = $_SESSION['flash_message']['update_target']['id'];
+        $location = '/admin/editPageAdmin?id='.$id;
+
+        if (!validateUpdateForm($method, $request, $id)) {
+            retrieveOldFormData();
+            header('Location: '.$location);
             exit;
         }
 
-        //try to update
-        $this->adminModel->update($method, $_REQUEST, $id);
+        //try to update (input id and value to change)
+        $this->adminModel->update($id, $request);
+        showLog($request);
 
         retrieveOldFormData();
-        header('Location: /admin/updateAdmin');
+        header('Location: '.$location);
         exit;
-
     }
 
     //search - ADMIN(super)
@@ -211,6 +229,7 @@ class adminController extends BaseController
         }
     }
 
+    //-----------------------------------------------------USER SECTION-------------------------------------------------
     //search - USER(admin)
     function searchUser()
     {

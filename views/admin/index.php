@@ -11,7 +11,9 @@
                            value="<?php echo oldData('email'); ?>"
                     />
                     <div class="error-holder m-3">
-                        <?php echo handleFlashMessage('email'); ?>
+                        <?php  if(isset($_SESSION['flash_message']['email'])){
+                            echo handleFlashMessage('email');
+                        } ?>
                     </div>
                 </div>
 
@@ -20,13 +22,17 @@
                     <label class="form-label" for="password">Password</label>
                     <input type="password" id="password" name="password" class="form-control"/>
                     <div class="error-holder m-3">
-                        <?php echo handleFlashMessage('password'); ?>
+                        <?php  if(isset($_SESSION['flash_message']['password'])){
+                            echo handleFlashMessage('password');
+                        } ?>
                     </div>
                 </div>
 
                 <div class="error-holder mb-3">
                     <p class="common-message-paragraph">
-                        <?php echo handleFlashMessage('common'); ?>
+                        <?php  if(isset($_SESSION['flash_message']['common'])){
+                            echo handleFlashMessage('common');
+                        } ?>
                     </p>
                 </div>
 

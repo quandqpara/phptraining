@@ -225,6 +225,32 @@ function validateAllInput()
     return $flag;
 }
 
+function validateAllUpdateInput(){
+    $flag = 0;
+    if (!empty($_REQUEST['password'])){
+        foreach ($_REQUEST as $item) {
+            switch ($item) {
+                case 'avatar':
+                    $flag += validateAvatar($_REQUEST['avatar'], $_REQUEST['email']);
+                    break;
+                case 'name':
+                    $flag += validateName($_REQUEST['name']);
+                    break;
+                case 'email':
+                    $flag += validateEmail($_REQUEST['email']);
+                    break;
+                case 'role':
+                    $flag += validateAdminRoles($_REQUEST['role']);
+                    break;
+            }
+        }
+    }
+    else if(empty($_REQUEST['password'])  && empty($_REQUEST['verify'])) {
+        $flag += validateAllInput();
+    }
+    return $flag;
+}
+
 function validateAdminCreateForm($method)
 {
     $error_flag = 0;
@@ -254,21 +280,21 @@ function validateLoginInput($method)
     return true;
 }
 
-function validateUpdateForm($method, $id)
+function validateUpdateForm($method, $request, $id)
 {
     $error_flag = 0;
 
-    $error_flag += validateSubmitFormPostAndEmptyRequest($method, $_REQUEST);
+    $error_flag += validateSubmitFormPostAndEmptyRequest($method, $request);
 
-    flagCheck($error_flag, 'admin', 'updateAdmin');
+    flagCheck($error_flag, 'admin', 'editAdmin');
 
     $error_flag += validateID($id);
 
-    flagCheck($error_flag, 'admin', 'updateAdmin');
+    flagCheck($error_flag, 'admin', 'editAdmin');
 
-    $error_flag += validateAllInput();
+    $error_flag += validateAllUpdateInput();
 
-    flagCheck($error_flag, 'admin', 'updateAdmin');
+    flagCheck($error_flag, 'admin', 'editAdmin');
     return true;
 }
 

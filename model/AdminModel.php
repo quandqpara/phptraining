@@ -11,6 +11,7 @@ class AdminModel extends BaseModel
             'id',
             'name',
             'avatar',
+            'email',
             'password',
             'role_type',
             'del_flag',
@@ -26,7 +27,7 @@ class AdminModel extends BaseModel
 
     public function adminLogin($email, $password)
     {
-        $user_data = [];
+        $userData = [];
         try {
             $stmt = $this->conn->prepare("SELECT id, name, email, avatar, role_type FROM ".$this->tableName." WHERE email = :email AND password = :password AND del_flag = :flag");
             $stmt->bindParam(':email', $email);
@@ -35,11 +36,30 @@ class AdminModel extends BaseModel
             $stmt->bindParam(':flag', $flag);
             $stmt->execute();
 
-            $user_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $userData = $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
         }
 
-        return $user_data;
+        return $userData;
     }
+
+    public function searchOne($id)
+    {
+        $targetInfo = [];
+        try {
+            $stmt = $this->conn->prepare("SELECT name, email, avatar, role_type FROM ".$this->tableName." WHERE id = :id AND del_flag = :flag");
+            $stmt->bindParam(':id', $_GET['id']);
+            $flag = DEL_FLAG_OFF;
+            $stmt->bindParam(':flag', $flag);
+            $stmt->execute();
+
+            $targetInfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "Error: ". $e;
+        }
+
+        return $targetInfo;
+    }
+
 }

@@ -23,16 +23,28 @@ abstract class BaseModel implements QueryInterface
     //&$stmt that have value that need binding
     //$needBinding array of key & value of corresponding value need in $stmt
     public function autoBind(&$stmt, $needBinding = []){
-        foreach ($needBinding as $item){
-            $stmt->bindParam(':'.array_search($item), $item);
+        foreach ($needBinding as $key=>&$value){
+            $stmt->bindParam(":$key", $value, PDO::PARAM_STR);
+        }
+    }
+
+    //remove empty input field
+    public function removeEmptyField(&$arrayOfInput){
+        foreach ($arrayOfInput as $key=>$value){
+            if(is_null($value) || $value == ''){
+                unset($arrayOfInput[$key]);
+            }
         }
     }
 
     //compare with $fillable to remove non-accepted data
-    public function checkFillable($input){
-        foreach ($input as $item){
-            if(!in_array(array_search($item), $this->fillable)){
-                unset($input[array_search($item)]);
+    //for each element in &$inputArray
+    //if $key is not in fillable array
+    //remove that from &$inputArray
+    public function checkFillable(&$input){
+        foreach ($input as $key=>$value){
+            if(!in_array($key, $this->fillable)){
+                unset($input[$key]);
             }
         }
     }
@@ -79,39 +91,35 @@ abstract class BaseModel implements QueryInterface
     public function update($id, $validatedInput)
     {
         // TODO: Implement create() method.
-
+        $rowChange = 0;
         $data = array_merge($validatedInput, [
             'upd_id' => getAdminID(),
             'upd_datetime' => date('Y-m-d H:i:s')
         ]);
 
         // check fillable
-        $this->checkFillable($validatedInput);
-        //if checkFillable() removed some unnecessary data and that make
-        //number of columns that need info is different from number of values provided.
-        //do not create new account
-        if(count($validatedInput) != count($this->columnUpdate)){
-            $_SERVER['flash_message']['update']['failed'] = getMessage('update_failed');
-            header('Location: admin/update/');
-            exit;
-        }
+        $this->removeEmptyField($data);
+        $this->checkFillable($data);
 
         $columnArr = array();
-        foreach ($this->columnUpdate as $column){
-            $setKeyAndValue = ''.$column.' = :'.$column;               //"column = :column"
-            array_push($columnArr, $setKeyAndValue);
+        foreach ($data as $key=>$value){
+            $setKeyAndValue = $key.' = :'.$key;
+            $columnArr[] = $setKeyAndValue;
         }
 
+        $setArray = implode(', ', $columnArr);
+
         try {
-            $sql = "UPDATE {$this->tableName} SET {implode(',', $columnArr)} WHERE id = {$id}";
+            $sql = "UPDATE {$this->tableName} SET {$setArray} WHERE id = {$id}";
             $stmt = $this->conn->prepare($sql);
-            $this->autoBind($stmt, $validatedInput);
+            $this->autoBind($stmt, $data);
             $stmt->execute();
 
-            if ($stmt->rowCount() == 0) {
+            $rowChange = $stmt->rowCount();
+            if ($rowChange == 0) {
                 $_SESSION['flash_message']['update']['failed'] = getMessage('update_failed');
             } else {
-                $_SESSION['flash_message']['update']['success'] = getMessage('update_success');
+                $_SESSION['flash_message']['update']['success'] = "Admin ID: ".$id.getMessage('update_success');
             }
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
@@ -119,6 +127,9 @@ abstract class BaseModel implements QueryInterface
 
         $log = "ACTION: UPDATE account at id: ".$id." - BY: ".$data['ins_id']." DATE: ".$data['ins_datetime'];
         $this->writeLog($log);
+
+        header('Location: /admin/home?email='.$data['email'].'&name='.$data['name']);
+        exit;
     }
 
     //need email and name
