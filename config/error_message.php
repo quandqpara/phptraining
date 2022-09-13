@@ -32,6 +32,7 @@ return [
     'update_failed' => ' has been failed updated!',
     'delete_success' => 'Delete success!',
     'delete_failed' => 'Delete failed!',
+    'search_success' => "Search completed",
 
     //Permission
     'no_permission_admin' => 'You do not have ADMIN permission to process this action',

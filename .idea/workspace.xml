@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4ffbe23c-1fb7-4eed-8404-eb6eb824b742" name="Changes" comment="Formatting validation.php&#10;SuperAdmin Create(Admin) functions&#10;Formatting Modulle - Controller (Admin)">
-      <change afterPath="$PROJECT_DIR$/log.txt" afterDir="false" />
+    <list default="true" id="4ffbe23c-1fb7-4eed-8404-eb6eb824b742" name="Changes" comment="Init Facebook Login API">
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Helper/common.php" beforeDir="false" afterPath="$PROJECT_DIR$/Helper/common.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config/error_message.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/error_message.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controllers/admin_controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/admin_controller.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/AdminModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/model/AdminModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/log.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/BaseModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/model/BaseModel.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/interface/QueryInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/model/interface/QueryInterface.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/validation/validation.php" beforeDir="false" afterPath="$PROJECT_DIR$/validation/validation.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/admin/createAdmin.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/createAdmin.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/admin/createUser.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/createUser.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/admin/home.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/home.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/error/error.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/error/error.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,16 +50,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/oriol/Desktop/Training/PHP/New folder/oop",
-    "settings.editor.selected.configurable": "preferences.general",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/oriol/Desktop/Training/PHP/New folder/oop&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.general&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\xampp\htdocs\PHPtraining\views\admin" />
@@ -83,7 +83,8 @@
       <updated>1662394648855</updated>
       <workItem from="1662394650073" duration="1360000" />
       <workItem from="1662396432302" duration="111198000" />
-      <workItem from="1662726809974" duration="66263000" />
+      <workItem from="1662726809974" duration="66455000" />
+      <workItem from="1663028455233" duration="12795000" />
     </task>
     <task id="LOCAL-00001" summary="Create DB,&#10;Create Login Interface">
       <created>1662418595991</created>
@@ -127,7 +128,21 @@
       <option name="project" value="LOCAL" />
       <updated>1662763546544</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Added SuperAdmin Functions (Still need to work on Displaying Results for Search function)">
+      <created>1662977835183</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1662977835183</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Init Facebook Login API">
+      <created>1662979790370</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1662979790370</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -157,6 +172,8 @@
     <MESSAGE value="Fixing Interface for Admin home and login&#10;Completing login function for admin" />
     <MESSAGE value="Formatting previous codes to correct format.&#10;Finishing admin login(login with email and passowrd).&#10;Add user interface for admin create forms." />
     <MESSAGE value="Formatting validation.php&#10;SuperAdmin Create(Admin) functions&#10;Formatting Modulle - Controller (Admin)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Formatting validation.php&#10;SuperAdmin Create(Admin) functions&#10;Formatting Modulle - Controller (Admin)" />
+    <MESSAGE value="Added SuperAdmin Functions (Still need to work on Displaying Results for Search function)" />
+    <MESSAGE value="Init Facebook Login API" />
+    <option name="LAST_COMMIT_MESSAGE" value="Init Facebook Login API" />
   </component>
 </project>

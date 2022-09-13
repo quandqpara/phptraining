@@ -22,7 +22,6 @@ abstract class BaseModel implements QueryInterface
     //Autobind:
     //&$stmt that have value that need binding
     //$needBinding array of key & value of corresponding value need in $stmt
-
     public function autoBind(&$stmt, $needBinding = []){
         foreach ($needBinding as $item){
             $stmt->bindParam(':'.array_search($item), $item);
@@ -123,7 +122,7 @@ abstract class BaseModel implements QueryInterface
     }
 
     //need email and name
-    public function findByEmailAndName($email, $name)
+    public function findByEmailAndName($email, $name, $page)
     {
         $dataPackage = [];
         $resultFromSearch = [];
@@ -137,45 +136,58 @@ abstract class BaseModel implements QueryInterface
         );
 
         $limit = 10;
-        $page = (isset($page)&&$page<10000) ? (int)$page : 1;
-        $start = $limit * int($page-1);
+        $start = $limit * ($page-1);
         $total = 0;
 
-        try {
-            $sql = "SELECT id, avatar, name, email, role_type 
-                    FROM {$this->tableName} 
-                    WHERE email LIKE '%{$email}%' 
-                      AND name LIKE '%{$name}%' 
-                      AND del_flag = ".DEL_FLAG_OFF." 
-                      LIMIT ".$start.",".$limit;
+        $sql = "SELECT id, avatar, name, email, role_type 
+                FROM {$this->tableName} 
+                WHERE email LIKE '%{$email}%'
+                    AND name LIKE '%{$name}%'
+                    AND del_flag = ".DEL_FLAG_OFF ;
 
-            $stmt = $this->conn->prepare($sql);
+        $limitSQL = " LIMIT ". $start.",".$limit;
+
+        //getting total number of result
+        if($total == 0){
+            try {
+                $stmtUnlimit = $this->conn->prepare($sql);
+                $stmtUnlimit->execute();
+                $stmtUnlimit->fetchAll(PDO::FETCH_ASSOC);
+
+                $total = $stmtUnlimit->rowCount();
+
+            } catch (PDOException $e) {
+                echo "Error: " . $e->getMessage();
+            }
+        }
+
+        //return page with limited result
+        try {
+            $query = $sql.$limitSQL;
+            $stmt = $this->conn->prepare($query);
             $stmt->execute();
 
             $resultFromSearch = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $dataPackage['data'] = $resultFromSearch;
 
-
-            $total = $stmt->rowCount();
-            $totalPages = ceil($total/ $limit);
-            $page = (isset($page)&&$page<10000) ? (int)$page : 1;
-            $start = $limit * ($page - 1);
-            $next = ($page > 1) ? $page + 1 : 1;
-            $prev = ($page < $total) ? $page - 1 : $total;
-
-            $paginationInfo = [
-                "page" => $page,
-                "start" => $start,
-                "totalPages" => $totalPages,
-                "next" => $next,
-                "prev" => $prev
-            ];
-
-            $dataPackage['pagination'] = $paginationInfo;
-
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
         }
+
+        $totalPages = ceil($total/ $limit);
+        $page = (isset($page)&&$page<10000) ? (int)$page : 1;
+        $start = $limit * ($page - 1);
+        $next = ($page > 1) ? $page + 1 : 1;
+        $prev = ($page < $total) ? $page - 1 : $total;
+
+        $paginationInfo = [
+            'totalPages' => $totalPages,
+            'page' => $page,
+            'start' => $start,
+            'next' => $next,
+            'prev' => $prev
+        ];
+        $dataPackage['pagination'] = $paginationInfo;
 
         $log = "ACTION: SEARCH email: ".$email." and name: ".$name." - BY: ".$data['search_id']." DATE: ".$data['search_datetime'];
         $this->writeLog($log);

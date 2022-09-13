@@ -6,7 +6,7 @@ require_once('Helper/common.php');
 
 class adminController extends BaseController
 {
-    public $dbResult=[];
+    public $dbResult = [];
 
     public function __construct()
     {
@@ -41,6 +41,7 @@ class adminController extends BaseController
 
         //if the input failed the validate return to login
         if (!validateLoginInput($method)) {
+
             header('Location: /admin/index');
             exit;
         }
@@ -49,6 +50,7 @@ class adminController extends BaseController
         if (validateLoginInput($method)) {
             $password = $_REQUEST['password'];
             $email = $_REQUEST['email'];
+
 
             //check account validity in DB
             //if return data contain data -> confirmed log in
@@ -94,8 +96,9 @@ class adminController extends BaseController
         exit;
     }
 
-    function permissionCheck(){
-        if (!isAdmin()){
+    function permissionCheck()
+    {
+        if (!isAdmin()) {
             header('Location: /user/home');
         }
 
@@ -155,7 +158,7 @@ class adminController extends BaseController
         //validate input
         $method = $_SERVER['REQUEST_METHOD'];
 
-        if (!validateUpdateForm($method, $request)){
+        if (!validateUpdateForm($method, $request)) {
             header('Location: /admin/updateAdmin');
             exit;
         }
@@ -178,13 +181,23 @@ class adminController extends BaseController
         //validate input
         $method = $_SERVER['REQUEST_METHOD'];
 
-        if (!validateSearchForm($method)){
+        if (!validateSearchForm($method)) {
             header('Location: /admin/home');
             exit;
         }
 
+        $emailPhrase = $_GET['email'];
+        $namePhrase = $_GET['name'];
+        $page = 1;
+        if (isset($_GET['page']) && is_numeric($_GET['page'])) {
+            $page = $_GET['page'];
+        }
+
         //search
-        $result = $this->adminModel->findByEmailAndName($_REQUEST['email'],$_REQUEST['name']);
+        $result = $this->adminModel->findByEmailAndName($emailPhrase, $namePhrase, $page);
+        if (isset($result)) {
+            $_SESSION['flash_message']['search']['success'] = getMessage('search_success');
+        }
         $this->render('home', ['data' => $result]);
     }
 
