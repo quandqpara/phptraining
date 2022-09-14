@@ -23,8 +23,9 @@ return [
     'avatar_over_size' => 'Avatar size must be <= 2MB',
 
     'verify_password' => 'Your Password Verify must match your password.',
+
     'invalid_id' => 'ID must only contain numbers',
-    'no_id_found' => 'Must provide a valid ID to update!',
+    'no_id_found' => 'Must provide a valid ID!',
 
     //Module - Controller interaction Messages
     'create_success' => 'New account has been successfully created!',

@@ -1,5 +1,5 @@
 <?php
-include_once  'model/interface/QueryInterface.php';
+include_once 'model/interface/QueryInterface.php';
 
 abstract class BaseModel implements QueryInterface
 {
@@ -7,31 +7,27 @@ abstract class BaseModel implements QueryInterface
     public $fillable;
     public $conn;
     public $columnCreate;
-    public $columnUpdate;
 
-    function __construct(){
+    function __construct()
+    {
     }
 
-    function writeLog($log){
-        $logFile = fopen("log.txt", "w") or die("Unable to open file");
-        fwrite($logFile, $log);
-        fclose($logFile);
-    }
-
-    //helper
+    //--------------------------------------------------HELPER----------------------------------------------------------
     //Autobind:
     //&$stmt that have value that need binding
     //$needBinding array of key & value of corresponding value need in $stmt
-    public function autoBind(&$stmt, $needBinding = []){
-        foreach ($needBinding as $key=>&$value){
+    public function autoBind(&$stmt, $needBinding = [])
+    {
+        foreach ($needBinding as $key => &$value) {
             $stmt->bindParam(":$key", $value, PDO::PARAM_STR);
         }
     }
 
     //remove empty input field
-    public function removeEmptyField(&$arrayOfInput){
-        foreach ($arrayOfInput as $key=>$value){
-            if(is_null($value) || $value == ''){
+    public function removeEmptyField(&$arrayOfInput)
+    {
+        foreach ($arrayOfInput as $key => $value) {
+            if (is_null($value) || $value == '') {
                 unset($arrayOfInput[$key]);
             }
         }
@@ -41,50 +37,62 @@ abstract class BaseModel implements QueryInterface
     //for each element in &$inputArray
     //if $key is not in fillable array
     //remove that from &$inputArray
-    public function checkFillable(&$input){
-        foreach ($input as $key=>$value){
-            if(!in_array($key, $this->fillable)){
+    public function checkFillable(&$input)
+    {
+        foreach ($input as $key => $value) {
+            if (!in_array($key, $this->fillable)) {
                 unset($input[$key]);
             }
         }
     }
 
+    //-------------------------------------------------DB---------------------------------------------------------------
+
     //need 'name', 'password', 'email', 'avatar', 'role_type', 'ins_id', 'ins_datetime'
-    public function create( $validatedDataFromInput = [])
+    public function create($validatedDataFromInput = [])
     {
+        unset($_SESSION['flash_message']);
+        unset($_SESSION['old_data']);
+
         // TODO: Implement create() method.
 
-        $validatedDataFromInput = array_merge($validatedDataFromInput, [
+        $data = array_merge($validatedDataFromInput, [
             'ins_id' => getAdminID(),
             'ins_datetime' => date('Y-m-d H:i:s')
         ]);
 
-        $this->checkFillable($validatedDataFromInput);
+
         //if checkFillable() removed some unnecessary data and that make
-        //number of columns that need info is different from number of values provided.
+        //the amount of data from input more or less than the number of column require input.
         //do not create new account
-        if(count($validatedDataFromInput) != count($this->columnCreate)){
-            $_SERVER['flash_message']['create']['failed'] = getMessage('create_failed');
-            header('Location: admin/create/');
+        $this->checkFillable($data);
+        if (count($data) != count($this->columnCreate)) {
+            $_SESSION['flash_message']['create']['failed'] = getMessage('create_failed');
+            header('Location: admin/createAdmin/');
             exit;
         }
+
+        $listOfRequireInfo = implode(', ', $this->columnCreate);
+        $listOfRequireValue = ':' . implode(', :', $this->columnCreate);
+
+        $rowCount = 0;
         try {
-            $sql = "INSERT INTO {$this->tableName}( {implode(',', $this->columnCreate)},del_flag) VALUES ( :{implode(': ,', $validatedDataFromInput)},".DEL_FLAG_OFF.")";
+            $sql = "INSERT INTO {$this->tableName} ({$listOfRequireInfo}) VALUES ({$listOfRequireValue})";
             $stmt = $this->conn->prepare($sql);
-            $this->autoBind($stmt, $validatedDataFromInput);
+            $this->autoBind($stmt, $data);
             $stmt->execute();
 
-            if ($stmt->rowCount() == 0) {
+            $rowCount = $stmt->rowCount();
+            if ($rowCount == 0 || $rowCount > 1) {
                 $_SESSION['flash_message']['create']['failed'] = getMessage('create_failed');
-            } else {
+            } else if ($rowCount == 1) {
                 $_SESSION['flash_message']['create']['success'] = getMessage('create_success');
             }
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
         }
-
-        $log = "ACTION: Create account at email ".$validatedDataFromInput['email']."- BY: ".$validatedDataFromInput['ins_id']." DATE: ".$validatedDataFromInput['ins_datetime'];
-        $this->writeLog($log);
+        $log = "ACTION: Create account at email " . $data['email'] . "- BY: " . $data['ins_id'] . " DATE: " . $data['ins_datetime'];
+        writeLog($log);
     }
 
     //need which row to update and its corresponding value and id
@@ -102,12 +110,13 @@ abstract class BaseModel implements QueryInterface
         $this->checkFillable($data);
 
         $columnArr = array();
-        foreach ($data as $key=>$value){
-            $setKeyAndValue = $key.' = :'.$key;
+        foreach ($data as $key => $value) {
+            $setKeyAndValue = $key . ' = :' . $key;
             $columnArr[] = $setKeyAndValue;
         }
 
         $setArray = implode(', ', $columnArr);
+        $rowChange = 0;
 
         try {
             $sql = "UPDATE {$this->tableName} SET {$setArray} WHERE id = {$id}";
@@ -116,20 +125,17 @@ abstract class BaseModel implements QueryInterface
             $stmt->execute();
 
             $rowChange = $stmt->rowCount();
-            if ($rowChange == 0) {
+            if ($rowChange == 0 || $rowChange > 1) {
                 $_SESSION['flash_message']['update']['failed'] = getMessage('update_failed');
-            } else {
-                $_SESSION['flash_message']['update']['success'] = "Admin ID: ".$id.getMessage('update_success');
+            } else if ($rowChange == 1) {
+                $_SESSION['flash_message']['edit']['success'] = getMessage('update_success');
             }
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
         }
 
-        $log = "ACTION: UPDATE account at id: ".$id." - BY: ".$data['ins_id']." DATE: ".$data['ins_datetime'];
-        $this->writeLog($log);
-
-        header('Location: /admin/home?email='.$data['email'].'&name='.$data['name']);
-        exit;
+        $log = "ACTION: UPDATE account at id: " . $id . " - BY: " . $data['ins_id'] . " DATE: " . $data['ins_datetime'];
+        writeLog($log);
     }
 
     //need email and name
@@ -147,19 +153,19 @@ abstract class BaseModel implements QueryInterface
         );
 
         $limit = 10;
-        $start = $limit * ($page-1);
+        $start = $limit * ($page - 1);
         $total = 0;
 
         $sql = "SELECT id, avatar, name, email, role_type 
                 FROM {$this->tableName} 
                 WHERE email LIKE '%{$email}%'
                     AND name LIKE '%{$name}%'
-                    AND del_flag = ".DEL_FLAG_OFF ;
+                    AND del_flag = " . DEL_FLAG_OFF;
 
-        $limitSQL = " LIMIT ". $start.",".$limit;
+        $limitSQL = " LIMIT " . $start . "," . $limit;
 
         //getting total number of result
-        if($total == 0){
+        if ($total == 0) {
             try {
                 $stmtUnlimit = $this->conn->prepare($sql);
                 $stmtUnlimit->execute();
@@ -174,7 +180,7 @@ abstract class BaseModel implements QueryInterface
 
         //return page with limited result
         try {
-            $query = $sql.$limitSQL;
+            $query = $sql . $limitSQL;
             $stmt = $this->conn->prepare($query);
             $stmt->execute();
 
@@ -185,8 +191,8 @@ abstract class BaseModel implements QueryInterface
             echo "Error: " . $e->getMessage();
         }
 
-        $totalPages = ceil($total/ $limit);
-        $page = (isset($page)&&$page<10000) ? (int)$page : 1;
+        $totalPages = ceil($total / $limit);
+        $page = (isset($page) && $page < 10000) ? (int)$page : 1;
         $start = $limit * ($page - 1);
         $next = ($page > 1) ? $page + 1 : 1;
         $prev = ($page < $total) ? $page - 1 : $total;
@@ -200,8 +206,8 @@ abstract class BaseModel implements QueryInterface
         ];
         $dataPackage['pagination'] = $paginationInfo;
 
-        $log = "ACTION: SEARCH email: ".$email." and name: ".$name." - BY: ".$data['search_id']." DATE: ".$data['search_datetime'];
-        $this->writeLog($log);
+        $log = "ACTION: SEARCH email: " . $email . " and name: " . $name . " - BY: " . $data['search_id'] . " DATE: " . $data['search_datetime'];
+        writeLog($log);
 
         return $dataPackage;
     }
@@ -216,21 +222,21 @@ abstract class BaseModel implements QueryInterface
         );
 
         try {
-            $sql = "UPDATE {$this->tableName} SET del_flag = ".DEL_FLAG_ON." WHERE id = ".$id;
+            $sql = "UPDATE {$this->tableName} SET del_flag = " . DEL_FLAG_ON . " WHERE id = " . $id;
             $stmt = $this->conn->prepare($sql);
             $stmt->execute();
 
-            if ($stmt->rowCount() == 0) {
-                $_SESSION['flash_message']['update']['failed'] = getMessage('update_failed');
+            if ($stmt->rowCount() == 0 || $stmt->rowCount() > 1) {
+                $_SESSION['flash_message']['delete']['failed'] = getMessage('delete_failed');
             } else {
-                $_SESSION['flash_message']['update']['success'] = getMessage('update_success');
+                $_SESSION['flash_message']['delete']['success'] = getMessage('delete_success');
             }
 
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
         }
 
-        $log = "ACTION: DELETE account at id ".$id." - BY: ".$data['ins_id']." DATE: ".$data['ins_datetime'];
-        $this->writeLog($log);
+        $log = "ACTION: DELETE account at id " . $id . " - BY: " . $data['ins_id'] . " DATE: " . $data['ins_datetime'];
+        writeLog($log);
     }
 }

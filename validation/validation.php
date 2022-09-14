@@ -1,5 +1,5 @@
 <?php
-//validate input pre-access to database
+//-----------------------------COMPONENT VALIDATION----------------------------------
 function validateID($id): int
 {
     $flag = 0;
@@ -59,41 +59,30 @@ function getFileType($fileType)
     return ltrim(strstr($fileType, '/'), '/');
 }
 
-function validateAvatar($avatar, $email): int
+function validateAvatar($avatar): int
 {
     $flag = 0;
-    showLog($_FILES, true);
     //check possible errors: empty, error, sizing, type
-    if (isset($_FILES[$avatar])) {
+    if (!isset($_FILES[$avatar])) {
         $_SESSION['flash_message']['avatar']['empty'] = getMessage('avatar_empty');
         $flag += 1;
     }
-
+;
     if ($_FILES[$avatar]['error'] != 0) {
         $_SESSION['flash_message']['avatar']['error'] = getMessage('avatar_error');
         $flag += 1;
     }
 
-    if ($_FILES[$avatar]['size'] < MBToByte(2)) {
+    if ($_FILES[$avatar]['size'] > MBToByte(2)) {
         $_SESSION['flash_message']['avatar']['size'] = getMessage('avatar_over_size');
         $flag += 1;
     }
 
-    if (!in_array($_FILES['type'], IMAGE_UPLOAD_FILE_TYPE)) {
+    if (!in_array($_FILES['avatar']['type'], IMAGE_UPLOAD_FILE_TYPE)) {
         $_SESSION['flash_message']['avatar']['type'] = getMessage('invalid_avatar');
         $flag += 1;
     }
 
-    //if no error was found, save the image to an actual folder.
-    $targetDir = "uploads/avatar/";
-    $fileType = getFileType($_FILES['avatar']['type']);
-    $fileNameAfterSaved = renameUploadImage($email) . '-avatar' . $fileType;
-
-    $targetFile = $targetDir . $fileNameAfterSaved;
-
-    if ($flag === 0) {
-        move_uploaded_file($_FILES['avatar']['tmp_name'], $targetFile);
-    }
     return $flag;
 }
 
@@ -161,6 +150,7 @@ function validateUsersStatus($status): int
 function validateSubmitFormPostAndEmptyRequest($method, $request): int
 {
     $flag = 0;
+
     if ($method !== 'POST') {
         $_SESSION['flash_message']['common']['failed'] = getMessage('common_error');
         $flag += 1;
@@ -170,6 +160,7 @@ function validateSubmitFormPostAndEmptyRequest($method, $request): int
         $_SESSION['flash_message']['common']['failed'] = getMessage('common_error');
         $flag += 1;
     }
+
     return $flag;
 }
 
@@ -188,23 +179,37 @@ function validateSubmitFormGetAndEmptyRequest($method, $request): int
     return $flag;
 }
 
-//Function validate
+//----------------------------------HELPER-------------------------------------------
 function flagCheck($flag, $user, $location)
 {
     if ($flag > 0) {
+        retrieveOldFormData();
         header('Location: /' . $user . '/' . $location);
         exit;
     }
 }
 
+//----------------------------------ADMIN VALIDATION----------------------------------
+function validateLoginInput($method)
+{
+    $error_flag = 0;
+
+    $error_flag += validateSubmitFormPostAndEmptyRequest($method, $_REQUEST);
+
+    flagCheck($error_flag, 'admin', 'index');
+
+    $error_flag += validateAllInput();
+
+    flagCheck($error_flag, 'admin', 'index');
+    return true;
+}
+
+//for Create
 function validateAllInput()
 {
     $flag = 0;
     foreach ($_REQUEST as $item) {
         switch ($item) {
-            case 'avatar':
-                $flag += validateAvatar($_REQUEST['avatar'], $_REQUEST['email']);
-                break;
             case 'name':
                 $flag += validateName($_REQUEST['name']);
                 break;
@@ -225,14 +230,12 @@ function validateAllInput()
     return $flag;
 }
 
+//for Update
 function validateAllUpdateInput(){
     $flag = 0;
     if (!empty($_REQUEST['password'])){
         foreach ($_REQUEST as $item) {
             switch ($item) {
-                case 'avatar':
-                    $flag += validateAvatar($_REQUEST['avatar'], $_REQUEST['email']);
-                    break;
                 case 'name':
                     $flag += validateName($_REQUEST['name']);
                     break;
@@ -251,33 +254,23 @@ function validateAllUpdateInput(){
     return $flag;
 }
 
-function validateAdminCreateForm($method)
+function validateAdminCreateForm($method, $avatarFlag)
 {
     $error_flag = 0;
 
-    $error_flag += validateSubmitFormPostAndEmptyRequest($method, $_REQUEST);
+    $error_flag += validateSubmitFormPostAndEmptyRequest($method, $_POST);
 
-    flagCheck($error_flag, 'admin', 'createAdmin');
-
-    $error_flag += validateAllInput();
-
-    flagCheck($error_flag, 'admin', 'createAdmin');
-    return true;
-
-}
-
-function validateLoginInput($method)
-{
-    $error_flag = 0;
-
-    $error_flag += validateSubmitFormPostAndEmptyRequest($method, $_REQUEST);
-
-    flagCheck($error_flag, 'admin', 'index');
+    if(is_numeric($avatarFlag)){
+        $error_flag += $avatarFlag;
+    }
 
     $error_flag += validateAllInput();
 
-    flagCheck($error_flag, 'admin', 'index');
+    //if flag check failed -> redirect
+    flagCheck($error_flag, 'admin', 'createPageAdmin');
+    //otherwise return true
     return true;
+
 }
 
 function validateUpdateForm($method, $request, $id)
@@ -286,33 +279,15 @@ function validateUpdateForm($method, $request, $id)
 
     $error_flag += validateSubmitFormPostAndEmptyRequest($method, $request);
 
-    flagCheck($error_flag, 'admin', 'editAdmin');
+    flagCheck($error_flag, 'admin', 'editAdmin?id='.$id);
 
     $error_flag += validateID($id);
 
-    flagCheck($error_flag, 'admin', 'editAdmin');
+    flagCheck($error_flag, 'admin', 'editAdmin?id='.$id);
 
     $error_flag += validateAllUpdateInput();
 
-    flagCheck($error_flag, 'admin', 'editAdmin');
-    return true;
-}
-
-function validateDeleteForm($method, $id)
-{
-    $error_flag = 0;
-
-    $error_flag += validateSubmitFormPostAndEmptyRequest($method, $_REQUEST);
-
-    flagCheck($error_flag, 'admin', 'deleteAdmin');
-
-    $error_flag += validateID($id);
-
-    flagCheck($error_flag, 'admin', 'deleteAdmin');
-
-    $error_flag += validateAllInput();
-
-    flagCheck($error_flag, 'admin', 'deleteAdmin');
+    flagCheck($error_flag, 'admin', 'editAdmin?id='.$id);
     return true;
 }
 
@@ -334,4 +309,90 @@ function validateSearchForm($method)
 
     return true;
 }
+
+//----------------------------------USER VALIDATION----------------------------------
+function validateAllUpdateInputForUser()
+{
+    $flag = 0;
+
+    if(!isset($_REQUEST['password'])){
+        foreach ($_REQUEST as $item) {
+            switch ($item) {
+                case 'name':
+                    $flag += validateName($_REQUEST['name']);
+                    break;
+                case 'email':
+                    $flag += validateEmail($_REQUEST['email']);
+                    break;
+                case 'role':
+                    $flag += validateAdminRoles($_REQUEST['role']);
+                    break;
+            }
+        }
+    } else if (isset($_REQUEST['password'])){
+        foreach ($_REQUEST as $item) {
+            switch ($item) {
+                case 'name':
+                    $flag += validateName($_REQUEST['name']);
+                    break;
+                case 'email':
+                    $flag += validateEmail($_REQUEST['email']);
+                    break;
+                case 'password':
+                    $flag += validatePassword($_REQUEST['password']);
+                    break;
+                case 'verify':
+                    $flag += validateVerifyPassword($_REQUEST['password'], $_REQUEST['verify']);
+                    break;
+                case 'role':
+                    $flag += validateAdminRoles($_REQUEST['role']);
+                    break;
+            }
+        }
+    }
+
+
+
+    return $flag;
+}
+
+function validateSearchFormForUser($method)
+{
+    $error_flag = 0;
+
+    //method should be get and $_GET should not be empty
+    $error_flag += validateSubmitFormGetAndEmptyRequest($method, $_GET);
+
+    flagCheck($error_flag, 'admin', 'searchPageUser');
+
+    //don't have to validate anything more than empty input
+    if (!isset($_GET['email']) || !isset($_GET['name'])) {
+        $_SESSION['flash_message']['email']['empty'] = getMessage('email_empty');
+        $_SESSION['flash_message']['name']['empty'] = getMessage('name_empty');
+        return false;
+    }
+
+    return true;
+}
+
+function validateUpdateFormForUser($method, $request, $id)
+{
+    $error_flag = 0;
+
+    $error_flag += validateSubmitFormPostAndEmptyRequest($method, $request);
+
+    flagCheck($error_flag, 'admin', 'editPageUser?id='.$id);
+
+    $error_flag += validateID($id);
+
+    flagCheck($error_flag, 'admin', 'editPageUser?id='.$id);
+
+    $error_flag += validateAllUpdateInputForUser();
+
+    flagCheck($error_flag, 'admin', 'editPageUser?id='.$id);
+    return true;
+}
+
+
+
 

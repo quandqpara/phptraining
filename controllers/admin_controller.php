@@ -1,6 +1,7 @@
 <?php
 require_once('controllers/base_controller.php');
 require_once('model/AdminModel.php');
+require_once('model/UserModel.php');
 require_once('validation/validation.php');
 require_once('Helper/common.php');
 
@@ -12,37 +13,50 @@ class adminController extends BaseController
     {
         $this->folder = 'admin';
         $this->adminModel = new AdminModel();
+        $this->userModel = new UserModel();
     }
 
     //-----------------------------------------------------VIEW SECTION-------------------------------------------------
+    //login
     public function index()
     {
         return $this->render('index');
     }
 
+    //search page/ home page
     public function home()
     {
         return $this->render('home');
     }
 
+    //create admin page
     public function createPageAdmin()
     {
         return $this->render('createAdmin');
     }
 
-    public function createPageUser()
-    {
-        return $this->render('createUser');
-    }
-
+    //edit admin page
     public function editPageAdmin()
     {
-        return $this->render('editAdmin');
+        if(isset($_GET['id'])){
+            $updatingAdminInfo = $this->adminModel->searchOneAdmin($_GET['id']);
+        }
+        return $this->render('editAdmin', ['targetAdminToUpdate' => $updatingAdminInfo]);
     }
 
+    //search user page
+    public function searchPageUser()
+    {
+        return $this->render('searchUser');
+    }
+
+    //edit user page
     public function editPageUser()
     {
-        return $this->render('editUser');
+        if(isset($_GET['id'])){
+            $updatingUserInfo = $this->userModel->searchOneUser($_GET['id']);
+        }
+        return $this->render('editUser', ['targetUserToUpdate'=>$updatingUserInfo]);
     }
 
     //-----------------------------------------------------AUTH SECTION-------------------------------------------------
@@ -109,34 +123,79 @@ class adminController extends BaseController
     }
 
     //----------------------------------------------------ADMIN SECTION-------------------------------------------------
+    //normal Admin check
+    function isPermissionAdmin(){
+        if (!isAdmin()) {
+            $_SESSION['flash_message']['permission']['no_permission_admin'] = getMessage('no_permission_admin');
+            header('Location: /user/home');
+        }
+
+        return true;
+    }
+
+    //superAdmin check
     function permissionCheck()
     {
         if (!isAdmin()) {
+            $_SESSION['flash_message']['permission']['no_permission_admin'] = getMessage('no_permission_admin');
             header('Location: /user/home');
         }
 
         if (!isSuperAdmin()) {
-            header('Location: /admin/createUser');
+            $_SESSION['flash_message']['permission']['no_permission_super_admin'] = getMessage('no_permission_super_admin');
+            header('Location: /admin/home');
         }
         return true;
+    }
+
+    //handle avatar
+    function handleAvatar()
+    {
+        $error = 0;
+        if (isset($_POST)) {
+            $tempname = $_FILES['avatar']['tmp_name'];
+            $folder = ROOT . "/uploads/avatar/";
+
+            $error += validateAvatar('avatar');
+
+            //if no error was found, save the image to an actual folder.
+            if ($error == 0) {
+                $fileType = getFileType($_FILES['avatar']['type']);
+                $fileNameAfterSaved = renameUploadImage($_POST['email']) . '-avatar.' . $fileType;
+                $folder .= $fileNameAfterSaved;
+                if (file_exists($folder)){
+                    unlink($folder);
+                    move_uploaded_file($tempname, $folder);
+                } else {
+                    move_uploaded_file($tempname, $folder);
+                }
+                return $folder;
+            }
+        }
+        //else return error
+        return $error;
     }
 
     //create - ADMIN(super)
     //Must be admin to create new admin
     function createAdmin()
     {
-        //check for permission
+        unsetAll();
+        //check for permission - if there is no permission back to homepage
         $this->permissionCheck();
 
         $method = $_SERVER['REQUEST_METHOD'];
+        $request = $_POST;
 
         //check validity of the input
         //if not pass return
         //if passed try to create
-        if (!validateAdminCreateForm($method, $_REQUEST)) {
-            header('Location: /admin/createAdmin');
-            exit;
-        }
+        $avatarLink = $this->handleAvatar();
+        validateAdminCreateForm($method, $avatarLink);
+
+        //if it can pass validateAdminCreateForm
+        //Correcting the $_REQUEST before passing it to the query
+        $_REQUEST['avatar'] = $avatarLink;
 
         //try to create (call create from module)
         $infoArrayForCreateAccount = $this->getInfoForCreateNewAdmin();
@@ -144,7 +203,7 @@ class adminController extends BaseController
 
         //redirect to create Screen with messages
         retrieveOldFormData();
-        header('Location: /admin/createAdmin');
+        header('Location: /admin/createPageAdmin');
         exit;
     }
 
@@ -162,6 +221,7 @@ class adminController extends BaseController
     //update - ADMIN(super)
     function editAdmin()
     {
+        unsetAll();
         //permission check
         $this->permissionCheck();
 
@@ -183,7 +243,6 @@ class adminController extends BaseController
 
         //try to update (input id and value to change)
         $this->adminModel->update($id, $request);
-        showLog($request);
 
         retrieveOldFormData();
         header('Location: '.$location);
@@ -193,6 +252,7 @@ class adminController extends BaseController
     //search - ADMIN(super)
     function searchAdmin()
     {
+        unsetAll();
         //permission check
         $this->permissionCheck();
 
@@ -222,30 +282,129 @@ class adminController extends BaseController
     //delete - ADMIN(super)
     function deleteAdmin()
     {
-        if (!isSuperAdmin()) {
-            setFlashMessage(getMessage('no_permission'));
+        //unset $_SESSION [flash_mess] and [old_data]
+        unsetAll();
+        //permission check
+        $this->permissionCheck();
 
-            header('Location: /');
+        //collecting $id to delete from GET
+        $id = null;
+
+        //if $_GET['id'] is empty or not set back to search with message
+        if (!isset($_GET['id']) || empty($_GET['id'])) {
+            $_SESSION['flash_message']['id']['no_id_found'] = getMessage('no_id_found');
+            header('Location: /admin/home');
+            exit;
         }
+
+        $id = $_GET['id'];
+        //if $id failed validate
+        if(validateID($id)!== 0) {
+            $_SESSION['flash_message']['id']['invalid'] = getMessage('invalid_id');
+            header('Location: /admin/home');
+            exit;
+        }
+
+        //if $id passed validate
+        //delete
+        $this->adminModel->deleteById($id);
+        header('Location: /admin/home');
+        exit;
     }
 
     //-----------------------------------------------------USER SECTION-------------------------------------------------
     //search - USER(admin)
     function searchUser()
     {
+        unsetAll();
+        //permission check
+        $this->isPermissionAdmin();
 
+        //validate input
+        $method = $_SERVER['REQUEST_METHOD'];
+
+        if (!validateSearchFormForUser($method)) {
+            header('Location: /admin/searchPageUser');
+            exit;
+        }
+
+        $emailPhrase = $_GET['email'];
+        $namePhrase = $_GET['name'];
+        $page = 1;
+        if (isset($_GET['page']) && is_numeric($_GET['page'])) {
+            $page = $_GET['page'];
+        }
+
+        //search
+        $result = $this->userModel->findByEmailAndName($emailPhrase, $namePhrase, $page);
+        if (isset($result)) {
+            $_SESSION['flash_message']['search']['success'] = getMessage('search_success');
+        }
+        $this->render('searchPageUser', ['data' => $result]);
     }
 
     //edit/update - USER(admin)
     function editUser()
     {
+        unsetAll();
+        //permission check
+        $this->isPermissionAdmin();
 
+        //validate input
+        $method = $_SERVER['REQUEST_METHOD'];
+        $request = $_POST;
+
+        if (!isset($_SESSION['flash_message']['update_target']['id'])){
+            $_SESSION['flash_message']['update_id']['not_found'] = getMessage('no_id_found');
+        }
+        $id = $_SESSION['flash_message']['update_target']['id'];
+        $location = '/admin/editPageUser?id='.$id;
+
+        if (!validateUpdateFormForUser($method, $request, $id)) {
+            retrieveOldFormData();
+            header('Location: '.$location);
+            exit;
+        }
+
+        //try to update (input id and value to change)
+        $this->userModel->update($id, $request);
+
+        retrieveOldFormData();
+        header('Location: '.$location);
+        exit;
     }
 
     //delete - USER(admin)
     function deleteUser()
     {
+        //unset $_SESSION [flash_mess] and [old_data]
+        unsetAll();
+        //permission check
+        $this->isPermissionAdmin();
 
+        //collecting $id to delete from GET
+        $id = null;
+
+        //if $_GET['id'] is empty or not set back to search with message
+        if (!isset($_GET['id']) || empty($_GET['id'])) {
+            $_SESSION['flash_message']['id']['no_id_found'] = getMessage('no_id_found');
+            header('Location: /admin/searchPageUser');
+            exit;
+        }
+
+        $id = $_GET['id'];
+        //if $id failed validate
+        if(validateID($id)!== 0) {
+            $_SESSION['flash_message']['id']['invalid'] = getMessage('invalid_id');
+            header('Location: /admin/searchPageUser');
+            exit;
+        }
+
+        //if $id passed validate
+        //delete
+        $this->userModel->deleteById($id);
+        header('Location: /admin/searchPageUser');
+        exit;
     }
 
 }

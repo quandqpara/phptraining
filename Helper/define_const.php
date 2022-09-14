@@ -11,4 +11,4 @@ define('FACEBOOK_APP_SECRET', '2c812a2f9428e524fda285ba92c6d9a3');
 
 
 //acceptable upload file type
-define('IMAGE_UPLOAD_FILE_TYPE', array('image/png', 'image/jpg', 'image/svg', 'image/svg'));
+define('IMAGE_UPLOAD_FILE_TYPE', array('image/png', 'image/jpg', 'image/jpeg', 'image/svg', 'image/svg'));

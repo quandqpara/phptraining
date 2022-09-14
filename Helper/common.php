@@ -47,8 +47,6 @@ function isUser(){
     return false;
 }
 
-
-
 function isLoggedIn(){
     if (isset($_SESSION['admin'])) {
         header('Location: /admin/home');
@@ -60,6 +58,7 @@ function isLoggedIn(){
         exit;
     }
 }
+
 function basicUserSetter($data){
     $_SESSION['session_user']['id'] = $data[0]['id'];
     $_SESSION['session_user']['name'] = $data[0]['name'];
@@ -80,6 +79,12 @@ function showLog($data, $continue = false)
 }
 
 //helper functions
+function writeLog($log){
+    $logFile = fopen("log.txt", "w") or die("Unable to open file");
+    fwrite($logFile, $log);
+    fclose($logFile);
+}
+
 function buildURL($url)
 {
     return getServerProtocol() . SERVER_DOMAIN . '/' . $url;
@@ -92,7 +97,28 @@ function getServerProtocol()
         isset($_SERVER['HTTP_X_FORWARDED_PROTO']) &&
         $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') ? 'https://' : 'http://';
 }
+function MBToByte($size){
+    return 1024 * 1024 * $size;
+}
 
+
+//function setFlashMessage($message, $grant = 'admin')
+//{
+//    if (empty($message)) {
+//        return;
+//    }
+//
+//    $_SESSION[$grant]['flash_message'] = $message;
+//}
+//
+//function getFlashMessage($grant = 'admin')
+//{
+//    $flashMessages = $_SESSION[$grant]['flash_message'];
+//
+//    unset($_SESSION[$grant]['flash_message']);
+//
+//    return $flashMessages;
+//}
 function getMessage()
 {
     $_errorMessages = '';
@@ -128,24 +154,6 @@ function getMessage()
     }
 }
 
-//function setFlashMessage($message, $grant = 'admin')
-//{
-//    if (empty($message)) {
-//        return;
-//    }
-//
-//    $_SESSION[$grant]['flash_message'] = $message;
-//}
-//
-//function getFlashMessage($grant = 'admin')
-//{
-//    $flashMessages = $_SESSION[$grant]['flash_message'];
-//
-//    unset($_SESSION[$grant]['flash_message']);
-//
-//    return $flashMessages;
-//}
-
 function handleFlashMessage($message)
 {
     $tempMessage = null;
@@ -171,9 +179,31 @@ function handleFlashMessage($message)
     return $tempMessage;
 }
 
+
+function unsetAll(){
+    unsetMessage();
+    unsetOldData();
+}
+
+function unsetMessage(){
+    if(isset($_SESSION['flash_message'])){
+        unset($_SESSION['flash_message']);
+    }
+}
+
+function unsetOldData(){
+    if(isset($_SESSION['old_data'])){
+        unset($_SESSION['old_data']);
+    }
+}
+
 function retrieveOldFormData(){
+    if(isset($_SESSION['old_data'])){
+        unset($_SESSION['old_data']);
+    }
+
     foreach ($_REQUEST as $item){
-        if(array_search($item, $_REQUEST) !== 'password'){
+        if(array_search($item, $_REQUEST) !== 'password'|| array_search($item, $_REQUEST) !== 'role_type'){
             $_SESSION['old_data'][array_search($item, $_REQUEST)] = $item;
         }
     }
@@ -196,7 +226,5 @@ function oldData($field, $default = '')
     return isset($data) ? $data : $default;
 }
 
-function MBToByte($size){
-    return 1024 * 1024 * $size;
-}
+
 

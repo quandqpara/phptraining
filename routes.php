@@ -1,9 +1,9 @@
 <?php
 $controllers = array(
     'default' => ['index'],
-    'admin' => ['index', 'auth', 'home', 'logout',
-                'createPageAdmin','createAdmin', 'searchAdmin', 'editPageAdmin', 'editAdmin',
-                'createUserPage', 'createUser', 'searchUser', 'editPageUser', 'editUser'],
+    'admin' => ['index', 'auth', 'logout', 'home', 'searchAdmin', 'deleteAdmin',
+                'createPageAdmin','createAdmin',  'editPageAdmin', 'editAdmin',
+                'searchUser', 'searchPageUser', 'editPageUser', 'editUser'],
     'users' => ['index', 'auth', 'fbAuth', 'home'. 'logout'],
     'error' => ['error']
 );

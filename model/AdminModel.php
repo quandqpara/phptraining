@@ -21,7 +21,6 @@ class AdminModel extends BaseModel
             'upd_datetime'
         ];
         $this->columnCreate = array('name', 'password', 'email', 'avatar', 'role_type', 'ins_id', 'ins_datetime');
-        $this->columnUpdate = array();
         $this->conn = DB::getInstance();
     }
 
@@ -44,11 +43,11 @@ class AdminModel extends BaseModel
         return $userData;
     }
 
-    public function searchOne($id)
+    public function searchOneAdmin($id)
     {
         $targetInfo = [];
         try {
-            $stmt = $this->conn->prepare("SELECT name, email, avatar, role_type FROM ".$this->tableName." WHERE id = :id AND del_flag = :flag");
+            $stmt = $this->conn->prepare("SELECT name, email, avatar FROM ".$this->tableName." WHERE id = :id AND del_flag = :flag");
             $stmt->bindParam(':id', $_GET['id']);
             $flag = DEL_FLAG_OFF;
             $stmt->bindParam(':flag', $flag);
@@ -61,5 +60,4 @@ class AdminModel extends BaseModel
 
         return $targetInfo;
     }
-
 }

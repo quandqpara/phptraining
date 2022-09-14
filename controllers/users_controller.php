@@ -13,9 +13,9 @@ class usersController extends BaseController
         return $this->render('index');
     }
 
-    public function home()
+    public function profile()
     {
-        return $this->render('home');
+        return $this->render('profile');
     }
 
 

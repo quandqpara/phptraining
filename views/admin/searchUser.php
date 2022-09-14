@@ -56,7 +56,7 @@
         </span>
     </div>
     <div class="mt-3 mb-3 search-box border border-dark">
-        <form method="GET" action="/admin/searchAdmin" class=" m-4 form-create">
+        <form method="GET" action="/admin/searchUser" class=" m-4 form-create">
             <!-- Email input -->
             <div class="row g-2 align-items-center mb-3 mt-3">
                 <div class="col-auto m-3">
@@ -181,28 +181,28 @@
                         $searchTable .= "<td>" . $result['name'] . "</td>";
                         $searchTable .= "<td>" . $result['email'] . "</td>";
 
-                       $role = '';
-                        if (!empty($result['role_type'])) {
-                            $role = $result['role_type'];
-                            switch ($role) {
-                                case 1:
-                                    $role = 'Admin';
+                        $status = '';
+                        if (!empty($result['status'])) {
+                            switch ($result['status']) {
+                                case '1':
+                                    $status = 'Active';
                                     break;
-                                case 2:
-                                    $role = 'Super Admin';
+                                case '2':
+                                    $status = 'Banned';
                                     break;
                             }
                         }
-                        $searchTable .= "<td>" . $role . "</td>";
+
+                        $searchTable .= "<td>" . $status . "</td>";
 
                         $searchTable .= " <td>
                         <div class=\"row g-2 align-items-center\">
                             <div class=\"col-auto\">
-                                    <a class=\"disguised-button edit-btn\" href=\"/admin/editPageAdmin?id=" . $result['id'] . "\">Edit</a> 
+                                    <a class=\"disguised-button edit-btn\" href=\"/admin/editPageUser?id=" . $result['id'] . "\">Edit</a> 
                             </div>
                             <div class=\"col-auto\">
                                     <a  class=\"disguised-button delete-btn confirmation\" 
-                                        href=\"/admin/deleteAdmin?id=" . $result['id'] . "\"
+                                        href=\"/admin/deleteUser?id=" . $result['id'] . "\"
                                         onclick=\"return confirm('Are you sure?')\"
                                     >
                                         Delete
