@@ -38,7 +38,7 @@ class adminController extends BaseController
     //edit admin page
     public function editPageAdmin()
     {
-        if(isset($_GET['id'])){
+        if (isset($_GET['id'])) {
             $updatingAdminInfo = $this->adminModel->searchOneAdmin($_GET['id']);
         }
         return $this->render('editAdmin', ['targetAdminToUpdate' => $updatingAdminInfo]);
@@ -53,10 +53,10 @@ class adminController extends BaseController
     //edit user page
     public function editPageUser()
     {
-        if(isset($_GET['id'])){
+        if (isset($_GET['id'])) {
             $updatingUserInfo = $this->userModel->searchOneUser($_GET['id']);
         }
-        return $this->render('editUser', ['targetUserToUpdate'=>$updatingUserInfo]);
+        return $this->render('editUser', ['targetUserToUpdate' => $updatingUserInfo]);
     }
 
     //-----------------------------------------------------AUTH SECTION-------------------------------------------------
@@ -124,7 +124,8 @@ class adminController extends BaseController
 
     //----------------------------------------------------ADMIN SECTION-------------------------------------------------
     //normal Admin check
-    function isPermissionAdmin(){
+    function isPermissionAdmin()
+    {
         if (!isAdmin()) {
             $_SESSION['flash_message']['permission']['no_permission_admin'] = getMessage('no_permission_admin');
             header('Location: /user/home');
@@ -163,7 +164,7 @@ class adminController extends BaseController
                 $fileType = getFileType($_FILES['avatar']['type']);
                 $fileNameAfterSaved = renameUploadImage($_POST['email']) . '-avatar.' . $fileType;
                 $folder .= $fileNameAfterSaved;
-                if (file_exists($folder)){
+                if (file_exists($folder)) {
                     unlink($folder);
                     move_uploaded_file($tempname, $folder);
                 } else {
@@ -229,15 +230,15 @@ class adminController extends BaseController
         $method = $_SERVER['REQUEST_METHOD'];
         $request = $_POST;
 
-        if (!isset($_SESSION['flash_message']['update_target']['id'])){
+        if (!isset($_SESSION['flash_message']['update_target']['id'])) {
             $_SESSION['flash_message']['update_id']['not_found'] = getMessage('no_id_found');
         }
         $id = $_SESSION['flash_message']['update_target']['id'];
-        $location = '/admin/editPageAdmin?id='.$id;
+        $location = '/admin/editPageAdmin?id=' . $id;
 
         if (!validateUpdateForm($method, $request, $id)) {
             retrieveOldFormData();
-            header('Location: '.$location);
+            header('Location: ' . $location);
             exit;
         }
 
@@ -245,7 +246,7 @@ class adminController extends BaseController
         $this->adminModel->update($id, $request);
 
         retrieveOldFormData();
-        header('Location: '.$location);
+        header('Location: ' . $location);
         exit;
     }
 
@@ -299,7 +300,7 @@ class adminController extends BaseController
 
         $id = $_GET['id'];
         //if $id failed validate
-        if(validateID($id)!== 0) {
+        if (validateID($id) !== 0) {
             $_SESSION['flash_message']['id']['invalid'] = getMessage('invalid_id');
             header('Location: /admin/home');
             exit;
@@ -354,15 +355,15 @@ class adminController extends BaseController
         $method = $_SERVER['REQUEST_METHOD'];
         $request = $_POST;
 
-        if (!isset($_SESSION['flash_message']['update_target']['id'])){
+        if (!isset($_SESSION['flash_message']['update_target']['id'])) {
             $_SESSION['flash_message']['update_id']['not_found'] = getMessage('no_id_found');
         }
         $id = $_SESSION['flash_message']['update_target']['id'];
-        $location = '/admin/editPageUser?id='.$id;
+        $location = '/admin/editPageUser?id=' . $id;
 
         if (!validateUpdateFormForUser($method, $request, $id)) {
             retrieveOldFormData();
-            header('Location: '.$location);
+            header('Location: ' . $location);
             exit;
         }
 
@@ -370,7 +371,7 @@ class adminController extends BaseController
         $this->userModel->update($id, $request);
 
         retrieveOldFormData();
-        header('Location: '.$location);
+        header('Location: ' . $location);
         exit;
     }
 
@@ -394,7 +395,7 @@ class adminController extends BaseController
 
         $id = $_GET['id'];
         //if $id failed validate
-        if(validateID($id)!== 0) {
+        if (validateID($id) !== 0) {
             $_SESSION['flash_message']['id']['invalid'] = getMessage('invalid_id');
             header('Location: /admin/searchPageUser');
             exit;

@@ -28,7 +28,7 @@ class AdminModel extends BaseModel
     {
         $userData = [];
         try {
-            $stmt = $this->conn->prepare("SELECT id, name, email, avatar, role_type FROM ".$this->tableName." WHERE email = :email AND password = :password AND del_flag = :flag");
+            $stmt = $this->conn->prepare("SELECT id, name, email, avatar, role_type FROM " . $this->tableName . " WHERE email = :email AND password = :password AND del_flag = :flag");
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':password', $password);
             $flag = DEL_FLAG_OFF;
@@ -47,7 +47,7 @@ class AdminModel extends BaseModel
     {
         $targetInfo = [];
         try {
-            $stmt = $this->conn->prepare("SELECT name, email, avatar FROM ".$this->tableName." WHERE id = :id AND del_flag = :flag");
+            $stmt = $this->conn->prepare("SELECT name, email, avatar FROM " . $this->tableName . " WHERE id = :id AND del_flag = :flag");
             $stmt->bindParam(':id', $_GET['id']);
             $flag = DEL_FLAG_OFF;
             $stmt->bindParam(':flag', $flag);
@@ -55,7 +55,7 @@ class AdminModel extends BaseModel
 
             $targetInfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            echo "Error: ". $e;
+            echo "Error: " . $e;
         }
 
         return $targetInfo;

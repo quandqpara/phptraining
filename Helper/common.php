@@ -1,28 +1,32 @@
 <?php
 
-function setSessionAdmin($role){
+function setSessionAdmin($role)
+{
     $_SESSION['admin']['role'] = (int)$role;
 }
 
-function getAdminID(){
-    if($_SESSION['admin']){
+function getAdminID()
+{
+    if ($_SESSION['admin']) {
         return $_SESSION['session_user']['id'];
     }
 }
 
-function getUserID(){
-    if($_SESSION['user']){
+function getUserID()
+{
+    if ($_SESSION['user']) {
         return $_SESSION['session_user']['id'];
     }
 }
 
-function setSessionUser(){
+function setSessionUser()
+{
     $_SESSION['user'] = true;
 }
 
-function isAdmin(){
-    if($_SESSION['admin'])
-    {
+function isAdmin()
+{
+    if ($_SESSION['admin']) {
         return true;
     } else {
         $_SESSION['flash_message']['permission']['no_permission_admin'] = getMessage('no_permission_admin');
@@ -30,8 +34,9 @@ function isAdmin(){
     }
 }
 
-function isSuperAdmin(){
-    if($_SESSION['admin']['role'] == 2){
+function isSuperAdmin()
+{
+    if ($_SESSION['admin']['role'] == 2) {
         return true;
     } else {
         $_SESSION['flash_message']['permission']['no_permission_super_admin'] = getMessage('no_permission_super_admin');
@@ -39,15 +44,16 @@ function isSuperAdmin(){
     }
 }
 
-function isUser(){
-    if($_SESSION['user'])
-    {
+function isUser()
+{
+    if ($_SESSION['user']) {
         return true;
     }
     return false;
 }
 
-function isLoggedIn(){
+function isLoggedIn()
+{
     if (isset($_SESSION['admin'])) {
         header('Location: /admin/home');
         exit;
@@ -59,7 +65,8 @@ function isLoggedIn(){
     }
 }
 
-function basicUserSetter($data){
+function basicUserSetter($data)
+{
     $_SESSION['session_user']['id'] = $data[0]['id'];
     $_SESSION['session_user']['name'] = $data[0]['name'];
     $_SESSION['session_user']['email'] = $data[0]['email'];
@@ -79,8 +86,9 @@ function showLog($data, $continue = false)
 }
 
 //helper functions
-function writeLog($log){
-    $logFile = fopen("log.txt", "w") or die("Unable to open file");
+function writeLog($log)
+{
+    $logFile = fopen("log.txt", "a") or die("Unable to open file");
     fwrite($logFile, $log);
     fclose($logFile);
 }
@@ -97,7 +105,9 @@ function getServerProtocol()
         isset($_SERVER['HTTP_X_FORWARDED_PROTO']) &&
         $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') ? 'https://' : 'http://';
 }
-function MBToByte($size){
+
+function MBToByte($size)
+{
     return 1024 * 1024 * $size;
 }
 
@@ -159,7 +169,7 @@ function handleFlashMessage($message)
     $tempMessage = null;
 
     //check if there is any unread message
-    if (isset($_SESSION['flash_message']) && empty($_SESSION['flash_message'])){
+    if (isset($_SESSION['flash_message']) && empty($_SESSION['flash_message'])) {
         unset($_SESSION['flash_message']);
         return $tempMessage;
     }
@@ -168,8 +178,8 @@ function handleFlashMessage($message)
     //then check if ['flash_message']['item'].... contain message
     //only print first message from that ['item'][...] array
     //remove that section from 'flash_message'
-    if(isset($_SESSION['flash_message']) && !empty($_SESSION['flash_message'])){
-        if (!empty($_SESSION['flash_message'][$message])){
+    if (isset($_SESSION['flash_message']) && !empty($_SESSION['flash_message'])) {
+        if (!empty($_SESSION['flash_message'][$message])) {
             $arrayMessage = $_SESSION['flash_message'][$message];
             $tempMessage = array_shift($arrayMessage);
         }
@@ -180,30 +190,34 @@ function handleFlashMessage($message)
 }
 
 
-function unsetAll(){
+function unsetAll()
+{
     unsetMessage();
     unsetOldData();
 }
 
-function unsetMessage(){
-    if(isset($_SESSION['flash_message'])){
+function unsetMessage()
+{
+    if (isset($_SESSION['flash_message'])) {
         unset($_SESSION['flash_message']);
     }
 }
 
-function unsetOldData(){
-    if(isset($_SESSION['old_data'])){
+function unsetOldData()
+{
+    if (isset($_SESSION['old_data'])) {
         unset($_SESSION['old_data']);
     }
 }
 
-function retrieveOldFormData(){
-    if(isset($_SESSION['old_data'])){
+function retrieveOldFormData()
+{
+    if (isset($_SESSION['old_data'])) {
         unset($_SESSION['old_data']);
     }
 
-    foreach ($_REQUEST as $item){
-        if(array_search($item, $_REQUEST) !== 'password'|| array_search($item, $_REQUEST) !== 'role_type'){
+    foreach ($_REQUEST as $item) {
+        if (array_search($item, $_REQUEST) !== 'password' || array_search($item, $_REQUEST) !== 'role_type') {
             $_SESSION['old_data'][array_search($item, $_REQUEST)] = $item;
         }
     }

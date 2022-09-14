@@ -51,10 +51,11 @@
             <!-- Avatar input -->
             <div class="d-flex flex-row form-outline admin-create-item">
                 <label class="form-label admin-form-label" for="avatar">Avatar*</label>
-                <input type="file" id="avatar" name="avatar" class="form-control" accept="image/png, image/jpg, image/jpeg, image/svg, image/svg"/>
+                <input type="file" id="avatar" name="avatar" class="form-control"
+                       accept="image/png, image/jpg, image/jpeg, image/svg, image/svg"/>
                 <div class="error-holder m-3">
                     <?php
-                    if(isset($_SESSION['flash_message']['avatar'])){
+                    if (isset($_SESSION['flash_message']['avatar'])) {
                         echo handleFlashMessage('avatar');
                     } ?>
                 </div>
@@ -82,7 +83,7 @@
                        ?>"/>
                 <div class="error-holder m-3">
                     <?php
-                    if(isset($_SESSION['flash_message']['name'])){
+                    if (isset($_SESSION['flash_message']['name'])) {
                         echo handleFlashMessage('name');
                     } ?>
                 </div>
@@ -99,7 +100,7 @@
                        ?>"/>
                 <div class="error-holder m-3">
                     <?php
-                    if(isset($_SESSION['flash_message']['email'])){
+                    if (isset($_SESSION['flash_message']['email'])) {
                         echo handleFlashMessage('email');
                     } ?>
                 </div>
@@ -111,7 +112,7 @@
                 <input type="password" id="password" name="password" class="form-control"/>
                 <div class="error-holder m-3">
                     <?php
-                    if(isset($_SESSION['flash_message']['password'])){
+                    if (isset($_SESSION['flash_message']['password'])) {
                         echo handleFlashMessage('password');
                     } ?>
                 </div>
@@ -123,7 +124,7 @@
                 <input type="password" id="verify-password" name="verify-password" class="form-control"/>
                 <div class="error-holder m-3">
                     <?php
-                    if(isset($_SESSION['flash_message']['verify_password'])){
+                    if (isset($_SESSION['flash_message']['verify_password'])) {
                         echo handleFlashMessage('verify_password');
                     } ?>
                 </div>
@@ -133,16 +134,16 @@
             <div class="d-flex flex-row form-outline admin-create-item">
                 <label class="form-label admin-form-label" for="status">Role*</label>
                 <div>
-                    <input type="radio" id="active" name="status" />
+                    <input type="radio" id="active" name="status"/>
                     <label class="form-label admin-form-label" for="active" value="1">Active</label>
                 </div>
                 <div>
-                    <input type="radio" id="banned" name="status" />
+                    <input type="radio" id="banned" name="status"/>
                     <label class="form-label admin-form-label" for="banned" value="2">Banned</label>
                 </div>
                 <div class="error-holder m-3">
                     <?php
-                    if(isset($_SESSION['flash_message']['status'])){
+                    if (isset($_SESSION['flash_message']['status'])) {
                         echo handleFlashMessage('status');
                     } ?>
                 </div>

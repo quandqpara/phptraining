@@ -1,26 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4ffbe23c-1fb7-4eed-8404-eb6eb824b742" name="Changes" comment="Hoàn Thiện chức năng và giao diện Search / Edit(90%) / Create (50%)">
-      <change afterPath="$PROJECT_DIR$/uploads/avatar/default-user-avatar.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/admin/searchUser.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="4ffbe23c-1fb7-4eed-8404-eb6eb824b742" name="Changes" comment="Hoàn Thiện Module Admin">
       <change beforePath="$PROJECT_DIR$/Helper/common.php" beforeDir="false" afterPath="$PROJECT_DIR$/Helper/common.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Helper/define_const.php" beforeDir="false" afterPath="$PROJECT_DIR$/Helper/define_const.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/error_message.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/error_message.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controllers/admin_controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/admin_controller.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/users_controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/users_controller.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/log.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/AdminModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/model/AdminModel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/BaseModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/model/BaseModel.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/UserModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/model/UserModel.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/style.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/validation/validation.php" beforeDir="false" afterPath="$PROJECT_DIR$/validation/validation.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/admin/createAdmin.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/createAdmin.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/admin/createUser.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/editUser.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/admin/editAdmin.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/editAdmin.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/admin/editUser.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/editUser.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/admin/home.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/home.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/admin/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/admin/searchUser.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/searchUser.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,7 +85,7 @@
       <workItem from="1662396432302" duration="111198000" />
       <workItem from="1662726809974" duration="66455000" />
       <workItem from="1663028455233" duration="32597000" />
-      <workItem from="1663115174288" duration="31919000" />
+      <workItem from="1663115174288" duration="32230000" />
     </task>
     <task id="LOCAL-00001" summary="Create DB,&#10;Create Login Interface">
       <created>1662418595991</created>
@@ -164,7 +157,21 @@
       <option name="project" value="LOCAL" />
       <updated>1663065526867</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Hoàn Thiện Module Admin">
+      <created>1663151372904</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1663151372904</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Hoàn Thiện Module Admin">
+      <created>1663151400236</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1663151400236</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -198,6 +205,7 @@
     <MESSAGE value="Init Facebook Login API" />
     <MESSAGE value="Pagination for Search" />
     <MESSAGE value="Hoàn Thiện chức năng và giao diện Search / Edit(90%) / Create (50%)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Hoàn Thiện chức năng và giao diện Search / Edit(90%) / Create (50%)" />
+    <MESSAGE value="Hoàn Thiện Module Admin" />
+    <option name="LAST_COMMIT_MESSAGE" value="Hoàn Thiện Module Admin" />
   </component>
 </project>

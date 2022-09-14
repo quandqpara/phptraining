@@ -1,9 +1,12 @@
 <?php
-class UserModel extends BaseModel {
+
+class UserModel extends BaseModel
+{
 
     private $facebookID = '';
 
-    public function __construct (){
+    public function __construct()
+    {
         $this->tableName = 'user';
         $this->fillable = [
             'id',
@@ -22,15 +25,19 @@ class UserModel extends BaseModel {
         $this->conn = DB::getInstance();
     }
 
-    public function facebookAuth(){}
+    public function facebookAuth()
+    {
+    }
 
-    public function login(){}
+    public function login()
+    {
+    }
 
     public function searchOneUser($id)
     {
         $targetInfo = [];
         try {
-            $stmt = $this->conn->prepare("SELECT name, email, avatar FROM ".$this->tableName." WHERE id = :id AND del_flag = :flag");
+            $stmt = $this->conn->prepare("SELECT name, email, avatar FROM " . $this->tableName . " WHERE id = :id AND del_flag = :flag");
             $stmt->bindParam(':id', $_GET['id']);
             $flag = DEL_FLAG_OFF;
             $stmt->bindParam(':flag', $flag);
@@ -38,7 +45,7 @@ class UserModel extends BaseModel {
 
             $targetInfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            echo "Error: ". $e;
+            echo "Error: " . $e;
         }
 
         return $targetInfo;

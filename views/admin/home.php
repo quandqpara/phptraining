@@ -71,7 +71,7 @@
                     />
                 </div>
                 <div class="error-holder m-3">
-                    <?php  if(isset($_SESSION['flash_message']['email'])){
+                    <?php if (isset($_SESSION['flash_message']['email'])) {
                         echo handleFlashMessage('email');
                     } ?>
                 </div>
@@ -91,7 +91,7 @@
                     />
                 </div>
                 <div class="error-holder m-3">
-                    <?php  if(isset($_SESSION['flash_message']['name'])){
+                    <?php if (isset($_SESSION['flash_message']['name'])) {
                         echo handleFlashMessage('name');
                     } ?>
                 </div>
@@ -130,7 +130,7 @@
                 $href = rtrim("/admin/searchAdmin?" . $reloadUrl, '&');
 
                 //print Pagination
-                if (!empty($data)){
+                if (!empty($data)) {
                     $pageLink = "<ul class='pagination'>";
                     $pageLink .= "<li class='page-item'><a class='page-link' href='" . $href . "&page=" . $data['pagination']['prev'] . "'>Previous</a></li>";
                     for ($i = 1; $i <= $data['pagination']['totalPages']; $i++) {
@@ -161,19 +161,17 @@
                     $searchTable = "<tr>";
                     $searchTable .= "<td colspan='6'><span>No Results Found!</span></td>";
                     echo $searchTable . "</tr>";
-                }
-                else {
+                } else {
                     foreach ($data['data'] as $result) {
                         $searchTable = "<tr>";
                         $searchTable .= "<td>" . $result['id'] . "</td>";
 
                         $imagePath = $result['avatar'];
                         $correctPath = '';
-                        if(!empty($imagePath)){
+                        if (!empty($imagePath)) {
                             $correctPath = strstr($imagePath, '/uploads');
                             $correctPath = "<img class= src=\"" . $correctPath . "\">";
-                        }
-                        else if (empty($imagePath)) {
+                        } else if (empty($imagePath)) {
                             $correctPath = "<img src=\"/uploads/avatar/default-user-avatar.png\">";
                         }
                         $searchTable .= "<td>" . $correctPath . "</td>";
@@ -181,7 +179,7 @@
                         $searchTable .= "<td>" . $result['name'] . "</td>";
                         $searchTable .= "<td>" . $result['email'] . "</td>";
 
-                       $role = '';
+                        $role = '';
                         if (!empty($result['role_type'])) {
                             $role = $result['role_type'];
                             switch ($role) {

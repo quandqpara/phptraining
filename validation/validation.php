@@ -66,8 +66,7 @@ function validateAvatar($avatar): int
     if (!isset($_FILES[$avatar])) {
         $_SESSION['flash_message']['avatar']['empty'] = getMessage('avatar_empty');
         $flag += 1;
-    }
-;
+    };
     if ($_FILES[$avatar]['error'] != 0) {
         $_SESSION['flash_message']['avatar']['error'] = getMessage('avatar_error');
         $flag += 1;
@@ -231,9 +230,10 @@ function validateAllInput()
 }
 
 //for Update
-function validateAllUpdateInput(){
+function validateAllUpdateInput()
+{
     $flag = 0;
-    if (!empty($_REQUEST['password'])){
+    if (!empty($_REQUEST['password'])) {
         foreach ($_REQUEST as $item) {
             switch ($item) {
                 case 'name':
@@ -247,8 +247,7 @@ function validateAllUpdateInput(){
                     break;
             }
         }
-    }
-    else if(empty($_REQUEST['password'])  && empty($_REQUEST['verify'])) {
+    } else if (empty($_REQUEST['password']) && empty($_REQUEST['verify'])) {
         $flag += validateAllInput();
     }
     return $flag;
@@ -260,7 +259,7 @@ function validateAdminCreateForm($method, $avatarFlag)
 
     $error_flag += validateSubmitFormPostAndEmptyRequest($method, $_POST);
 
-    if(is_numeric($avatarFlag)){
+    if (is_numeric($avatarFlag)) {
         $error_flag += $avatarFlag;
     }
 
@@ -279,15 +278,15 @@ function validateUpdateForm($method, $request, $id)
 
     $error_flag += validateSubmitFormPostAndEmptyRequest($method, $request);
 
-    flagCheck($error_flag, 'admin', 'editAdmin?id='.$id);
+    flagCheck($error_flag, 'admin', 'editAdmin?id=' . $id);
 
     $error_flag += validateID($id);
 
-    flagCheck($error_flag, 'admin', 'editAdmin?id='.$id);
+    flagCheck($error_flag, 'admin', 'editAdmin?id=' . $id);
 
     $error_flag += validateAllUpdateInput();
 
-    flagCheck($error_flag, 'admin', 'editAdmin?id='.$id);
+    flagCheck($error_flag, 'admin', 'editAdmin?id=' . $id);
     return true;
 }
 
@@ -315,7 +314,7 @@ function validateAllUpdateInputForUser()
 {
     $flag = 0;
 
-    if(!isset($_REQUEST['password'])){
+    if (!isset($_REQUEST['password'])) {
         foreach ($_REQUEST as $item) {
             switch ($item) {
                 case 'name':
@@ -329,7 +328,7 @@ function validateAllUpdateInputForUser()
                     break;
             }
         }
-    } else if (isset($_REQUEST['password'])){
+    } else if (isset($_REQUEST['password'])) {
         foreach ($_REQUEST as $item) {
             switch ($item) {
                 case 'name':
@@ -350,7 +349,6 @@ function validateAllUpdateInputForUser()
             }
         }
     }
-
 
 
     return $flag;
@@ -381,15 +379,15 @@ function validateUpdateFormForUser($method, $request, $id)
 
     $error_flag += validateSubmitFormPostAndEmptyRequest($method, $request);
 
-    flagCheck($error_flag, 'admin', 'editPageUser?id='.$id);
+    flagCheck($error_flag, 'admin', 'editPageUser?id=' . $id);
 
     $error_flag += validateID($id);
 
-    flagCheck($error_flag, 'admin', 'editPageUser?id='.$id);
+    flagCheck($error_flag, 'admin', 'editPageUser?id=' . $id);
 
     $error_flag += validateAllUpdateInputForUser();
 
-    flagCheck($error_flag, 'admin', 'editPageUser?id='.$id);
+    flagCheck($error_flag, 'admin', 'editPageUser?id=' . $id);
     return true;
 }
 
