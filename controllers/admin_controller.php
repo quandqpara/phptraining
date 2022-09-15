@@ -81,9 +81,9 @@ class adminController extends BaseController
             //check account validity in DB
             //if return data contain data -> confirmed log in
             //....else no data found back to login
-            $returnData = $this->adminModel->adminLogin($email, $password);
+            $returnData = $this->adminModel->basicLogin($email, $password);
 
-            if ($this->checkReturnData($returnData)) {
+            if (checkEmptyReturnData($returnData)) {
                 setSessionAdmin($returnData[0]['role_type']);                                                           // set admin session.
                 $this->sessionAdminSetter($returnData);                                                                 // set admin info
                 $message = $_SESSION['session_user']['name'] . getMessage('login_success');
@@ -106,13 +106,6 @@ class adminController extends BaseController
         $_SESSION['session_user']['role_type'] = $data[0]['role_type'];
     }
 
-    private function checkReturnData($array)
-    {
-        if (!empty($array)) {
-            return true;
-        }
-    }
-
     //logout
     //clear session back to first page.
     function logout()
@@ -128,7 +121,7 @@ class adminController extends BaseController
     {
         if (!isAdmin()) {
             $_SESSION['flash_message']['permission']['no_permission_admin'] = getMessage('no_permission_admin');
-            header('Location: /user/home');
+            header('Location: /user/profile');
         }
 
         return true;
@@ -139,7 +132,7 @@ class adminController extends BaseController
     {
         if (!isAdmin()) {
             $_SESSION['flash_message']['permission']['no_permission_admin'] = getMessage('no_permission_admin');
-            header('Location: /user/home');
+            header('Location: /user/profile');
         }
 
         if (!isSuperAdmin()) {

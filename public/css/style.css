@@ -144,3 +144,18 @@ img {
 .disguised-button:hover {
     color: yellow;
 }
+
+.outer-container {
+    position: relative;
+    width: 90%;
+    height: 80%;
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+.user-profile-noti{
+    width: 90%;
+    height: 50px;
+    color: white;
+    background-color: green;
+}

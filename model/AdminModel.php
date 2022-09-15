@@ -22,25 +22,7 @@ class AdminModel extends BaseModel
         ];
         $this->columnCreate = array('name', 'password', 'email', 'avatar', 'role_type', 'ins_id', 'ins_datetime');
         $this->conn = DB::getInstance();
-    }
-
-    public function adminLogin($email, $password)
-    {
-        $userData = [];
-        try {
-            $stmt = $this->conn->prepare("SELECT id, name, email, avatar, role_type FROM " . $this->tableName . " WHERE email = :email AND password = :password AND del_flag = :flag");
-            $stmt->bindParam(':email', $email);
-            $stmt->bindParam(':password', $password);
-            $flag = DEL_FLAG_OFF;
-            $stmt->bindParam(':flag', $flag);
-            $stmt->execute();
-
-            $userData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
-        }
-
-        return $userData;
+        $this->loginArrayInfo = "id, name, email, avatar, role_type";
     }
 
     public function searchOneAdmin($id)

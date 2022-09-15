@@ -7,6 +7,7 @@ abstract class BaseModel implements QueryInterface
     public $fillable;
     public $conn;
     public $columnCreate;
+    public $loginArrayInfo;
 
     function __construct()
     {
@@ -46,13 +47,34 @@ abstract class BaseModel implements QueryInterface
         }
     }
 
+    //--------------------------------------------------Login-----------------------------------------------------------
+    public function basicLogin($email, $password)
+    {
+        $userData = [];
+        try {
+            $query = "SELECT {$this->loginArrayInfo} FROM ".$this->tableName." WHERE email = :email AND password = :password AND del_flag = :del_flag";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':password', $password);
+            $flag = DEL_FLAG_OFF;
+            $stmt->bindParam(':flag', $flag);
+            $stmt->execute();
+
+            $userData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+
+        return $userData;
+    }
+
     //-------------------------------------------------DB---------------------------------------------------------------
 
     //need 'name', 'password', 'email', 'avatar', 'role_type', 'ins_id', 'ins_datetime'
     public function create($validatedDataFromInput = [])
     {
-        unset($_SESSION['flash_message']);
-        unset($_SESSION['old_data']);
+        //unset [flash_message] and [old_data] if isset
+        unsetAll();
 
         // TODO: Implement create() method.
 

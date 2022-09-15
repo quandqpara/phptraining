@@ -60,8 +60,15 @@ function isLoggedIn()
     }
 
     if (isset($_SESSION['user'])) {
-        header('Location: /user/home');
+        header('Location: /user/profile');
         exit;
+    }
+}
+
+function checkEmptyReturnData($array)
+{
+    if (!empty($array)) {
+        return true;
     }
 }
 

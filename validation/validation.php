@@ -310,6 +310,20 @@ function validateSearchForm($method)
 }
 
 //----------------------------------USER VALIDATION----------------------------------
+function validateLoginInputForUser($method)
+{
+    $error_flag = 0;
+
+    $error_flag += validateSubmitFormPostAndEmptyRequest($method, $_REQUEST);
+
+    flagCheck($error_flag, 'user', 'index');
+
+    $error_flag += validateAllInput();
+
+    flagCheck($error_flag, 'user', 'index');
+    return true;
+}
+
 function validateAllUpdateInputForUser()
 {
     $flag = 0;
@@ -382,8 +396,6 @@ function validateUpdateFormForUser($method, $request, $id)
     flagCheck($error_flag, 'admin', 'editPageUser?id=' . $id);
 
     $error_flag += validateID($id);
-
-    flagCheck($error_flag, 'admin', 'editPageUser?id=' . $id);
 
     $error_flag += validateAllUpdateInputForUser();
 

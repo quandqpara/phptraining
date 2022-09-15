@@ -1,3 +1,12 @@
+<?php
+//    session_unset();
+//    showLog($_SESSION, true);
+    if(isset($_GET['state']) && FB_APP_STATE == $_GET['state']) {
+        $fbLogin = tryAndLoginWithFacebook($_GET);
+    }
+
+    isLoggedIn();
+?>
 <section class="h-100 d-flex align-items-center justify-content-center">
     <form method="POST" action="" class="form-login">
         <!-- Email input -->
@@ -19,7 +28,7 @@
         <div class="text-center">
             <p>or sign up with:</p>
             <button type="button" class="btn btn-link btn-floating mx-1">
-                <a href="https://phptraining.local/user/login-facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="<?php echo getFacebookLoginUrl(); ?>"><i class="fab fa-facebook-f"></i></a>
             </button>
         </div>
     </form>

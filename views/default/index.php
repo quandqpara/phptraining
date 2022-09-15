@@ -11,7 +11,7 @@
                 </a>
             </div>
             <div class="col-auto">
-                <a href="/users/index">
+                <a href="/user/index">
                     <button type="button" class="btn btn-primary btn-block mb-4">USER</button>
                 </a>
             </div>
