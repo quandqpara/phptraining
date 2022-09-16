@@ -170,7 +170,7 @@
                         $correctPath = '';
                         if (!empty($imagePath)) {
                             $correctPath = strstr($imagePath, '/uploads');
-                            $correctPath = "<img class= src=\"" . $correctPath . "\">";
+                            $correctPath = "<img src=\"" . $correctPath . "\">";
                         } else if (empty($imagePath)) {
                             $correctPath = "<img src=\"/uploads/avatar/default-user-avatar.png\">";
                         }

@@ -2,103 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4ffbe23c-1fb7-4eed-8404-eb6eb824b742" name="Changes" comment="Format Code">
-      <change afterPath="$PROJECT_DIR$/controllers/user_controller.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/user/profile.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/Authentication/AccessToken.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/Authentication/AccessTokenMetadata.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/Authentication/OAuth2Client.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/Exceptions/FacebookAuthenticationException.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/Exceptions/FacebookAuthorizationException.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/Exceptions/FacebookClientException.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/Exceptions/FacebookOtherException.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/Exceptions/FacebookResponseException.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/Exceptions/FacebookResumableUploadException.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/Exceptions/FacebookSDKException.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/Exceptions/FacebookServerException.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/Exceptions/FacebookThrottleException.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/Facebook.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/FacebookApp.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/FacebookBatchRequest.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/FacebookBatchResponse.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/FacebookClient.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/FacebookRequest.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/FacebookResponse.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/FileUpload/FacebookFile.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/FileUpload/FacebookResumableUploader.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/FileUpload/FacebookTransferChunk.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/FileUpload/FacebookVideo.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/FileUpload/Mimetypes.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/GraphNodes/Birthday.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/GraphNodes/Collection.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/GraphNodes/GraphAchievement.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/GraphNodes/GraphAlbum.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/GraphNodes/GraphApplication.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/GraphNodes/GraphCoverPhoto.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/GraphNodes/GraphEdge.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/GraphNodes/GraphEvent.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/GraphNodes/GraphGroup.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/GraphNodes/GraphList.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/GraphNodes/GraphLocation.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/GraphNodes/GraphNode.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/GraphNodes/GraphNodeFactory.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/GraphNodes/GraphObject.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/GraphNodes/GraphObjectFactory.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/GraphNodes/GraphPage.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/GraphNodes/GraphPicture.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/GraphNodes/GraphSessionInfo.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/GraphNodes/GraphUser.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/Helpers/FacebookCanvasHelper.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/Helpers/FacebookJavaScriptHelper.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/Helpers/FacebookPageTabHelper.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/Helpers/FacebookRedirectLoginHelper.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/Helpers/FacebookSignedRequestFromInputHelper.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/Http/GraphRawResponse.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/Http/RequestBodyInterface.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/Http/RequestBodyMultipart.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/Http/RequestBodyUrlEncoded.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/HttpClients/FacebookCurl.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/HttpClients/FacebookCurlHttpClient.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/HttpClients/FacebookGuzzleHttpClient.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/HttpClients/FacebookHttpClientInterface.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/HttpClients/FacebookStream.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/HttpClients/FacebookStreamHttpClient.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/HttpClients/HttpClientsFactory.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/HttpClients/certs/DigiCertHighAssuranceEVRootCA.pem" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/PersistentData/FacebookMemoryPersistentDataHandler.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/PersistentData/FacebookSessionPersistentDataHandler.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/PersistentData/PersistentDataFactory.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/PersistentData/PersistentDataInterface.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/PseudoRandomString/McryptPseudoRandomStringGenerator.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/PseudoRandomString/OpenSslPseudoRandomStringGenerator.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/PseudoRandomString/PseudoRandomStringGeneratorFactory.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/PseudoRandomString/PseudoRandomStringGeneratorInterface.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/PseudoRandomString/PseudoRandomStringGeneratorTrait.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/PseudoRandomString/RandomBytesPseudoRandomStringGenerator.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/PseudoRandomString/UrandomPseudoRandomStringGenerator.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/SignedRequest.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/Url/FacebookUrlDetectionHandler.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/Url/FacebookUrlManipulator.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/Url/UrlDetectionInterface.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/autoload.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/polyfills.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Helper/common.php" beforeDir="false" afterPath="$PROJECT_DIR$/Helper/common.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Helper/define_const.php" beforeDir="false" afterPath="$PROJECT_DIR$/Helper/define_const.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/config.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/config.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config/error_message.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/error_message.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controllers/admin_controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/admin_controller.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/users_controller.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controllers/user_controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/user_controller.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/log.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/AdminModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/model/AdminModel.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/BaseModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/model/BaseModel.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/UserModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/model/UserModel.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/validation/validation.php" beforeDir="false" afterPath="$PROJECT_DIR$/validation/validation.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/admin/createAdmin.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/createAdmin.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/admin/editAdmin.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/editAdmin.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/admin/home.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/home.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/admin/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/index.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/default/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/default/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/user/home.php" beforeDir="false" afterPath="$PROJECT_DIR$/Facebook/facebook_api.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/user/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/user/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/user/profile.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/user/profile.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -172,6 +92,7 @@
       <workItem from="1663028455233" duration="32597000" />
       <workItem from="1663115174288" duration="37153000" />
       <workItem from="1663208438427" duration="22913000" />
+      <workItem from="1663292943086" duration="30374000" />
     </task>
     <task id="LOCAL-00001" summary="Create DB,&#10;Create Login Interface">
       <created>1662418595991</created>

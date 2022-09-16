@@ -24,16 +24,6 @@ abstract class BaseModel implements QueryInterface
         }
     }
 
-    //remove empty input field
-    public function removeEmptyField(&$arrayOfInput)
-    {
-        foreach ($arrayOfInput as $key => $value) {
-            if (is_null($value) || $value == '') {
-                unset($arrayOfInput[$key]);
-            }
-        }
-    }
-
     //compare with $fillable to remove non-accepted data
     //for each element in &$inputArray
     //if $key is not in fillable array
@@ -51,15 +41,13 @@ abstract class BaseModel implements QueryInterface
     public function basicLogin($email, $password)
     {
         $userData = [];
+
         try {
-            $query = "SELECT {$this->loginArrayInfo} FROM ".$this->tableName." WHERE email = :email AND password = :password AND del_flag = :del_flag";
+            $query = "SELECT {$this->loginArrayInfo} FROM " . $this->tableName . " WHERE email = :email AND password = :password AND del_flag = " . DEL_FLAG_OFF;
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':password', $password);
-            $flag = DEL_FLAG_OFF;
-            $stmt->bindParam(':flag', $flag);
             $stmt->execute();
-
             $userData = $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
@@ -69,7 +57,6 @@ abstract class BaseModel implements QueryInterface
     }
 
     //-------------------------------------------------DB---------------------------------------------------------------
-
     //need 'name', 'password', 'email', 'avatar', 'role_type', 'ins_id', 'ins_datetime'
     public function create($validatedDataFromInput = [])
     {
@@ -105,16 +92,14 @@ abstract class BaseModel implements QueryInterface
             $stmt->execute();
 
             $rowCount = $stmt->rowCount();
-            if ($rowCount == 0 || $rowCount > 1) {
-                $_SESSION['flash_message']['create']['failed'] = getMessage('create_failed');
-            } else if ($rowCount == 1) {
-                $_SESSION['flash_message']['create']['success'] = getMessage('create_success');
-            }
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
         }
+
         $log = "ACTION: Create account at email " . $data['email'] . "- BY: " . $data['ins_id'] . " DATE: " . $data['ins_datetime'];
         writeLog($log);
+
+        return $rowCount;
     }
 
     //need which row to update and its corresponding value and id
@@ -128,7 +113,6 @@ abstract class BaseModel implements QueryInterface
         ]);
 
         // check fillable
-        $this->removeEmptyField($data);
         $this->checkFillable($data);
 
         $columnArr = array();
@@ -147,17 +131,14 @@ abstract class BaseModel implements QueryInterface
             $stmt->execute();
 
             $rowChange = $stmt->rowCount();
-            if ($rowChange == 0 || $rowChange > 1) {
-                $_SESSION['flash_message']['update']['failed'] = getMessage('update_failed');
-            } else if ($rowChange == 1) {
-                $_SESSION['flash_message']['edit']['success'] = getMessage('update_success');
-            }
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
         }
 
         $log = "ACTION: UPDATE account at id: " . $id . " - BY: " . $data['ins_id'] . " DATE: " . $data['ins_datetime'];
         writeLog($log);
+
+        return $rowChange;
     }
 
     //need email and name
@@ -178,23 +159,19 @@ abstract class BaseModel implements QueryInterface
         $start = $limit * ($page - 1);
         $total = 0;
 
-        $sql = "SELECT id, avatar, name, email, role_type 
+        $countQuery = "SELECT count(id) 
                 FROM {$this->tableName} 
                 WHERE email LIKE '%{$email}%'
                     AND name LIKE '%{$name}%'
                     AND del_flag = " . DEL_FLAG_OFF;
 
-        $limitSQL = " LIMIT " . $start . "," . $limit;
-
         //getting total number of result
         if ($total == 0) {
             try {
-                $stmtUnlimit = $this->conn->prepare($sql);
+                $stmtUnlimit = $this->conn->prepare($countQuery);
                 $stmtUnlimit->execute();
-                $stmtUnlimit->fetchAll(PDO::FETCH_ASSOC);
-
-                $total = $stmtUnlimit->rowCount();
-
+                $result = $stmtUnlimit->fetch(PDO::FETCH_ASSOC);
+                $total = $result['count(id)'];
             } catch (PDOException $e) {
                 echo "Error: " . $e->getMessage();
             }
@@ -202,7 +179,11 @@ abstract class BaseModel implements QueryInterface
 
         //return page with limited result
         try {
-            $query = $sql . $limitSQL;
+            $query = "SELECT id, avatar, name, email, role_type
+                FROM {$this->tableName} 
+                WHERE email LIKE '%{$email}%'
+                    AND name LIKE '%{$name}%'
+                    AND del_flag = " . DEL_FLAG_OFF;
             $stmt = $this->conn->prepare($query);
             $stmt->execute();
 
@@ -212,7 +193,6 @@ abstract class BaseModel implements QueryInterface
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
         }
-
         $totalPages = ceil($total / $limit);
         $page = (isset($page) && $page < 10000) ? (int)$page : 1;
         $start = $limit * ($page - 1);

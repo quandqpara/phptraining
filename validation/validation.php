@@ -77,11 +77,10 @@ function validateAvatar($avatar): int
         $flag += 1;
     }
 
-    if (!in_array($_FILES['avatar']['type'], IMAGE_UPLOAD_FILE_TYPE)) {
+    if (!in_array($_FILES[$avatar]['type'], IMAGE_UPLOAD_FILE_TYPE)) {
         $_SESSION['flash_message']['avatar']['type'] = getMessage('invalid_avatar');
         $flag += 1;
     }
-
     return $flag;
 }
 
@@ -94,7 +93,7 @@ function validateName($name): int
     }
 
     //Must only contain letters
-    if (!preg_match('/^[a-zA-z]*$/', $name)) {
+    if (!preg_match('/^[a-zA-z\s]*$/', $name)) {
         $_SESSION['flash_message']['name']['invalid'] = getMessage('invalid_name');
         $flag += 1;
     }
@@ -115,7 +114,7 @@ function validateVerifyPassword($pass1, $pass2): int
 function validateAdminRoles($role): int
 {
     $flag = 0;
-    if (empty($role)) {
+    if (!isset($role) || empty($role)) {
         $_SESSION['flash_message']['role']['empty'] = getMessage('role_empty');
         $flag += 1;
         return $flag;
@@ -126,6 +125,7 @@ function validateAdminRoles($role): int
         $flag += 1;
         return $flag;
     }
+
     return $flag;
 }
 
@@ -159,7 +159,6 @@ function validateSubmitFormPostAndEmptyRequest($method, $request): int
         $_SESSION['flash_message']['common']['failed'] = getMessage('common_error');
         $flag += 1;
     }
-
     return $flag;
 }
 
@@ -179,77 +178,44 @@ function validateSubmitFormGetAndEmptyRequest($method, $request): int
 }
 
 //----------------------------------HELPER-------------------------------------------
-function flagCheck($flag, $user, $location)
+function flagCheck($flag)
 {
     if ($flag > 0) {
-        retrieveOldFormData();
-        header('Location: /' . $user . '/' . $location);
-        exit;
+        return false;
     }
+    return true;
 }
 
 //----------------------------------ADMIN VALIDATION----------------------------------
+//LOGIN
 function validateLoginInput($method)
 {
     $error_flag = 0;
 
     $error_flag += validateSubmitFormPostAndEmptyRequest($method, $_REQUEST);
 
-    flagCheck($error_flag, 'admin', 'index');
+    if (!flagCheck($error_flag)) {
+        return false;
+    }
 
-    $error_flag += validateAllInput();
+    $error_flag += validateEmail($_REQUEST['email']);
+    $error_flag += validatePassword($_REQUEST['password']);
 
-    flagCheck($error_flag, 'admin', 'index');
+    if (!flagCheck($error_flag)) {
+        return false;
+    }
     return true;
 }
 
-//for Create
+//CREATE
 function validateAllInput()
 {
     $flag = 0;
-    foreach ($_REQUEST as $item) {
-        switch ($item) {
-            case 'name':
-                $flag += validateName($_REQUEST['name']);
-                break;
-            case 'email':
-                $flag += validateEmail($_REQUEST['email']);
-                break;
-            case 'password':
-                $flag += validatePassword($_REQUEST['password']);
-                break;
-            case 'verify':
-                $flag += validateVerifyPassword($_REQUEST['password'], $_REQUEST['verify']);
-                break;
-            case 'role':
-                $flag += validateAdminRoles($_REQUEST['role']);
-                break;
-        }
-    }
-    return $flag;
-}
-
-//for Update
-function validateAllUpdateInput()
-{
-    $flag = 0;
-    if (!empty($_REQUEST['password'])) {
-        foreach ($_REQUEST as $item) {
-            switch ($item) {
-                case 'name':
-                    $flag += validateName($_REQUEST['name']);
-                    break;
-                case 'email':
-                    $flag += validateEmail($_REQUEST['email']);
-                    break;
-                case 'role':
-                    $flag += validateAdminRoles($_REQUEST['role']);
-                    break;
-            }
-        }
-    } else if (empty($_REQUEST['password']) && empty($_REQUEST['verify'])) {
-        $flag += validateAllInput();
-    }
+    $flag += validateName($_REQUEST['name']);
+    $flag += validateEmail($_REQUEST['email']);
+    $flag += validatePassword($_REQUEST['password']);
+    $flag += validateVerifyPassword($_REQUEST['password'], $_REQUEST['verify']);
+    $flag += validateAdminRoles($_REQUEST['role_type']);
     return $flag;
 }
 
@@ -259,6 +225,10 @@ function validateAdminCreateForm($method, $avatarFlag)
 
     $error_flag += validateSubmitFormPostAndEmptyRequest($method, $_POST);
 
+    if (!flagCheck($error_flag)) {
+        return false;
+    }
+
     if (is_numeric($avatarFlag)) {
         $error_flag += $avatarFlag;
     }
@@ -266,30 +236,92 @@ function validateAdminCreateForm($method, $avatarFlag)
     $error_flag += validateAllInput();
 
     //if flag check failed -> redirect
-    flagCheck($error_flag, 'admin', 'createPageAdmin');
+    if (!flagCheck($error_flag)) {
+        return false;
+    }
     //otherwise return true
     return true;
-
 }
 
-function validateUpdateForm($method, $request, $id)
+//UPDATE
+//1. Check form REQUEST TYPE and REQUEST has value
+//2. validate ID
+//3. Check if user has entered password(optional input) or not
+//3.1 if not remove $_POST['password'] and ['verify_password']
+//3.2 if yes continue
+//4. validate others field normally
+function validateUpdateForm($method, $id)
 {
     $error_flag = 0;
 
-    $error_flag += validateSubmitFormPostAndEmptyRequest($method, $request);
+    $error_flag += validateSubmitFormPostAndEmptyRequest($method, $_POST);
 
-    flagCheck($error_flag, 'admin', 'editAdmin?id=' . $id);
+    if (!flagCheck($error_flag)) {
+        return false;
+    }
 
     $error_flag += validateID($id);
 
-    flagCheck($error_flag, 'admin', 'editAdmin?id=' . $id);
+    if (!flagCheck($error_flag)) {
+        return false;
+    }
 
-    $error_flag += validateAllUpdateInput();
+    $error_flag += optionalUpdateInputCheck();
 
-    flagCheck($error_flag, 'admin', 'editAdmin?id=' . $id);
+    if (!flagCheck($error_flag)) {
+        return false;
+    }
+
+    $error_flag += validateAllUpdateRequiredInput();
+
+    if (!flagCheck($error_flag)) {
+        return false;
+    }
     return true;
 }
 
+//name, email, role
+function validateAllUpdateRequiredInput()
+{
+    $flag = 0;
+    $flag += validateName($_POST['name']);
+    $flag += validateEmail($_POST['email']);
+    $flag += validateAdminRoles($_POST['role_type']);
+    return $flag;
+}
+
+//password, verify_password
+function optionalUpdateInputCheck()
+{
+    $flag = 0;
+
+    //is password and verify set?
+    if (!isset($_POST['password']) && !isset($_POST['verify'])) {
+        //they are not set, it's ok, optional, no error, go back
+        return $flag;
+    }
+
+    if (isset($_POST['password']) && isset($_POST['verify'])) {
+        //they are set, it's ok,
+        //first check their emptiness
+        //----> if empty, just remove them from $_post, and return
+        if (empty($_POST['password'])) {
+            unset($_POST['password']);
+            unset($_POST['verify']);
+            return $flag;
+        }
+
+        //----> else, move to second
+        //second check for proper password and verify identical
+        $flag += validatePassword($_POST['password']);
+        $flag += validateVerifyPassword($_POST['password'], $_POST['verify']);
+
+        return $flag;
+    }
+    return $flag;
+}
+
+//SEARCH
 function validateSearchForm($method)
 {
     $error_flag = 0;
@@ -297,7 +329,9 @@ function validateSearchForm($method)
     //method should be get and $_GET should not be empty
     $error_flag += validateSubmitFormGetAndEmptyRequest($method, $_GET);
 
-    flagCheck($error_flag, 'admin', 'home');
+    if (!flagCheck($error_flag)) {
+        return false;
+    }
 
     //don't have to validate anything more than empty input
     if (!isset($_GET['email']) || !isset($_GET['name'])) {
@@ -316,11 +350,20 @@ function validateLoginInputForUser($method)
 
     $error_flag += validateSubmitFormPostAndEmptyRequest($method, $_REQUEST);
 
-    flagCheck($error_flag, 'user', 'index');
+    if (!flagCheck($error_flag)) {
+        return false;
+    }
 
-    $error_flag += validateAllInput();
+    $error_flag += validateEmail($_REQUEST['email']);
 
-    flagCheck($error_flag, 'user', 'index');
+    if ($_REQUEST['password'] == "") {
+        return true;
+    }
+
+    $error_flag += validatePassword($_REQUEST['password']);
+    if (!flagCheck($error_flag)) {
+        return false;
+    }
     return true;
 }
 

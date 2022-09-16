@@ -93,4 +93,29 @@ class UserModel extends BaseModel
         }
         return $targetInfo;
     }
+
+    public function basicLogin($email, $password)
+    {
+        $userData = [];
+
+        try {
+            if(empty($password)){
+                $query = "SELECT {$this->loginArrayInfo} FROM ".$this->tableName." WHERE email = :email AND del_flag = ".DEL_FLAG_OFF;
+                $stmt = $this->conn->prepare($query);
+                $stmt->bindParam(':email', $email);
+            } else {
+                $query = "SELECT {$this->loginArrayInfo} FROM ".$this->tableName." WHERE email = :email AND password = :password AND del_flag = ".DEL_FLAG_OFF;
+                $stmt = $this->conn->prepare($query);
+                $stmt->bindParam(':email', $email);
+                $stmt->bindParam(':password', $password);
+            }
+
+            $stmt->execute();
+            $userData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+
+        return $userData;
+    }
 }

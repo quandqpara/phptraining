@@ -104,22 +104,16 @@ img {
     padding: 45px;
 }
 
-.admin-create-item, .admin-update-item {
+.admin-create-item {
     margin: 1.5rem;
     padding: 5px;
 }
 
-.admin-form-label {
-    margin-right: 20px;
-}
-
 .avatar-display {
-    margin-left: 5%;
     border-width: thin;
     border-color: black;
     width: 80px;
     height: 80px;
-    background-color: grey;
 }
 
 .disguised-button {
@@ -159,3 +153,63 @@ img {
     color: white;
     background-color: green;
 }
+
+.title strong{
+    font-size: xx-large;
+}
+
+.info-window-container-for-edit-admin{
+    display: grid;
+    border: black solid 1px;
+    height: 80vh;
+    padding-left: 80px;
+    padding-right: 80px;
+    padding-top: 55px;
+    padding-bottom: 55px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    grid-row-gap: 10px;
+}
+
+.info-window-container {
+    display: grid;
+    border: black solid 1px;
+    height: 60%;
+    padding-left: 80px;
+    padding-right: 80px;
+    padding-top: 55px;
+    padding-bottom: 55px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    grid-row-gap: 10px;
+}
+
+.col-data {
+    flex: 1;
+    width: 100%;
+    max-width: 400px;
+}
+
+.user-info-section {
+    height: 90vh;
+}
+
+.logout-btn {
+    padding-right: 95px;
+}
+
+.logout-text:hover{
+    color: red;
+}
+
+.update-form-container {
+    max-height: 80vh;
+    margin-top: 20px;
+    padding: 50px
+}
+
+.form-update {
+    max-height: 800px;
+    max-width: 1700px;
+}
+

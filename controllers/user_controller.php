@@ -1,7 +1,7 @@
 <?php
 
-require_once ('controllers/base_controller.php');
-require_once ('model/UserModel.php');
+require_once('controllers/base_controller.php');
+require_once('model/UserModel.php');
 require_once('validation/validation.php');
 require_once('Helper/common.php');
 
@@ -25,26 +25,26 @@ class userController extends BaseController
         return $this->render('profile');
     }
 
-    public function auth(){
+    public function auth()
+    {
         $method = $_SERVER['REQUEST_METHOD'];
 
         //if the input failed the validate return to login
         if (!validateLoginInputForUser($method)) {
-
             header('Location: /user/index');
             exit;
         }
 
         //if it passed
-        $password = $_REQUEST['password'];
-        $email = $_REQUEST['email'];
+        $password = $_POST['password'];
+        $email = $_POST['email'];
 
         //check account validity in DB
         //if return data contain data -> confirmed log in
         //....else no data found back to login
         $returnData = $this->userModel->basicLogin($email, $password);
 
-        if (checkEmptyReturnData($returnData)) {
+        if (!empty($returnData)) {
             setSessionUser();                                                                                           // set user session.
             $this->sessionUserSetter($returnData);                                                                      // set user info
             $message = $_SESSION['session_user']['name'] . getMessage('login_success');
@@ -59,19 +59,21 @@ class userController extends BaseController
         }
     }
 
-    public function logout(){
+    public function logout()
+    {
         session_unset();
         header('Location: /user/index');
         exit;
     }
 
-    function processingFacebookData(){
-        if(!isset($_SESSION['fb_user_info'])){
+    function processingFacebookData()
+    {
+        if (!isset($_SESSION['fb_user_info'])) {
             $_SESSION['flash_message']['login']['failed'] = getMessage('login_fb_failed');
             header('Location: /user/index');
             exit;
         }
-        $name = $_SESSION['fb_user_info']['first_name'].$_SESSION['fb_user_info']['last_name'];
+        $name = $_SESSION['fb_user_info']['first_name'] . $_SESSION['fb_user_info']['last_name'];
         $facebook_id = $_SESSION['fb_user_info']['id'];
         $email = $_SESSION['fb_user_info']['email'];
         $avatar = $_SESSION['fb_user_info']['picture']['data']['url'];
@@ -80,16 +82,17 @@ class userController extends BaseController
         unset($_SESSION['fb_user_info']);
 
         $userInfoFromFacebook = array(
-            'name'=> $name,
+            'name' => $name,
             'facebook_id' => $facebook_id,
             'email' => $email,
             'avatar' => $avatar,
-            );
+        );
 
         $currentUser = $this->userModel->createUserWithInfoFromFacebook($userInfoFromFacebook);
         $_SESSION['session_user'] = $currentUser;
-        if(!empty($currentUser)){
-            $_SESSION['flash_message']['login']['success'] = $userInfoFromFacebook['name'].getMessage('login_success');
+        if (!empty($currentUser)) {
+            $_SESSION['flash_message']['login']['success'] = $userInfoFromFacebook['name'] . getMessage('login_success');
+            setSessionUser();
             header('Location: /user/profile');
             exit;
         } else {

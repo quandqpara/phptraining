@@ -65,13 +65,6 @@ function isLoggedIn()
     }
 }
 
-function checkEmptyReturnData($array)
-{
-    if (!empty($array)) {
-        return true;
-    }
-}
-
 function basicUserSetter($data)
 {
     $_SESSION['session_user']['id'] = $data[0]['id'];
@@ -96,6 +89,7 @@ function showLog($data, $continue = false)
 function writeLog($log)
 {
     $logFile = fopen("log.txt", "a") or die("Unable to open file");
+    $log .= "\n";
     fwrite($logFile, $log);
     fclose($logFile);
 }

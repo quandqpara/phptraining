@@ -67,7 +67,6 @@ class adminController extends BaseController
 
         //if the input failed the validate return to login
         if (!validateLoginInput($method)) {
-
             header('Location: /admin/index');
             exit;
         }
@@ -77,13 +76,13 @@ class adminController extends BaseController
             $password = $_REQUEST['password'];
             $email = $_REQUEST['email'];
 
-
             //check account validity in DB
             //if return data contain data -> confirmed log in
             //....else no data found back to login
             $returnData = $this->adminModel->basicLogin($email, $password);
 
-            if (checkEmptyReturnData($returnData)) {
+            //if returnData is not empty -> user is found
+            if (!empty($returnData)) {
                 setSessionAdmin($returnData[0]['role_type']);                                                           // set admin session.
                 $this->sessionAdminSetter($returnData);                                                                 // set admin info
                 $message = $_SESSION['session_user']['name'] . getMessage('login_success');
@@ -116,17 +115,6 @@ class adminController extends BaseController
     }
 
     //----------------------------------------------------ADMIN SECTION-------------------------------------------------
-    //normal Admin check
-    function isPermissionAdmin()
-    {
-        if (!isAdmin()) {
-            $_SESSION['flash_message']['permission']['no_permission_admin'] = getMessage('no_permission_admin');
-            header('Location: /user/profile');
-        }
-
-        return true;
-    }
-
     //superAdmin check
     function permissionCheck()
     {
@@ -174,7 +162,6 @@ class adminController extends BaseController
     //Must be admin to create new admin
     function createAdmin()
     {
-        unsetAll();
         //check for permission - if there is no permission back to homepage
         $this->permissionCheck();
 
@@ -182,10 +169,15 @@ class adminController extends BaseController
         $request = $_POST;
 
         //check validity of the input
-        //if not pass return
+        //if not pass return with failed message
         //if passed try to create
         $avatarLink = $this->handleAvatar();
-        validateAdminCreateForm($method, $avatarLink);
+        if (!validateAdminCreateForm($method, $avatarLink)) {
+            $_SESSION['flash_message']['create']['failed'] = getMessage('create_failed');
+            retrieveOldFormData();
+            header('Location: /admin/createPageAdmin');
+            exit;
+        }
 
         //if it can pass validateAdminCreateForm
         //Correcting the $_REQUEST before passing it to the query
@@ -193,9 +185,16 @@ class adminController extends BaseController
 
         //try to create (call create from module)
         $infoArrayForCreateAccount = $this->getInfoForCreateNewAdmin();
-        $this->adminModel->create($infoArrayForCreateAccount);
 
-        //redirect to create Screen with messages
+        $rowNum = $this->adminModel->create($infoArrayForCreateAccount);
+
+        if ($rowNum == 0 || $rowNum > 1) {
+            $_SESSION['flash_message']['create']['failed'] = getMessage('create_failed');
+        } else if ($rowNum == 1) {
+            $_SESSION['flash_message']['create']['success'] = getMessage('create_success');
+        }
+
+        //redirect to create Screen with success messages
         retrieveOldFormData();
         header('Location: /admin/createPageAdmin');
         exit;
@@ -215,13 +214,11 @@ class adminController extends BaseController
     //update - ADMIN(super)
     function editAdmin()
     {
-        unsetAll();
         //permission check
         $this->permissionCheck();
 
         //validate input
         $method = $_SERVER['REQUEST_METHOD'];
-        $request = $_POST;
 
         if (!isset($_SESSION['flash_message']['update_target']['id'])) {
             $_SESSION['flash_message']['update_id']['not_found'] = getMessage('no_id_found');
@@ -229,14 +226,21 @@ class adminController extends BaseController
         $id = $_SESSION['flash_message']['update_target']['id'];
         $location = '/admin/editPageAdmin?id=' . $id;
 
-        if (!validateUpdateForm($method, $request, $id)) {
+        if (!validateUpdateForm($method, $id)) {
             retrieveOldFormData();
+            $_SESSION['flash_message']['edit']['failed'] = getMessage('update_failed');
             header('Location: ' . $location);
             exit;
         }
 
         //try to update (input id and value to change)
-        $this->adminModel->update($id, $request);
+        $rowAffected = $this->adminModel->update($id, $_POST);
+
+        if ($rowAffected == 0 || $rowAffected > 1) {
+            $_SESSION['flash_message']['edit']['failed'] = getMessage('update_failed');
+        } else if ($rowAffected == 1) {
+            $_SESSION['flash_message']['edit']['success'] = getMessage('update_success');
+        }
 
         retrieveOldFormData();
         header('Location: ' . $location);
@@ -307,7 +311,17 @@ class adminController extends BaseController
     }
 
     //-----------------------------------------------------USER SECTION-------------------------------------------------
-    //search - USER(admin)
+    //normal Admin check
+    function isPermissionAdmin()
+    {
+        if (!isAdmin()) {
+            $_SESSION['flash_message']['permission']['no_permission_admin'] = getMessage('no_permission_admin');
+            header('Location: /user/profile');
+        }
+
+        return true;
+    }//search - USER(admin)
+
     function searchUser()
     {
         unsetAll();

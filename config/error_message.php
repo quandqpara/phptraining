@@ -30,8 +30,8 @@ return [
     //Module - Controller interaction Messages
     'create_success' => 'New account has been successfully created!',
     'create_failed' => 'Failed to create new account.',
-    'update_success' => ' has been updated!',
-    'update_failed' => ' has been failed updated!',
+    'update_success' => 'Successfully updated!',
+    'update_failed' => ' Failed to updated!',
     'delete_success' => 'Delete success!',
     'delete_failed' => 'Delete failed!',
     'search_success' => "Search completed!",
