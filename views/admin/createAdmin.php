@@ -8,9 +8,9 @@
                         Admin management
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/admin/home">Search</a>
+                        <a class="dropdown-item" href="/management/admin/home">Search</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="/admin/createPageAdmin">Create</a>
+                        <a class="dropdown-item" href="/management/admin/createPageAdmin">Create</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -19,11 +19,11 @@
                         User management
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/admin/searchPageUser">Search</a>
+                        <a class="dropdown-item" href="/management/admin/searchPageUser">Search</a>
                     </div>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="/admin/logout">Log out </a>
+                    <a class="nav-link" href="/management/auth/logout">Log out </a>
                 </li>
             </ul>
         </div>
@@ -33,15 +33,15 @@
 if (isset($_SESSION['flash_message']['create'])) {
     echo "<div class=\"w-80 mt-3 mb-3 notification border border-success rounded\">
           <span class=\"noti-message h-100 d-flex align-text-center justify-content-center align-items-center\">";
-        echo handleFlashMessage('create');
-        echo "</span>
+    echo handleFlashMessage('create');
+    echo "</span>
                     </div>";
 }
 ?>
 <section class="d-flex flex-column align-items-center justify-content-start">
     <div class="outer-container">
         <div class="title mt-3"><strong>My Profile ><span style="color:blue">Create Admin</span></strong></div>
-        <form method="POST" action="/admin/createAdmin" class="form-update" enctype="multipart/form-data">
+        <form method="POST" action="/management/admin/createAdmin" class="form-update" enctype="multipart/form-data">
             <div class="info-window-container-for-edit-admin">
                 <!-- Avatar input -->
                 <div class="row">
@@ -70,7 +70,7 @@ if (isset($_SESSION['flash_message']['create'])) {
                             $correctPath = strstr($imagPath, '/uploads');
                             echo "<img src=\"" . $correctPath . "\">";
                         } else {
-                            echo "<img src=\"/uploads/avatar/default-user-avatar.png\">";
+                            echo "<img src=\"/uploads/avatar/default-front-avatar.png\">";
                         }
                         ?>
                     </div>

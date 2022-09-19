@@ -8,9 +8,9 @@
                         Admin management
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/admin/home">Search</a>
+                        <a class="dropdown-item" href="/management/admin/home">Search</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="/admin/createPageAdmin">Create</a>
+                        <a class="dropdown-item" href="/management/admin/createPageAdmin">Create</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -19,44 +19,37 @@
                         User management
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/admin/searchPageUser">Search</a>
+                        <a class="dropdown-item" href="/management/admin/searchPageUser">Search</a>
                     </div>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="/admin/logout">Log out </a>
+                    <a class="nav-link" href="/management/auth/logout">Log out </a>
                 </li>
             </ul>
         </div>
     </nav>
 </header>
 <section class="h-100 w-100 flex-column mb-auto admin-home-sect">
-    <div class="w-80 mt-3 mb-3 notification border border-success rounded">
-        <span class="noti-message h-100 d-flex align-text-center justify-content-center align-items-center">
-            <?php
-            if (isset($_SESSION['flash_message']['login'])) {
-                echo handleFlashMessage('login');
+    <?php
+    $acceptableMessage = array('login', 'search', 'update', 'id', 'permission', 'delete');
+    foreach ($_SESSION['flash_message'] as $key => $value) {
+        if (in_array($key, $acceptableMessage)) {
+            if (isset($_SESSION['flash_message'][$key])) {
+                echo "
+                            <div class=\"w-80 mt-3 mb-3 notification border border-success rounded\">
+                            <span class=\"noti-message h-100 d-flex align-text-center justify-content-center align-items-center\">"; ?>
+                <?php
+                if (isset($_SESSION['flash_message'][$key])) {
+                    echo handleFlashMessage($key);
+                }
+                echo "</span>
+                    </div>";
             }
-            if (isset($_SESSION['flash_message']['search'])) {
-                echo handleFlashMessage('search');
-            }
-            if (isset($_SESSION['flash_message']['update'])) {
-                echo handleFlashMessage('update');
-            }
-            if (isset($_SESSION['flash_message']['permission'])) {
-                echo handleFlashMessage('permission');
-            }
-            if (isset($_SESSION['flash_message']['id'])) {
-                echo handleFlashMessage('id');
-            }
-            if (isset($_SESSION['flash_message']['delete'])) {
-                echo handleFlashMessage('delete');
-            }
-            //what messages will appear here? login, search complete?
-            ?>
-        </span>
-    </div>
+        }
+    }
+    ?>
     <div class="mt-3 mb-3 search-box border border-dark">
-        <form method="GET" action="/admin/searchUser" class=" m-4 form-create">
+        <form method="GET" action="/management/admin/searchUser" class=" m-4 form-create">
             <!-- Email input -->
             <div class="row g-2 align-items-center mb-3 mt-3">
                 <div class="col-auto m-3">
@@ -67,7 +60,11 @@
                            id="email"
                            name="email"
                            class="form-control"
-                           value="<?php echo oldData('email'); ?>"
+                           value="<?php
+                           if (isset($_SESSION['old_data']['email'])) {
+                               echo oldData('email');
+                           }
+                           ?>"
                     />
                 </div>
                 <div class="error-holder m-3">
@@ -87,7 +84,11 @@
                            id="name"
                            name="name"
                            class="form-control"
-                           value="<?php echo oldData('name'); ?>"
+                           value="<?php
+                           if (isset($_SESSION['old_data']['name'])) {
+                               echo oldData('name');
+                           }
+                           ?>"
                     />
                 </div>
                 <div class="error-holder m-3">
@@ -112,33 +113,8 @@
         <div class="pagination-cover flex-row-reverse m-2">
             <nav aria-label="Page navigation example" class="page-nav">
                 <?php
-                $reloadUrl = ltrim(strstr($_SERVER['REQUEST_URI'], '?'), '?');
-
-                //remove duplicate params
-                $correctingUrl = explode("&", $reloadUrl);
-                $reloadUrl = "";
-                if (!isset($correctingUrl)) {
-                    foreach ($correctingUrl as $param) {
-                        $temp = explode("=", $param);
-                        $key = $temp[0];
-                        $value = $temp[1];
-                        if (!str_contains($reloadUrl, $key)) {
-                            $reloadUrl .= $key . "=" . $value . "&";
-                        }
-                    }
-                }
-                $href = rtrim("/admin/searchAdmin?" . $reloadUrl, '&');
-
-                //print Pagination
-                if (!empty($data)) {
-                    $pageLink = "<ul class='pagination'>";
-                    $pageLink .= "<li class='page-item'><a class='page-link' href='" . $href . "&page=" . $data['pagination']['prev'] . "'>Previous</a></li>";
-                    for ($i = 1; $i <= $data['pagination']['totalPages']; $i++) {
-                        $pageLink .= "<li class='page-item'><a class='page-link' href='" . $href . "&page=" . $i . "'>" . $i . "</a></li>";
-                    }
-                    $pageLink .= "<li class='page-item'><a class='page-link' href='" . $href . "&page=" . $data['pagination']['next'] . "'>Next</a></li>";
-                    echo $pageLink . "</ul>";
-                }
+                error_reporting(E_ERROR | E_PARSE);
+                loadPaginator($data);
                 ?>
             </nav>
         </div>
@@ -147,11 +123,19 @@
             <table class="result-table table table-striped table-bordered table-hover">
                 <thread class="thead-dark">
                     <tr>
-                        <th scope="col">ID</th>
+                        <th class="fathread-column" scope="col" onclick="sortTable(0)">ID <i class="fa fa-sort"
+                                                                                             style="font-size:20px"></i>
+                        </th>
                         <th scope="col">Avatar</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Role</th>
+                        <th class="thread-column" scope="col" onclick="sortTable(1)">Name <i class="fa fa-sort"
+                                                                                             style="font-size:20px"></i>
+                        </th>
+                        <th class="thread-column" scope="col" onclick="sortTable(2)">Email <i class="fa fa-sort"
+                                                                                              style="font-size:20px"></i>
+                        </th>
+                        <th class="thread-column" scope="col" onclick="sortTable(3)">Role <i class="fa fa-sort"
+                                                                                             style="font-size:20px"></i>
+                        </th>
                         <th scope="col">Action</th>
                     </tr>
                 </thread>
@@ -167,12 +151,10 @@
                         $searchTable .= "<td>" . $result['id'] . "</td>";
 
                         $imagePath = $result['avatar'];
-                        $correctPath = '';
                         if (!empty($imagePath)) {
-                            $correctPath = strstr($imagePath, '/uploads');
-                            $correctPath = "<img class= src=\"" . $correctPath . "\">";
+                            $correctPath = "<img src=\"" . $imagePath . "\">";
                         } else if (empty($imagePath)) {
-                            $correctPath = "<img src=\"/uploads/avatar/default-user-avatar.png\">";
+                            $correctPath = "<img src=\"/uploads/avatar/default-front-avatar.png\">";
                         }
                         $searchTable .= "<td>" . $correctPath . "</td>";
 
@@ -196,11 +178,11 @@
                         $searchTable .= " <td>
                         <div class=\"row g-2 align-items-center\">
                             <div class=\"col-auto\">
-                                    <a class=\"disguised-button edit-btn\" href=\"/admin/editPageUser?id=" . $result['id'] . "\">Edit</a> 
+                                    <a class=\"disguised-button edit-btn\" href=\"/management/admin/editPageUser?id=" . $result['id'] . "\">Edit</a> 
                             </div>
                             <div class=\"col-auto\">
                                     <a  class=\"disguised-button delete-btn confirmation\" 
-                                        href=\"/admin/deleteUser?id=" . $result['id'] . "\"
+                                        href=\"/management/admin/deleteUser?id=" . $result['id'] . "\"
                                         onclick=\"return confirm('Are you sure?')\"
                                     >
                                         Delete
@@ -216,5 +198,4 @@
             </table>
         </div>
     </div>
-
 </section>

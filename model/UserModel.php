@@ -35,9 +35,9 @@ class UserModel extends BaseModel
             'ins_datetime' => date('Y-m-d H:i:s')
         ]);
 
-        //if user is already exist (stop creating new user)
-        //redirect to user homepage
-        //$userExist contains all basic info of the user
+        //if front is already exist (stop creating new front)
+        //redirect to front homepage
+        //$userExist contains all basic info of the front
         $userExist = $this->checkExistenceByFacebookId($data['facebook_id']);
         if (!empty($userExist)) {
             return $userExist;
@@ -73,7 +73,7 @@ class UserModel extends BaseModel
         $log = "ACTION: Create account at email " . $data['email'] . "- BY: " . $data['ins_id'] . " DATE: " . $data['ins_datetime'];
         writeLog($log);
 
-        //by now the new user is created => return an array of basic info to display on user homepage
+        //by now the new front is created => return an array of basic info to display on front homepage
         return $this->checkExistenceByFacebookId($data['facebook_id']);
     }
 
@@ -99,12 +99,12 @@ class UserModel extends BaseModel
         $userData = [];
 
         try {
-            if(empty($password)){
-                $query = "SELECT {$this->loginArrayInfo} FROM ".$this->tableName." WHERE email = :email AND del_flag = ".DEL_FLAG_OFF;
+            if (empty($password)) {
+                $query = "SELECT {$this->loginArrayInfo} FROM " . $this->tableName . " WHERE email = :email AND del_flag = " . DEL_FLAG_OFF;
                 $stmt = $this->conn->prepare($query);
                 $stmt->bindParam(':email', $email);
             } else {
-                $query = "SELECT {$this->loginArrayInfo} FROM ".$this->tableName." WHERE email = :email AND password = :password AND del_flag = ".DEL_FLAG_OFF;
+                $query = "SELECT {$this->loginArrayInfo} FROM " . $this->tableName . " WHERE email = :email AND password = :password AND del_flag = " . DEL_FLAG_OFF;
                 $stmt = $this->conn->prepare($query);
                 $stmt->bindParam(':email', $email);
                 $stmt->bindParam(':password', $password);

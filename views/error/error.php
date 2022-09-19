@@ -7,3 +7,4 @@ echo "Request";
 showLog($_REQUEST, true);
 echo "Server";
 showLog($_SERVER);
+echo '<br>';

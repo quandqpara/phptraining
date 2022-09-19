@@ -120,7 +120,7 @@ function validateAdminRoles($role): int
         return $flag;
     }
 
-    if ($role >= 2 || $role == 0) {
+    if ($role >= 3 || $role == 0) {
         $_SESSION['flash_message']['role']['invalid'] = getMessage('invalid_role');
         $flag += 1;
         return $flag;
@@ -138,7 +138,7 @@ function validateUsersStatus($status): int
         return $flag;
     }
 
-    if ($status >= 2 || $status == 0) {
+    if ($status >= 3 || $status == 0) {
         $_SESSION['flash_message']['status']['invalid'] = getMessage('invalid_status');
         $flag += 1;
         return $flag;
@@ -178,7 +178,7 @@ function validateSubmitFormGetAndEmptyRequest($method, $request): int
 }
 
 //----------------------------------HELPER-------------------------------------------
-function flagCheck($flag)
+function flagCheck($flag): bool
 {
     if ($flag > 0) {
         return false;
@@ -188,7 +188,7 @@ function flagCheck($flag)
 
 //----------------------------------ADMIN VALIDATION----------------------------------
 //LOGIN
-function validateLoginInput($method)
+function validateLoginInput($method): bool
 {
     $error_flag = 0;
 
@@ -208,7 +208,7 @@ function validateLoginInput($method)
 }
 
 //CREATE
-function validateAllInput()
+function validateAllInput(): int
 {
     $flag = 0;
     $flag += validateName($_REQUEST['name']);
@@ -219,7 +219,7 @@ function validateAllInput()
     return $flag;
 }
 
-function validateAdminCreateForm($method, $avatarFlag)
+function validateAdminCreateForm($method, $avatarFlag): bool
 {
     $error_flag = 0;
 
@@ -246,11 +246,11 @@ function validateAdminCreateForm($method, $avatarFlag)
 //UPDATE
 //1. Check form REQUEST TYPE and REQUEST has value
 //2. validate ID
-//3. Check if user has entered password(optional input) or not
+//3. Check if front has entered password(optional input) or not
 //3.1 if not remove $_POST['password'] and ['verify_password']
 //3.2 if yes continue
 //4. validate others field normally
-function validateUpdateForm($method, $id)
+function validateUpdateForm($method, $id): bool
 {
     $error_flag = 0;
 
@@ -281,7 +281,7 @@ function validateUpdateForm($method, $id)
 }
 
 //name, email, role
-function validateAllUpdateRequiredInput()
+function validateAllUpdateRequiredInput(): int
 {
     $flag = 0;
     $flag += validateName($_POST['name']);
@@ -291,7 +291,7 @@ function validateAllUpdateRequiredInput()
 }
 
 //password, verify_password
-function optionalUpdateInputCheck()
+function optionalUpdateInputCheck(): int
 {
     $flag = 0;
 
@@ -322,7 +322,7 @@ function optionalUpdateInputCheck()
 }
 
 //SEARCH
-function validateSearchForm($method)
+function validateSearchForm($method): bool
 {
     $error_flag = 0;
 
@@ -344,7 +344,7 @@ function validateSearchForm($method)
 }
 
 //----------------------------------USER VALIDATION----------------------------------
-function validateLoginInputForUser($method)
+function validateLoginInputForUser($method): bool
 {
     $error_flag = 0;
 
@@ -367,85 +367,61 @@ function validateLoginInputForUser($method)
     return true;
 }
 
-function validateAllUpdateInputForUser()
-{
-    $flag = 0;
-
-    if (!isset($_REQUEST['password'])) {
-        foreach ($_REQUEST as $item) {
-            switch ($item) {
-                case 'name':
-                    $flag += validateName($_REQUEST['name']);
-                    break;
-                case 'email':
-                    $flag += validateEmail($_REQUEST['email']);
-                    break;
-                case 'role':
-                    $flag += validateAdminRoles($_REQUEST['role']);
-                    break;
-            }
-        }
-    } else if (isset($_REQUEST['password'])) {
-        foreach ($_REQUEST as $item) {
-            switch ($item) {
-                case 'name':
-                    $flag += validateName($_REQUEST['name']);
-                    break;
-                case 'email':
-                    $flag += validateEmail($_REQUEST['email']);
-                    break;
-                case 'password':
-                    $flag += validatePassword($_REQUEST['password']);
-                    break;
-                case 'verify':
-                    $flag += validateVerifyPassword($_REQUEST['password'], $_REQUEST['verify']);
-                    break;
-                case 'role':
-                    $flag += validateAdminRoles($_REQUEST['role']);
-                    break;
-            }
-        }
-    }
-
-
-    return $flag;
-}
-
-function validateSearchFormForUser($method)
+function validateSearchFormForUser($method): bool
 {
     $error_flag = 0;
 
     //method should be get and $_GET should not be empty
     $error_flag += validateSubmitFormGetAndEmptyRequest($method, $_GET);
 
-    flagCheck($error_flag, 'admin', 'searchPageUser');
+    if (!flagCheck($error_flag)) {
+        return false;
+    }
 
     //don't have to validate anything more than empty input
-    if (!isset($_GET['email']) || !isset($_GET['name'])) {
+    if (isset($_GET['email']) == false || isset($_GET['name']) == false) {
         $_SESSION['flash_message']['email']['empty'] = getMessage('email_empty');
         $_SESSION['flash_message']['name']['empty'] = getMessage('name_empty');
+        return false;
+    }
+    return true;
+}
+
+function validateUpdateFormForUser($method, $id): bool
+{
+    $error_flag = 0;
+
+    $error_flag += validateSubmitFormPostAndEmptyRequest($method, $_POST);
+
+    if (!flagCheck($error_flag)) {
+        return false;
+    }
+
+    $error_flag += validateID($id);
+
+    $error_flag += optionalUpdateInputCheck();
+
+    if (!flagCheck($error_flag)) {
+        return false;
+    }
+
+    $error_flag += validateAllUpdateRequiredInputForUser();
+
+    if (!flagCheck($error_flag)) {
         return false;
     }
 
     return true;
 }
 
-function validateUpdateFormForUser($method, $request, $id)
+function validateAllUpdateRequiredInputForUser(): int
 {
-    $error_flag = 0;
-
-    $error_flag += validateSubmitFormPostAndEmptyRequest($method, $request);
-
-    flagCheck($error_flag, 'admin', 'editPageUser?id=' . $id);
-
-    $error_flag += validateID($id);
-
-    $error_flag += validateAllUpdateInputForUser();
-
-    flagCheck($error_flag, 'admin', 'editPageUser?id=' . $id);
-    return true;
+    $flag = 0;
+    $flag += validateName($_POST['name']);
+    $flag += validateEmail($_POST['email']);
+    $flag += validateUsersStatus($_POST['status']);
+    return $flag;
 }
-
 
 
 

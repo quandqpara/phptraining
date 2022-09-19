@@ -26,7 +26,7 @@ function setSessionUser()
 
 function isAdmin()
 {
-    if ($_SESSION['admin']) {
+    if (!empty($_SESSION['admin'])) {
         return true;
     } else {
         $_SESSION['flash_message']['permission']['no_permission_admin'] = getMessage('no_permission_admin');
@@ -36,7 +36,7 @@ function isAdmin()
 
 function isSuperAdmin()
 {
-    if ($_SESSION['admin']['role'] == 2) {
+    if (isAdmin() && $_SESSION['admin']['role'] == 2) {
         return true;
     } else {
         $_SESSION['flash_message']['permission']['no_permission_super_admin'] = getMessage('no_permission_super_admin');
@@ -55,12 +55,12 @@ function isUser()
 function isLoggedIn()
 {
     if (isset($_SESSION['admin'])) {
-        header('Location: /admin/home');
+        header('Location: /management/admin/home');
         exit;
     }
 
     if (isset($_SESSION['user'])) {
-        header('Location: /user/profile');
+        header('Location: /frontend/front/profile');
         exit;
     }
 }
@@ -73,7 +73,7 @@ function basicUserSetter($data)
     $_SESSION['session_user']['avatar'] = $data[0]['avatar'];
 }
 
-//debug
+//________________________________________________________debug_________________________________________________________
 function showLog($data, $continue = false)
 {
     echo "<pre>";
@@ -85,7 +85,7 @@ function showLog($data, $continue = false)
     }
 }
 
-//helper functions
+//__________________________________________________helper functions____________________________________________________
 function writeLog($log)
 {
     $logFile = fopen("log.txt", "a") or die("Unable to open file");
@@ -112,30 +112,44 @@ function MBToByte($size)
     return 1024 * 1024 * $size;
 }
 
+function getTitle(){
+    $title = $_SESSION['page_title'];
+    switch ($title){
+        case('index'):
+            $title = 'Login';
+            break;
+        case('profile'):
+            $title = 'Profile';
+            break;
+        case('home'):
+            $title = 'Home';
+            break;
+        case('searchUser'):
+            $title = 'Search User';
+            break;
+        case('editUser'):
+            $title = 'Edit User';
+            break;
+        case('searchAdmin'):
+            $title = 'Search Admin';
+            break;
+        case('editUser'):
+            $title = 'Edit Admin';
+            break;
+        case('creatAdmin'):
+            $title = 'Create Admin';
+            break;
+    }
+    return $title;
+}
 
-//function setFlashMessage($message, $grant = 'admin')
-//{
-//    if (empty($message)) {
-//        return;
-//    }
-//
-//    $_SESSION[$grant]['flash_message'] = $message;
-//}
-//
-//function getFlashMessage($grant = 'admin')
-//{
-//    $flashMessages = $_SESSION[$grant]['flash_message'];
-//
-//    unset($_SESSION[$grant]['flash_message']);
-//
-//    return $flashMessages;
-//}
+//____________________________________________________handling notice message___________________________________________
 function getMessage()
 {
     $_errorMessages = '';
     //get all possible error messages
     if (empty($_errorMessages)) {
-        $_errorMessages = require ROOT . '/config/error_message.php';
+        $_errorMessages = require ROOT . '/config/message.php';
     }
 
     $arguments = func_get_args();
@@ -190,27 +204,7 @@ function handleFlashMessage($message)
     return $tempMessage;
 }
 
-
-function unsetAll()
-{
-    unsetMessage();
-    unsetOldData();
-}
-
-function unsetMessage()
-{
-    if (isset($_SESSION['flash_message'])) {
-        unset($_SESSION['flash_message']);
-    }
-}
-
-function unsetOldData()
-{
-    if (isset($_SESSION['old_data'])) {
-        unset($_SESSION['old_data']);
-    }
-}
-
+//______________________________________filling old data from previous input form_______________________________________
 function retrieveOldFormData()
 {
     if (isset($_SESSION['old_data'])) {
@@ -241,5 +235,33 @@ function oldData($field, $default = '')
     return isset($data) ? $data : $default;
 }
 
+//__________________________________________________displaying html_____________________________________________________
+function loadPaginator($data)
+{
+    $reloadUrl = ltrim(strstr($_SERVER['REQUEST_URI'], '?'), '?');
 
-
+    //remove duplicate params
+    $correctingUrl = explode("&", $reloadUrl);
+    $reloadUrl = "";
+    if (isset($correctingUrl)) {
+        foreach ($correctingUrl as $param) {
+            $temp = explode("=", $param);
+            $key = $temp[0];
+            $value = $temp[1];
+            if (!str_contains($reloadUrl, $key)) {
+                $reloadUrl .= $key . "=" . $value . "&";
+            }
+        }
+    }
+    $href = rtrim($_SERVER['REDIRECT_URL'] . "?" . $reloadUrl, '&');
+    //print Pagination
+    if (!empty($data)) {
+        $pageLink = "<ul class='pagination'>";
+        $pageLink .= "<li class='page-item'><a class='page-link' href='" . $href . "&page=" . $data['pagination']['prev'] . "'>Previous</a></li>";
+        for ($i = 1; $i <= $data['pagination']['totalPages']; $i++) {
+            $pageLink .= "<li class='page-item'><a class='page-link' href='" . $href . "&page=" . $i . "'>" . $i . "</a></li>";
+        }
+        $pageLink .= "<li class='page-item'><a class='page-link' href='" . $href . "&page=" . $data['pagination']['next'] . "'>Next</a></li>";
+        echo $pageLink . "</ul>";
+    }
+}

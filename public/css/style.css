@@ -147,18 +147,18 @@ img {
     margin-right: 30px;
 }
 
-.user-profile-noti{
+.user-profile-noti {
     width: 90%;
     height: 50px;
     color: white;
     background-color: green;
 }
 
-.title strong{
+.title strong {
     font-size: xx-large;
 }
 
-.info-window-container-for-edit-admin{
+.info-window-container-for-edit-admin {
     display: grid;
     border: black solid 1px;
     height: 80vh;
@@ -198,7 +198,7 @@ img {
     padding-right: 95px;
 }
 
-.logout-text:hover{
+.logout-text:hover {
     color: red;
 }
 
@@ -211,5 +211,9 @@ img {
 .form-update {
     max-height: 800px;
     max-width: 1700px;
+}
+
+.thread-column:hover {
+    cursor: pointer;
 }
 

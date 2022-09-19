@@ -45,5 +45,6 @@ return [
     'invalid_account_status' => 'You has been banned. Contact for support.',
     'login_success' => ' has been logged in.',
     'login_failed' => 'Your email or password might be incorrect.',
-    'login_fb_failed' => 'Failed to login with faceboook!'
+    'login_fb_failed' => 'Failed to login with faceboook!',
+    'logout' => 'You have been logged out!'
 ];

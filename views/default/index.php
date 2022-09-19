@@ -2,12 +2,12 @@
     <div class="button-container">
         <div class="row g-2 align-items-center">
             <div class="col-auto">
-                <a href="/admin/index">
+                <a href="management/auth/index">
                     <button type="button" class="btn btn-primary btn-block mb-4">ADMIN</button>
                 </a>
             </div>
             <div class="col-auto">
-                <a href="/user/index">
+                <a href="frontend/front/index">
                     <button type="button" class="btn btn-primary btn-block mb-4">USER</button>
                 </a>
             </div>

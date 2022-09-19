@@ -24,22 +24,4 @@ class AdminModel extends BaseModel
         $this->conn = DB::getInstance();
         $this->loginArrayInfo = "id, name, email, avatar, role_type";
     }
-
-    public function searchOneAdmin($id)
-    {
-        $targetInfo = [];
-        try {
-            $stmt = $this->conn->prepare("SELECT name, email, avatar FROM " . $this->tableName . " WHERE id = :id AND del_flag = :flag");
-            $stmt->bindParam(':id', $_GET['id']);
-            $flag = DEL_FLAG_OFF;
-            $stmt->bindParam(':flag', $flag);
-            $stmt->execute();
-
-            $targetInfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            echo "Error: " . $e;
-        }
-
-        return $targetInfo;
-    }
 }

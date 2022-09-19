@@ -7,16 +7,20 @@ require_once('Helper/common.php');
 
 include_once 'Facebook/facebook_api.php';
 
-class userController extends BaseController
+class frontController extends BaseController
 {
     public function __construct()
     {
-        $this->folder = 'user';
+        $this->folder = 'front';
         $this->userModel = new UserModel();
     }
 
     public function index()
     {
+        isLoggedIn();
+        if (isset($_GET['state']) && FB_APP_STATE == $_GET['state']) {
+            $fbLogin = tryAndLoginWithFacebook($_GET);
+        }
         return $this->render('index');
     }
 
@@ -31,7 +35,7 @@ class userController extends BaseController
 
         //if the input failed the validate return to login
         if (!validateLoginInputForUser($method)) {
-            header('Location: /user/index');
+            header('Location: /frontend/front/index');
             exit;
         }
 
@@ -43,18 +47,17 @@ class userController extends BaseController
         //if return data contain data -> confirmed log in
         //....else no data found back to login
         $returnData = $this->userModel->basicLogin($email, $password);
-
         if (!empty($returnData)) {
-            setSessionUser();                                                                                           // set user session.
-            $this->sessionUserSetter($returnData);                                                                      // set user info
+            setSessionUser();                                                                                           // set front session.
+            $this->sessionUserSetter($returnData);                                                                      // set front info
             $message = $_SESSION['session_user']['name'] . getMessage('login_success');
             $_SESSION['flash_message']['login']['logged_in'] = $message;
-            header('Location: /user/profile');
+            header('Location: /frontend/front/profile');
             exit;
         } else {
             $_SESSION['flash_message']['login']['not_logged_in'] = getMessage('login_failed');
             $_SESSION['old_data']['email'] = $email;
-            header('Location: /user/index');
+            header('Location: /frontend/front/index');
             exit;
         }
     }
@@ -62,7 +65,7 @@ class userController extends BaseController
     public function logout()
     {
         session_unset();
-        header('Location: /user/index');
+        header('Location: /frontend/front/index');
         exit;
     }
 
@@ -70,7 +73,7 @@ class userController extends BaseController
     {
         if (!isset($_SESSION['fb_user_info'])) {
             $_SESSION['flash_message']['login']['failed'] = getMessage('login_fb_failed');
-            header('Location: /user/index');
+            header('Location: frontend/front/index');
             exit;
         }
         $name = $_SESSION['fb_user_info']['first_name'] . $_SESSION['fb_user_info']['last_name'];
@@ -93,11 +96,12 @@ class userController extends BaseController
         if (!empty($currentUser)) {
             $_SESSION['flash_message']['login']['success'] = $userInfoFromFacebook['name'] . getMessage('login_success');
             setSessionUser();
-            header('Location: /user/profile');
+            header('Location: /frontend/front/profile');
             exit;
         } else {
-            $_SESSION['flash_message']['login']['failed'] = getMessage('login_success');
-            header('Location: /user/index');
+
+            $_SESSION['flash_message']['login']['failed'] = getMessage('login_failed');
+            header('Location: /frontend/front/index');
             exit;
         }
     }

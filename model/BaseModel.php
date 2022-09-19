@@ -37,6 +37,18 @@ abstract class BaseModel implements QueryInterface
         }
     }
 
+    //set Array of SELECT items
+    public function setSelectItems($target)
+    {
+        $select = '';
+        if ($target == 'admin') {
+            $select = 'id, avatar, name, email, role_type';
+        } elseif ($target == 'user') {
+            $select = 'id, avatar, name, email, status';
+        }
+        return $select;
+    }
+
     //--------------------------------------------------Login-----------------------------------------------------------
     public function basicLogin($email, $password)
     {
@@ -60,16 +72,12 @@ abstract class BaseModel implements QueryInterface
     //need 'name', 'password', 'email', 'avatar', 'role_type', 'ins_id', 'ins_datetime'
     public function create($validatedDataFromInput = [])
     {
-        //unset [flash_message] and [old_data] if isset
-        unsetAll();
-
         // TODO: Implement create() method.
 
         $data = array_merge($validatedDataFromInput, [
             'ins_id' => getAdminID(),
             'ins_datetime' => date('Y-m-d H:i:s')
         ]);
-
 
         //if checkFillable() removed some unnecessary data and that make
         //the amount of data from input more or less than the number of column require input.
@@ -123,7 +131,6 @@ abstract class BaseModel implements QueryInterface
 
         $setArray = implode(', ', $columnArr);
         $rowChange = 0;
-
         try {
             $sql = "UPDATE {$this->tableName} SET {$setArray} WHERE id = {$id}";
             $stmt = $this->conn->prepare($sql);
@@ -156,7 +163,6 @@ abstract class BaseModel implements QueryInterface
         );
 
         $limit = 10;
-        $start = $limit * ($page - 1);
         $total = 0;
 
         $countQuery = "SELECT count(id) 
@@ -178,8 +184,9 @@ abstract class BaseModel implements QueryInterface
         }
 
         //return page with limited result
+        $selectThis = $this->setSelectItems($this->tableName);
         try {
-            $query = "SELECT id, avatar, name, email, role_type
+            $query = "SELECT " . $selectThis . "
                 FROM {$this->tableName} 
                 WHERE email LIKE '%{$email}%'
                     AND name LIKE '%{$name}%'
@@ -193,11 +200,15 @@ abstract class BaseModel implements QueryInterface
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
         }
+
         $totalPages = ceil($total / $limit);
         $page = (isset($page) && $page < 10000) ? (int)$page : 1;
         $start = $limit * ($page - 1);
         $next = ($page > 1) ? $page + 1 : 1;
         $prev = ($page < $total) ? $page - 1 : $total;
+        if ($prev == 0) {
+            $prev = 1;
+        }
 
         $paginationInfo = [
             'totalPages' => $totalPages,
@@ -218,27 +229,31 @@ abstract class BaseModel implements QueryInterface
     public function deleteById($id)
     {
         $data = array(
-            'id' => $id,
+            'del_flag' => DEL_FLAG_ON,
             'upd_id' => getAdminID(),
             'upd_datetime' => date('Y-m-d H:i:s')
         );
 
-        try {
-            $sql = "UPDATE {$this->tableName} SET del_flag = " . DEL_FLAG_ON . " WHERE id = " . $id;
-            $stmt = $this->conn->prepare($sql);
-            $stmt->execute();
-
-            if ($stmt->rowCount() == 0 || $stmt->rowCount() > 1) {
-                $_SESSION['flash_message']['delete']['failed'] = getMessage('delete_failed');
-            } else {
-                $_SESSION['flash_message']['delete']['success'] = getMessage('delete_success');
-            }
-
-        } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
-        }
-
+        $rowChange = $this->update($id, $data);
         $log = "ACTION: DELETE account at id " . $id . " - BY: " . $data['ins_id'] . " DATE: " . $data['ins_datetime'];
         writeLog($log);
+        return $rowChange;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    public function searchOneByID($id)
+    {
+        $targetInfo = [];
+        try {
+            $stmt = $this->conn->prepare("SELECT name, email, avatar FROM " . $this->tableName . " WHERE id = :id AND del_flag = " . DEL_FLAG_OFF);
+            $stmt->bindParam(':id', $_GET['id']);
+            $stmt->execute();
+
+            $targetInfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "Error: " . $e;
+        }
+
+        return $targetInfo;
     }
 }

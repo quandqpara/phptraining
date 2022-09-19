@@ -5,21 +5,10 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Admin management
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/management/admin/home">Search</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="/management/admin/createPageAdmin">Create</a>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         User management
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/management/admin/searchPageUser">Search</a>
+                        <a class="dropdown-item" href="/management/user/searchPageUser">Search</a>
                     </div>
                 </li>
                 <li class="nav-item active">
@@ -45,7 +34,7 @@ if (isset($_SESSION['flash_message']['edit'])) {
 <section class="d-flex flex-column align-items-center justify-content-start">
     <div class="outer-container">
         <div class="title mt-3"><strong>Admin Search ><span style="color:blue">Edit User</span></strong></div>
-        <form method="POST" action="/management/admin/editUser" class="form-update" enctype="multipart/form-data">
+        <form method="POST" action="/management/user/editUser" class="form-update" enctype="multipart/form-data">
             <div class="info-window-container-for-edit-admin">
                 <!-- search ID -->
                 <div class="row">
@@ -184,7 +173,7 @@ if (isset($_SESSION['flash_message']['edit'])) {
                 <!-- Status input -->
                 <div class="row">
                     <div class="col-2">
-                        <label class="form-label" for="status">Role*</label>
+                        <label class="form-label" for="status">Status*</label>
                     </div>
                     <div class="col-2">
                         <input type="radio" id="active" name="status" value="1"/>

@@ -5,21 +5,10 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Admin management
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/management/admin/home">Search</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="/management/admin/createPageAdmin">Create</a>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         User management
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/management/admin/searchPageUser">Search</a>
+                        <a class="dropdown-item" href="/management/user/searchPageUser">Search</a>
                     </div>
                 </li>
                 <li class="nav-item active">
@@ -31,7 +20,7 @@
 </header>
 <section class="h-100 w-100 flex-column mb-auto admin-home-sect">
     <?php
-    $acceptableMessage = array('login', 'search', 'update', 'id', 'permission', 'delete');
+    $acceptableMessage = array('login', 'search', 'update', 'id', 'permission', 'delete', 'permission');
     foreach ($_SESSION['flash_message'] as $key => $value) {
         if (in_array($key, $acceptableMessage)) {
             if (isset($_SESSION['flash_message'][$key])) {
@@ -49,7 +38,7 @@
     }
     ?>
     <div class="mt-3 mb-3 search-box border border-dark">
-        <form method="GET" action="/management/admin/searchAdmin" class=" m-4 form-create">
+        <form method="GET" action="/management/user/searchUser" class=" m-4 form-create">
             <!-- Email input -->
             <div class="row g-2 align-items-center mb-3 mt-3">
                 <div class="col-auto m-3">
@@ -60,7 +49,11 @@
                            id="email"
                            name="email"
                            class="form-control"
-                           value="<?php echo oldData('email'); ?>"
+                           value="<?php
+                           if (isset($_SESSION['old_data']['email'])) {
+                               echo oldData('email');
+                           }
+                           ?>"
                     />
                 </div>
                 <div class="error-holder m-3">
@@ -80,7 +73,11 @@
                            id="name"
                            name="name"
                            class="form-control"
-                           value="<?php echo oldData('name'); ?>"
+                           value="<?php
+                           if (isset($_SESSION['old_data']['name'])) {
+                               echo oldData('name');
+                           }
+                           ?>"
                     />
                 </div>
                 <div class="error-holder m-3">
@@ -112,7 +109,7 @@
         </div>
 
         <div class="table-cover border border-dark">
-            <table id="searchTable" class="result-table table table-striped table-bordered table-hover">
+            <table class="result-table table table-striped table-bordered table-hover">
                 <thread class="thead-dark">
                     <tr>
                         <th class="fathread-column" scope="col" onclick="sortTable(0)">ID <i class="fa fa-sort"
@@ -143,10 +140,8 @@
                         $searchTable .= "<td>" . $result['id'] . "</td>";
 
                         $imagePath = $result['avatar'];
-                        $correctPath = '';
                         if (!empty($imagePath)) {
-                            $correctPath = strstr($imagePath, '/uploads');
-                            $correctPath = "<img src=\"" . $correctPath . "\">";
+                            $correctPath = "<img src=\"" . $imagePath . "\">";
                         } else if (empty($imagePath)) {
                             $correctPath = "<img src=\"/uploads/avatar/default-front-avatar.png\">";
                         }
@@ -155,28 +150,28 @@
                         $searchTable .= "<td>" . $result['name'] . "</td>";
                         $searchTable .= "<td>" . $result['email'] . "</td>";
 
-                        $role = '';
-                        if (!empty($result['role_type'])) {
-                            $role = $result['role_type'];
-                            switch ($role) {
-                                case 1:
-                                    $role = 'Admin';
+                        $status = '';
+                        if (!empty($result['status'])) {
+                            switch ($result['status']) {
+                                case '1':
+                                    $status = 'Active';
                                     break;
-                                case 2:
-                                    $role = 'Super Admin';
+                                case '2':
+                                    $status = 'Banned';
                                     break;
                             }
                         }
-                        $searchTable .= "<td>" . $role . "</td>";
+
+                        $searchTable .= "<td>" . $status . "</td>";
 
                         $searchTable .= " <td>
                         <div class=\"row g-2 align-items-center\">
                             <div class=\"col-auto\">
-                                    <a class=\"disguised-button edit-btn\" href=\"/management/admin/editPageAdmin?id=" . $result['id'] . "\">Edit</a> 
+                                    <a class=\"disguised-button edit-btn\" href=\"/management/user/editPageUser?id=" . $result['id'] . "\">Edit</a> 
                             </div>
                             <div class=\"col-auto\">
                                     <a  class=\"disguised-button delete-btn confirmation\" 
-                                        href=\"/management/admin/deleteAdmin?id=" . $result['id'] . "\"
+                                        href=\"/management/user/deleteUser?id=" . $result['id'] . "\"
                                         onclick=\"return confirm('Are you sure?')\"
                                     >
                                         Delete
@@ -192,4 +187,5 @@
             </table>
         </div>
     </div>
+
 </section>

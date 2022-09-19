@@ -1,24 +1,17 @@
-<?php
-    isLoggedIn();
-
-    if(isset($_GET['state']) && FB_APP_STATE == $_GET['state']) {
-        $fbLogin = tryAndLoginWithFacebook($_GET);
-    }
-?>
 <section class="h-100 d-flex align-items-center justify-content-center">
-    <form method="POST" action="/user/auth" class="form-login">
+    <form method="POST" action="/frontend/front/auth" class="form-login">
         <?php
-            if(isset($_SESSION['flash_message']['login'])){
-                echo "
+        if (isset($_SESSION['flash_message']['login'])) {
+            echo "
                 <div class=\"w-80 mt-3 mb-3 notification border border-success rounded\">
                     <span class=\"noti-message h-100 d-flex align-text-center justify-content-center align-items-center\">"; ?>
-                    <?php
-                        if (isset($_SESSION['flash_message']['login'])) {
-                        echo handleFlashMessage('login');
-                    }
-                echo "</span>
-                </div>";
+            <?php
+            if (isset($_SESSION['flash_message']['login'])) {
+                echo handleFlashMessage('login');
             }
+            echo "</span>
+                </div>";
+        }
         ?>
 
         <!-- Email input -->

@@ -2,23 +2,38 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4ffbe23c-1fb7-4eed-8404-eb6eb824b742" name="Changes" comment="Format Code">
+      <change afterPath="$PROJECT_DIR$/controllers/management/auth_controller.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/controllers/management/user_controller.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/user/editUser.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/user/searchUser.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Facebook/facebook_api.php" beforeDir="false" afterPath="$PROJECT_DIR$/Facebook/facebook_api.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Helper/common.php" beforeDir="false" afterPath="$PROJECT_DIR$/Helper/common.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/error_message.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/error_message.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/admin_controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/admin_controller.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/user_controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/user_controller.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Helper/define_const.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/config.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/config.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/error_message.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/message.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controllers/admin_controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/management/admin_controller.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controllers/user_controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/frontend/front_controller.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/AdminModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/model/AdminModel.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/BaseModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/model/BaseModel.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/UserModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/model/UserModel.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/common.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/common.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/validation/validation.php" beforeDir="false" afterPath="$PROJECT_DIR$/validation/validation.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/admin/createAdmin.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/createAdmin.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/admin/editAdmin.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/editAdmin.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/admin/editUser.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/editUser.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/admin/home.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/home.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/admin/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/admin/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/auth/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/admin/searchUser.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/searchUser.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/default/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/default/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/user/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/user/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/user/profile.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/user/profile.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/error/error.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/error/error.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/layouts/application.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/layouts/application.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/user/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/front/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/user/profile.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/front/profile.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,27 +70,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/oriol/Desktop/Facebook/easycodeis-master&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.general&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/xampp/htdocs/PHPtraining/views/admin",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.general",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\xampp\htdocs\PHPtraining\views\admin" />
       <recent name="C:\xampp\htdocs\PHPtraining\public" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\xampp\htdocs\PHPtraining" />
-      <recent name="C:\xampp\htdocs\PHPtraining\uploads\avatar" />
-      <recent name="C:\xampp\htdocs\PHPtraining\validation" />
-      <recent name="C:\xampp\htdocs\PHPtraining\config" />
-      <recent name="C:\xampp\htdocs\PHPtraining\views\admin" />
+      <recent name="C:\xampp\htdocs\PHPtraining\views\auth" />
+      <recent name="C:\xampp\htdocs\PHPtraining\views\user" />
+      <recent name="C:\xampp\htdocs\PHPtraining\views\login" />
+      <recent name="C:\xampp\htdocs\PHPtraining\controllers\frontend" />
+      <recent name="C:\xampp\htdocs\PHPtraining\controllers\management" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -93,6 +109,7 @@
       <workItem from="1663115174288" duration="37153000" />
       <workItem from="1663208438427" duration="22913000" />
       <workItem from="1663292943086" duration="30374000" />
+      <workItem from="1663549325234" duration="33254000" />
     </task>
     <task id="LOCAL-00001" summary="Create DB,&#10;Create Login Interface">
       <created>1662418595991</created>

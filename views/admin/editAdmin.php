@@ -8,9 +8,9 @@
                         Admin management
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/admin/home">Search</a>
+                        <a class="dropdown-item" href="/management/admin/home">Search</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="/admin/createPageAdmin">Create</a>
+                        <a class="dropdown-item" href="/management/admin/createPageAdmin">Create</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -19,11 +19,11 @@
                         User management
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/admin/searchPageUser">Search</a>
+                        <a class="dropdown-item" href="/management/admin/searchPageUser">Search</a>
                     </div>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="/admin/logout">Log out </a>
+                    <a class="nav-link" href="/management/auth/logout">Log out </a>
                 </li>
             </ul>
         </div>
@@ -45,7 +45,7 @@ if (isset($_SESSION['flash_message']['edit'])) {
 <section class="d-flex flex-column align-items-center justify-content-start">
     <div class="outer-container">
         <div class="title mt-3"><strong>Admin Search ><span style="color:blue">Edit Admin</span></strong></div>
-        <form method="POST" action="/admin/editAdmin" class="form-update" enctype="multipart/form-data">
+        <form method="POST" action="/management/admin/editAdmin" class="form-update" enctype="multipart/form-data">
             <div class="info-window-container-for-edit-admin">
                 <!-- search ID -->
                 <div class="row">
@@ -89,7 +89,7 @@ if (isset($_SESSION['flash_message']['edit'])) {
                             $correctPath = strstr($imagePath, '/uploads');
                             echo "<img src=\"" . $correctPath . "\">";
                         } else {
-                            echo "<img src=\"/uploads/avatar/default-user-avatar.png\">";
+                            echo "<img src=\"/uploads/avatar/default-front-avatar.png\">";
                         }
                         ?>
                     </div>

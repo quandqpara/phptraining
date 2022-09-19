@@ -1,11 +1,16 @@
 <?php
 $controllers = array(
-    'default' => ['index'],
-    'admin' => ['index', 'auth', 'logout', 'home', 'searchAdmin', 'deleteAdmin',
-        'createPageAdmin', 'createAdmin', 'editPageAdmin', 'editAdmin',
-        'searchUser', 'searchPageUser', 'editPageUser', 'editUser'],
-    'user' => ['index', 'profile', 'auth', 'processingFacebookData', 'logout'],
-    'error' => ['error']
+    'default'               =>  ['index'],
+    'error'                 =>  ['error'],
+
+    'management/auth'       =>  ['index',       'logout', 'login'],
+
+    'management/admin'      =>  ['home',        'editPageAdmin',    'createPageAdmin',  'searchPageUser',   'editPageUser',
+                                'searchUser',   'editAdmin',        'createAdmin',      'searchAdmin',      'editUser',
+                                'deleteUser',   'deleteAdmin'],
+    'management/user'       =>  ['searchPageUser',  'editPageUser', 'searchUser',       'editUser',     'deleteUser'],
+
+    'frontend/front'        =>  ['index', 'profile', 'auth', 'processingFacebookData', 'logout'],
 );
 
 if (!array_key_exists($controller, $controllers) || !in_array($action, $controllers[$controller])) {
@@ -14,6 +19,10 @@ if (!array_key_exists($controller, $controllers) || !in_array($action, $controll
 }
 
 include_once('controllers/' . $controller . '_controller.php');
+
+if(str_contains($controller, '/')){
+    $controller = ltrim(strstr($controller, '/'),'/');
+}
 
 $klass = str_replace('_', '', ucwords($controller, '_')) . 'Controller';
 $controller = new $klass;
