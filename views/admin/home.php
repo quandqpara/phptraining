@@ -31,7 +31,7 @@
 </header>
 <section class="h-100 w-100 flex-column mb-auto admin-home-sect">
     <?php
-    $acceptableMessage = array('login', 'search', 'update', 'id', 'permission', 'delete');
+    $acceptableMessage = array('login', 'search', 'update', 'create', 'id', 'permission', 'delete', 'data');
     foreach ($_SESSION['flash_message'] as $key => $value) {
         if (in_array($key, $acceptableMessage)) {
             if (isset($_SESSION['flash_message'][$key])) {
@@ -110,86 +110,29 @@
                 ?>
             </nav>
         </div>
-
         <div class="table-cover border border-dark">
-            <table id="searchTable" class="result-table table table-striped table-bordered table-hover">
-                <thread class="thead-dark">
+            <table id="searchTable" class="result-table table table-sortable table-striped table-bordered table-hover">
+                <thead class="thead-dark">
                     <tr>
-                        <th class="fathread-column" scope="col" onclick="sortTable(0)">ID <i class="fa fa-sort"
-                                                                                             style="font-size:20px"></i>
+                        <th class="thread-column" scope="col" >ID <?php displayingSortIcon($data)?>
                         </th>
                         <th scope="col">Avatar</th>
-                        <th class="thread-column" scope="col" onclick="sortTable(1)">Name <i class="fa fa-sort"
-                                                                                             style="font-size:20px"></i>
+                        <th class="thread-column" scope="col" >Name <?php displayingSortIcon($data)?>
                         </th>
-                        <th class="thread-column" scope="col" onclick="sortTable(2)">Email <i class="fa fa-sort"
-                                                                                              style="font-size:20px"></i>
+                        <th class="thread-column" scope="col" >Email <?php displayingSortIcon($data)?>
                         </th>
-                        <th class="thread-column" scope="col" onclick="sortTable(3)">Role <i class="fa fa-sort"
-                                                                                             style="font-size:20px"></i>
+                        <th class="thread-column" scope="col" >Role <?php displayingSortIcon($data)?>
                         </th>
                         <th scope="col">Action</th>
                     </tr>
-                </thread>
+                </thead>
                 <tbody>
                 <?php
-                if (!isset($data['data']) || count($data['data']) == 0) {
-                    $searchTable = "<tr>";
-                    $searchTable .= "<td colspan='6'><span>No Results Found!</span></td>";
-                    echo $searchTable . "</tr>";
-                } else {
-                    foreach ($data['data'] as $result) {
-                        $searchTable = "<tr>";
-                        $searchTable .= "<td>" . $result['id'] . "</td>";
-
-                        $imagePath = $result['avatar'];
-                        $correctPath = '';
-                        if (!empty($imagePath)) {
-                            $correctPath = strstr($imagePath, '/uploads');
-                            $correctPath = "<img src=\"" . $correctPath . "\">";
-                        } else if (empty($imagePath)) {
-                            $correctPath = "<img src=\"/uploads/avatar/default-front-avatar.png\">";
-                        }
-                        $searchTable .= "<td>" . $correctPath . "</td>";
-
-                        $searchTable .= "<td>" . $result['name'] . "</td>";
-                        $searchTable .= "<td>" . $result['email'] . "</td>";
-
-                        $role = '';
-                        if (!empty($result['role_type'])) {
-                            $role = $result['role_type'];
-                            switch ($role) {
-                                case 1:
-                                    $role = 'Admin';
-                                    break;
-                                case 2:
-                                    $role = 'Super Admin';
-                                    break;
-                            }
-                        }
-                        $searchTable .= "<td>" . $role . "</td>";
-
-                        $searchTable .= " <td>
-                        <div class=\"row g-2 align-items-center\">
-                            <div class=\"col-auto\">
-                                    <a class=\"disguised-button edit-btn\" href=\"/management/admin/editPageAdmin?id=" . $result['id'] . "\">Edit</a> 
-                            </div>
-                            <div class=\"col-auto\">
-                                    <a  class=\"disguised-button delete-btn confirmation\" 
-                                        href=\"/management/admin/deleteAdmin?id=" . $result['id'] . "\"
-                                        onclick=\"return confirm('Are you sure?')\"
-                                    >
-                                        Delete
-                                    </a>
-                            </div>
-                        </div>
-                    </td>";
-                        echo $searchTable . "</tr>";
-                    }
-                }
+                    displayTableResult($data);
                 ?>
                 </tbody>
             </table>
         </div>
     </div>
 </section>
+

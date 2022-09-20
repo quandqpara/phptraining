@@ -1,3 +1,6 @@
+@media screen and (max-width: 800px) {
+}
+
 body {
     height: 100vh;
 }
@@ -12,11 +15,25 @@ th {
     vertical-align: middle;
 }
 
+.fill {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden
+}
+
+.fill img {
+    flex-shrink: 0;
+    min-width: 100%;
+    min-height: 100%
+}
 
 img {
     width: 60px;
     height: 60px;
-    object-fit: contain;
+    object-fit: cover;
 }
 
 .avatar-display img {
@@ -76,10 +93,6 @@ img {
 
 .page-nav {
     float: right;
-}
-
-.result-table {
-    margin-bottom: 0;
 }
 
 .noti-message {
@@ -169,6 +182,7 @@ img {
     margin-top: 20px;
     margin-bottom: 20px;
     grid-row-gap: 10px;
+    overflow: auto;
 }
 
 .info-window-container {
@@ -182,6 +196,7 @@ img {
     margin-top: 20px;
     margin-bottom: 20px;
     grid-row-gap: 10px;
+    overflow: auto;
 }
 
 .col-data {
@@ -217,3 +232,12 @@ img {
     cursor: pointer;
 }
 
+.error-holder {
+    color: red;
+}
+
+.back-btn-container {
+    padding-right: 2rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}

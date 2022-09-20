@@ -1,6 +1,6 @@
 <?php
 //session_destroy();
-require_once('Helper/common.php');
+require_once('helper/common.php');
 require_once('connection.php');
 require_once('config/config.php');
 

@@ -62,7 +62,8 @@ abstract class BaseModel implements QueryInterface
             $stmt->execute();
             $userData = $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
+            $error = "Error: " . $e->getMessage();
+            writeLog($error);
         }
 
         return $userData;
@@ -84,9 +85,7 @@ abstract class BaseModel implements QueryInterface
         //do not create new account
         $this->checkFillable($data);
         if (count($data) != count($this->columnCreate)) {
-            $_SESSION['flash_message']['create']['failed'] = getMessage('create_failed');
-            header('Location: admin/createAdmin/');
-            exit;
+            return false;
         }
 
         $listOfRequireInfo = implode(', ', $this->columnCreate);
@@ -101,7 +100,8 @@ abstract class BaseModel implements QueryInterface
 
             $rowCount = $stmt->rowCount();
         } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
+            $error = "Error: " . $e->getMessage();
+            writeLog($error);
         }
 
         $log = "ACTION: Create account at email " . $data['email'] . "- BY: " . $data['ins_id'] . " DATE: " . $data['ins_datetime'];
@@ -139,7 +139,8 @@ abstract class BaseModel implements QueryInterface
 
             $rowChange = $stmt->rowCount();
         } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
+            $error = "Error: " . $e->getMessage();
+            writeLog($error);
         }
 
         $log = "ACTION: UPDATE account at id: " . $id . " - BY: " . $data['ins_id'] . " DATE: " . $data['ins_datetime'];
@@ -179,18 +180,26 @@ abstract class BaseModel implements QueryInterface
                 $result = $stmtUnlimit->fetch(PDO::FETCH_ASSOC);
                 $total = $result['count(id)'];
             } catch (PDOException $e) {
-                echo "Error: " . $e->getMessage();
+                $error = "Error: " . $e->getMessage();
+                writeLog($error);
             }
         }
 
         //return page with limited result
+        $totalPages = (int)ceil($total / $limit);
+        $page = (isset($page) && $page < 10000) ? (int)$page : 1;
+        $start = $limit * ($page - 1);
+        $next = ($page < $totalPages) ? $page + 1 : $totalPages;
+        $prev = ($page > 1) ? $page - 1 : 1;
+
         $selectThis = $this->setSelectItems($this->tableName);
         try {
             $query = "SELECT " . $selectThis . "
                 FROM {$this->tableName} 
                 WHERE email LIKE '%{$email}%'
                     AND name LIKE '%{$name}%'
-                    AND del_flag = " . DEL_FLAG_OFF;
+                    AND del_flag = " . DEL_FLAG_OFF .
+                " LIMIT " . $start . "," . $limit;
             $stmt = $this->conn->prepare($query);
             $stmt->execute();
 
@@ -198,16 +207,8 @@ abstract class BaseModel implements QueryInterface
             $dataPackage['data'] = $resultFromSearch;
 
         } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
-        }
-
-        $totalPages = ceil($total / $limit);
-        $page = (isset($page) && $page < 10000) ? (int)$page : 1;
-        $start = $limit * ($page - 1);
-        $next = ($page > 1) ? $page + 1 : 1;
-        $prev = ($page < $total) ? $page - 1 : $total;
-        if ($prev == 0) {
-            $prev = 1;
+            $error = "Error: " . $e->getMessage();
+            writeLog($error);
         }
 
         $paginationInfo = [
@@ -246,12 +247,28 @@ abstract class BaseModel implements QueryInterface
         $targetInfo = [];
         try {
             $stmt = $this->conn->prepare("SELECT name, email, avatar FROM " . $this->tableName . " WHERE id = :id AND del_flag = " . DEL_FLAG_OFF);
-            $stmt->bindParam(':id', $_GET['id']);
+            $stmt->bindParam(':id', $id);
             $stmt->execute();
-
             $targetInfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            echo "Error: " . $e;
+            $error = "Error: " . $e->getMessage();
+            writeLog($error);
+        }
+
+        return $targetInfo;
+    }
+
+    public function checkEmailExistence($email)
+    {
+        $targetInfo = [];
+        try {
+            $stmt = $this->conn->prepare("SELECT name FROM " . $this->tableName . " WHERE email = :email AND del_flag = " . DEL_FLAG_OFF);
+            $stmt->bindParam(':email', $email);
+            $stmt->execute();
+            $targetInfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            $error = "Error: " . $e->getMessage();
+            writeLog($error);
         }
 
         return $targetInfo;

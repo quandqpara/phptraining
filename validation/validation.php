@@ -41,7 +41,8 @@ function validatePassword($password): int
     //8+ letters
     //At least 1 Letter
     //At least 1 number
-    if (!preg_match('/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/', $password)) {
+    //min length 8 max length 99 chars
+    if (!preg_match('/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,99}$/', $password)) {
         $_SESSION['flash_message']['password']['invalid'] = getMessage('invalid_password');
         $flag += 1;
     }
@@ -84,6 +85,33 @@ function validateAvatar($avatar): int
     return $flag;
 }
 
+function handleAvatar()
+{
+    $error = 0;
+    if (isset($_POST) && isset($_FILES)) {
+        $tempname = $_FILES['avatar']['tmp_name'];
+        $folder = ROOT . "/uploads/avatar/";
+
+        $error += validateAvatar('avatar');
+
+        //if no error was found, save the image to an actual folder.
+        if ($error == 0) {
+            $fileType = getFileType($_FILES['avatar']['type']);
+            $fileNameAfterSaved = renameUploadImage($_POST['email']) . '-avatar.' . $fileType;
+            $folder .= $fileNameAfterSaved;
+            if (file_exists($folder)) {
+                unlink($folder);
+                move_uploaded_file($tempname, $folder);
+            } else {
+                move_uploaded_file($tempname, $folder);
+            }
+            return $folder;
+        }
+    }
+    //else return error
+    return $error;
+}
+
 function validateName($name): int
 {
     $flag = 0;
@@ -93,7 +121,7 @@ function validateName($name): int
     }
 
     //Must only contain letters
-    if (!preg_match('/^[a-zA-z\s]*$/', $name)) {
+    if (!preg_match('/^([a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]+)$/i', $name)) {
         $_SESSION['flash_message']['name']['invalid'] = getMessage('invalid_name');
         $flag += 1;
     }
@@ -111,17 +139,17 @@ function validateVerifyPassword($pass1, $pass2): int
     return $flag;
 }
 
-function validateAdminRoles($role): int
+function validateAdminRoles(): int
 {
     $flag = 0;
-    if (!isset($role) || empty($role)) {
-        $_SESSION['flash_message']['role']['empty'] = getMessage('role_empty');
+    if (!isset($_REQUEST['role_type']) || empty($_REQUEST['role_type'])) {
+        $_SESSION['flash_message']['role_type']['empty'] = getMessage('role_empty');
         $flag += 1;
         return $flag;
     }
 
-    if ($role >= 3 || $role == 0) {
-        $_SESSION['flash_message']['role']['invalid'] = getMessage('invalid_role');
+    if ($_REQUEST['role_type'] >= 3 || $_REQUEST['role_type'] == 0) {
+        $_SESSION['flash_message']['role_type']['invalid'] = getMessage('invalid_role');
         $flag += 1;
         return $flag;
     }
@@ -215,14 +243,13 @@ function validateAllInput(): int
     $flag += validateEmail($_REQUEST['email']);
     $flag += validatePassword($_REQUEST['password']);
     $flag += validateVerifyPassword($_REQUEST['password'], $_REQUEST['verify']);
-    $flag += validateAdminRoles($_REQUEST['role_type']);
+    $flag += validateAdminRoles();
     return $flag;
 }
 
 function validateAdminCreateForm($method, $avatarFlag): bool
 {
     $error_flag = 0;
-
     $error_flag += validateSubmitFormPostAndEmptyRequest($method, $_POST);
 
     if (!flagCheck($error_flag)) {
@@ -250,7 +277,7 @@ function validateAdminCreateForm($method, $avatarFlag): bool
 //3.1 if not remove $_POST['password'] and ['verify_password']
 //3.2 if yes continue
 //4. validate others field normally
-function validateUpdateForm($method, $id): bool
+function validateUpdateForm($method, $id, $avatarFlag): bool
 {
     $error_flag = 0;
 
@@ -260,17 +287,13 @@ function validateUpdateForm($method, $id): bool
         return false;
     }
 
+    if (is_numeric($avatarFlag)) {
+        $error_flag += $avatarFlag;
+    }
+
     $error_flag += validateID($id);
 
-    if (!flagCheck($error_flag)) {
-        return false;
-    }
-
     $error_flag += optionalUpdateInputCheck();
-
-    if (!flagCheck($error_flag)) {
-        return false;
-    }
 
     $error_flag += validateAllUpdateRequiredInput();
 
@@ -387,7 +410,7 @@ function validateSearchFormForUser($method): bool
     return true;
 }
 
-function validateUpdateFormForUser($method, $id): bool
+function validateUpdateFormForUser($method, $id, $avatarFlag): bool
 {
     $error_flag = 0;
 
@@ -397,13 +420,13 @@ function validateUpdateFormForUser($method, $id): bool
         return false;
     }
 
+    if (is_numeric($avatarFlag)) {
+        $error_flag += $avatarFlag;
+    }
+
     $error_flag += validateID($id);
 
     $error_flag += optionalUpdateInputCheck();
-
-    if (!flagCheck($error_flag)) {
-        return false;
-    }
 
     $error_flag += validateAllUpdateRequiredInputForUser();
 
@@ -422,6 +445,7 @@ function validateAllUpdateRequiredInputForUser(): int
     $flag += validateUsersStatus($_POST['status']);
     return $flag;
 }
+
 
 
 

@@ -30,12 +30,21 @@
     </nav>
 </header>
 <?php
-if (isset($_SESSION['flash_message']['create'])) {
-    echo "<div class=\"w-80 mt-3 mb-3 notification border border-success rounded\">
-          <span class=\"noti-message h-100 d-flex align-text-center justify-content-center align-items-center\">";
-    echo handleFlashMessage('create');
-    echo "</span>
+$acceptableMessage = array('create', 'exist');
+foreach ($_SESSION['flash_message'] as $key => $value) {
+    if (in_array($key, $acceptableMessage)) {
+        if (isset($_SESSION['flash_message'][$key])) {
+            echo "
+                            <div class=\"w-80 mt-3 mb-3 notification border border-success rounded\">
+                            <span class=\"noti-message h-100 d-flex align-text-center justify-content-center align-items-center\">"; ?>
+            <?php
+            if (isset($_SESSION['flash_message'][$key])) {
+                echo handleFlashMessage($key);
+            }
+            echo "</span>
                     </div>";
+        }
+    }
 }
 ?>
 <section class="d-flex flex-column align-items-center justify-content-start">
@@ -44,7 +53,7 @@ if (isset($_SESSION['flash_message']['create'])) {
         <form method="POST" action="/management/admin/createAdmin" class="form-update" enctype="multipart/form-data">
             <div class="info-window-container-for-edit-admin">
                 <!-- Avatar input -->
-                <div class="row">
+                <div class="row" style="position: relative">
                     <div class="col-2">
                         <label class="form-label" for="avatar">Avatar*</label>
                     </div>
@@ -61,7 +70,7 @@ if (isset($_SESSION['flash_message']['create'])) {
                              </span>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" style="position: relative">
                     <div class="col-2"></div>
                     <div class="col-4 avatar-display border-round">
                         <?php
@@ -77,15 +86,15 @@ if (isset($_SESSION['flash_message']['create'])) {
                 </div>
 
                 <!-- Name input -->
-                <div class="row">
+                <div class="row" style="position: relative">
                     <div class="col-2">
                         <label class="form-label" for="name">Name*</label>
                     </div>
                     <div class="col-data">
                         <input type="text" id="name" name="name" class="form-control"
                                value="<?php
-                               if (isset($targetAdminToUpdate)) {
-                                   echo $targetAdminToUpdate['0']['name'];
+                               if (isset($_SESSION['old_data']['name'])) {
+                                   echo $_SESSION['old_data']['name'];
                                }
                                ?>"/>
                     </div>
@@ -100,15 +109,15 @@ if (isset($_SESSION['flash_message']['create'])) {
                 </div>
 
                 <!-- Email input -->
-                <div class="row">
+                <div class="row" style="position: relative">
                     <div class="col-2">
                         <label class="form-label" for="email">Email*</label>
                     </div>
                     <div class="col-data">
                         <input type="email" id="email" name="email" class="form-control"
                                value="<?php
-                               if (isset($targetAdminToUpdate)) {
-                                   echo $targetAdminToUpdate['0']['email'];
+                               if (isset($_SESSION['old_data']['email'])) {
+                                   echo $_SESSION['old_data']['email'];
                                }
                                ?>"/>
                     </div>
@@ -123,7 +132,7 @@ if (isset($_SESSION['flash_message']['create'])) {
                 </div>
 
                 <!-- Password input -->
-                <div class="row">
+                <div class="row" style="position: relative">
                     <div class="col-2">
                         <label class="form-label" for="password">Password*</label>
                     </div>
@@ -141,7 +150,7 @@ if (isset($_SESSION['flash_message']['create'])) {
                 </div>
 
                 <!-- Password Confirm input -->
-                <div class="row">
+                <div class="row" style="position: relative">
                     <div class="col-2">
                         <label class="form-label col-2 " for="verify">Password Verify*</label>
                     </div>
@@ -159,7 +168,7 @@ if (isset($_SESSION['flash_message']['create'])) {
                 </div>
 
                 <!-- Role input -->
-                <div class="row">
+                <div class="row" style="position: relative">
                     <div class="col-2">
                         <label class="form-label" for="role_type">Role*</label>
                     </div>
@@ -182,7 +191,7 @@ if (isset($_SESSION['flash_message']['create'])) {
                 </div>
 
                 <!-- Submit button -->
-                <div class="row g-2 align-items-center admin-update-item">
+                <div class="row g-2 align-items-center admin-update-item" style="position: relative">
                     <div class="col-auto">
                         <button type="reset" class="btn btn-primary btn-block mb-4">Reset</button>
                     </div>
@@ -194,3 +203,4 @@ if (isset($_SESSION['flash_message']['create'])) {
         </form>
     </div>
 </section>
+<?php showLog($_SESSION['old_data']); ?>

@@ -2,7 +2,7 @@
 require_once('controllers/base_controller.php');
 require_once('model/UserModel.php');
 require_once('validation/validation.php');
-require_once('Helper/common.php');
+require_once('helper/common.php');
 
 class userController extends BaseController
 {
@@ -76,13 +76,16 @@ class userController extends BaseController
         $id = $_SESSION['flash_message']['update_target']['id'];
         $location = '/management/user/editPageUser?id=' . $id;
 
-        if (!validateUpdateFormForUser($method, $id)) {
+        $avatarLink = handleAvatar();
+
+        if (!validateUpdateFormForUser($method, $id, $avatarLink)) {
             retrieveOldFormData();
             $_SESSION['flash_message']['edit']['failed'] = getMessage('update_failed');
             header('Location: ' . $location);
             exit;
         }
 
+        $_POST['avatar'] = $avatarLink;
         //try to update (input id and value to change)
         $rowAffected = $this->userModel->update($id, $_POST);
 

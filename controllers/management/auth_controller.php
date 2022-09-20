@@ -2,10 +2,12 @@
 require_once('controllers/base_controller.php');
 require_once('model/AdminModel.php');
 require_once('validation/validation.php');
-require_once('Helper/common.php');
+require_once('helper/common.php');
 
-class authController extends BaseController{
-    public function __construct(){
+class authController extends BaseController
+{
+    public function __construct()
+    {
         $this->folder = 'auth';
         $this->adminModel = new adminModel();
     }
@@ -41,16 +43,14 @@ class authController extends BaseController{
             //if returnData is not empty -> front is found
             if (!empty($returnData)) {
                 //check admin role
-                if($returnData['0']['role_type'] == 1){
+                if ($returnData['0']['role_type'] == 1) {
                     setSessionAdmin($returnData['0']['role_type']);
                     $this->sessionAdminSetter($returnData);
                     $message = $_SESSION['session_user']['name'] . getMessage('login_success');
                     $_SESSION['flash_message']['login']['logged_in'] = $message;
                     header('Location: /management/user/searchUser');
                     exit;
-                }
-                elseif ($returnData['0']['role_type'] == 2)
-                {
+                } elseif ($returnData['0']['role_type'] == 2) {
                     setSessionAdmin($returnData['0']['role_type']);
                     $this->sessionAdminSetter($returnData);
                     $message = $_SESSION['session_user']['name'] . getMessage('login_success');

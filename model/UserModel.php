@@ -67,7 +67,8 @@ class UserModel extends BaseModel
                 return null;
             }
         } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
+            $error =  "Error: " . $e->getMessage();
+            writeLog($error);
         }
 
         $log = "ACTION: Create account at email " . $data['email'] . "- BY: " . $data['ins_id'] . " DATE: " . $data['ins_datetime'];
@@ -89,7 +90,8 @@ class UserModel extends BaseModel
 
             $targetInfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            echo "Error: " . $e;
+            $error =  "Error: " . $e->getMessage();
+            writeLog($error);
         }
         return $targetInfo;
     }
@@ -113,7 +115,8 @@ class UserModel extends BaseModel
             $stmt->execute();
             $userData = $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
+            $error =  "Error: " . $e->getMessage();
+            writeLog($error);
         }
 
         return $userData;

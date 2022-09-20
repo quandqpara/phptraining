@@ -1,4 +1,4 @@
-<section class="h-100 d-flex flex-column align-items-center justify-content-center">
+<section class="h-100 d-flex flex-column align-items-center justify-content-center section-container">
     <?php
     error_reporting(E_ERROR | E_PARSE);
     $acceptableMessage = array('login', 'permission', 'logout', 'common');

@@ -3,7 +3,7 @@
 require_once('controllers/base_controller.php');
 require_once('model/UserModel.php');
 require_once('validation/validation.php');
-require_once('Helper/common.php');
+require_once('helper/common.php');
 
 include_once 'Facebook/facebook_api.php';
 

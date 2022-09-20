@@ -180,7 +180,7 @@ if (isset($_SESSION['flash_message']['edit'])) {
                 <!-- Role input -->
                 <div class="row">
                     <div class="col-2">
-                        <label class="form-label" for="role">Role*</label>
+                        <label class="form-label" for="role_type">Role*</label>
                     </div>
                     <div class="col-2">
                         <input type="radio" id="admin" name="role_type" value="1"/>
@@ -193,8 +193,8 @@ if (isset($_SESSION['flash_message']['edit'])) {
                     <div class="col-4">
                             <span class="error-holder">
                                 <?php
-                                if (isset($_SESSION['flash_message']['role'])) {
-                                    echo handleFlashMessage('role');
+                                if (isset($_SESSION['flash_message']['role_type'])) {
+                                    echo handleFlashMessage('role_type');
                                 } ?>
                             </span>
                     </div>
@@ -211,5 +211,10 @@ if (isset($_SESSION['flash_message']['edit'])) {
                 </div>
             </div>
         </form>
+        <div class="d-flex flex-row-reverse back-btn-container">
+            <a href="<?php echo $_SESSION['previous-page']; ?>">
+                <button type="button" class="btn btn-secondary"> Back</button>
+            </a>
+        </div>
     </div>
 </section>

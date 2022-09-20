@@ -6,7 +6,7 @@ return [
     'invalid_email' => 'Your email is invalid. PLease try again.',
 
     'password_empty' => 'Password must not be blank.',
-    'invalid_password' => 'Your password must contain at least 8 characters.\n It must contain at least 1 digit, 1 character.\n Please try again.',
+    'invalid_password' => 'Your password must contain at least 8 characters.<br> It must contain at least 1 digit, 1 character.<br> Please try again.',
 
     'name_empty' => 'Name must not be blank.',
     'invalid_name' => 'Name must only contain letters.',
@@ -46,5 +46,9 @@ return [
     'login_success' => ' has been logged in.',
     'login_failed' => 'Your email or password might be incorrect.',
     'login_fb_failed' => 'Failed to login with faceboook!',
-    'logout' => 'You have been logged out!'
+    'logout' => 'You have been logged out!',
+
+    //data
+    'data-not-found' => 'Data does not exist!',
+    'email_already_exist' => 'This email is already used!'
 ];

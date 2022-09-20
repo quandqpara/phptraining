@@ -3,7 +3,7 @@ require_once('controllers/base_controller.php');
 require_once('model/AdminModel.php');
 require_once('model/UserModel.php');
 require_once('validation/validation.php');
-require_once('Helper/common.php');
+require_once('helper/common.php');
 
 class adminController extends BaseController
 {
@@ -45,6 +45,11 @@ class adminController extends BaseController
     {
         if (isset($_GET['id'])) {
             $updatingAdminInfo = $this->adminModel->searchOneByID($_GET['id']);
+            if (empty($updatingAdminInfo)) {
+                $_SESSION['flash_message']['data']['data-not-found'] = getMessage('data-not-found');
+                header('Location: ' . $_SESSION['previous-page']);
+                exit;
+            }
         }
         return $this->render('editAdmin', ['targetAdminToUpdate' => $updatingAdminInfo]);
     }
@@ -66,47 +71,27 @@ class adminController extends BaseController
 
 
     //----------------------------------------------------ADMIN SECTION-------------------------------------------------
-    //handle avatar
-    function handleAvatar()
-    {
-        $error = 0;
-        if (isset($_POST) && isset($_FILES)) {
-            $tempname = $_FILES['avatar']['tmp_name'];
-            $folder = ROOT . "/uploads/avatar/";
-
-            $error += validateAvatar('avatar');
-
-            //if no error was found, save the image to an actual folder.
-            if ($error == 0) {
-                $fileType = getFileType($_FILES['avatar']['type']);
-                $fileNameAfterSaved = renameUploadImage($_POST['email']) . '-avatar.' . $fileType;
-                $folder .= $fileNameAfterSaved;
-                if (file_exists($folder)) {
-                    unlink($folder);
-                    move_uploaded_file($tempname, $folder);
-                } else {
-                    move_uploaded_file($tempname, $folder);
-                }
-                return $folder;
-            }
-        }
-        //else return error
-        return $error;
-    }
-
     //create - ADMIN(super)
     //Must be admin to create new admin
     function createAdmin()
     {
         $method = $_SERVER['REQUEST_METHOD'];
-        $request = $_POST;
 
         //check validity of the input
         //if not pass return with failed message
         //if passed try to create
-        $avatarLink = $this->handleAvatar();
+        $avatarLink = handleAvatar();
+
         if (!validateAdminCreateForm($method, $avatarLink)) {
             $_SESSION['flash_message']['create']['failed'] = getMessage('create_failed');
+            retrieveOldFormData();
+            header('Location: /management/admin/createPageAdmin');
+            exit;
+        }
+
+        //check if the email exist in database
+        if (!empty($this->adminModel->checkEmailExistence($_POST['email']))) {
+            $_SESSION['flash_message']['exist']['email_exist'] = getMessage('email_already_exist');
             retrieveOldFormData();
             header('Location: /management/admin/createPageAdmin');
             exit;
@@ -123,8 +108,16 @@ class adminController extends BaseController
 
         if ($rowNum == 0 || $rowNum > 1) {
             $_SESSION['flash_message']['create']['failed'] = getMessage('create_failed');
+            //redirect to create Screen with failed messages
+            retrieveOldFormData();
+            header('Location: /management/admin/createPageAdmin');
+            exit;
         } else if ($rowNum == 1) {
             $_SESSION['flash_message']['create']['success'] = getMessage('create_success');
+            //redirect to search with success messages
+            retrieveOldFormData();
+            header('Location: /management/admin/home');
+            exit;
         }
 
         //redirect to create Screen with success messages
@@ -156,12 +149,16 @@ class adminController extends BaseController
         $id = $_SESSION['flash_message']['update_target']['id'];
         $location = '/management/admin/editPageAdmin?id=' . $id;
 
-        if (!validateUpdateForm($method, $id)) {
+        $avatarLink = handleAvatar();
+
+        if (!validateUpdateForm($method, $id, $avatarLink)) {
             retrieveOldFormData();
             $_SESSION['flash_message']['edit']['failed'] = getMessage('update_failed');
             header('Location: ' . $location);
             exit;
         }
+
+        $_POST['avatar'] = $avatarLink;
 
         //try to update (input id and value to change)
         $rowAffected = $this->adminModel->update($id, $_POST);
@@ -215,7 +212,7 @@ class adminController extends BaseController
         //if $_GET['id'] is empty or not set back to search with message
         if (!isset($_GET['id']) || empty($_GET['id'])) {
             $_SESSION['flash_message']['id']['no_id_found'] = getMessage('no_id_found');
-            header('Location: /management/admin/home');
+            header('Location: ' . $_SESSION['previous-page']);
             exit;
         }
 
@@ -223,7 +220,13 @@ class adminController extends BaseController
         //if $id failed validate
         if (validateID($id) !== 0) {
             $_SESSION['flash_message']['id']['invalid'] = getMessage('invalid_id');
-            header('Location: /management/admin/home');
+            header('Location: ' . $_SESSION['previous-page']);
+            exit;
+        }
+
+        if (empty($this->adminModel->searchOneByID($id))) {
+            $_SESSION['flash_message']['data']['data-not-found'] = getMessage('data-not-found');
+            header('Location: ' . $_SESSION['previous-page']);
             exit;
         }
 
@@ -236,7 +239,7 @@ class adminController extends BaseController
             $_SESSION['flash_message']['delete']['failed'] = getMessage('delete_failed');
         }
 
-        header('Location: /management/admin/home');
+        header('Location: ' . $_SESSION['previous-page']);
         exit;
     }
 
@@ -281,13 +284,16 @@ class adminController extends BaseController
         $id = $_SESSION['flash_message']['update_target']['id'];
         $location = '/management/admin/editPageUser?id=' . $id;
 
-        if (!validateUpdateFormForUser($method, $id)) {
+        $avatarLink = handleAvatar();
+        if (!validateUpdateFormForUser($method, $id, $avatarLink)) {
             retrieveOldFormData();
             $_SESSION['flash_message']['edit']['failed'] = getMessage('update_failed');
             header('Location: ' . $location);
             exit;
         }
 
+
+        $_POST['avatar'] = $avatarLink;
         //try to update (input id and value to change)
         $rowAffected = $this->userModel->update($id, $_POST);
 

@@ -184,7 +184,7 @@ if (isset($_SESSION['flash_message']['edit'])) {
                 <!-- Status input -->
                 <div class="row">
                     <div class="col-2">
-                        <label class="form-label" for="status">Role*</label>
+                        <label class="form-label" for="status">Status*</label>
                     </div>
                     <div class="col-2">
                         <input type="radio" id="active" name="status" value="1"/>
