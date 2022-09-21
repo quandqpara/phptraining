@@ -7,6 +7,8 @@ function makeFacebookApiCall($endPoint, $params)
     curl_setopt($ch, CURLOPT_URL, $endPoint . '?' . http_build_query($params));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+    curl_setopt($ch, CURLOPT_COOKIESESSION, false);
 
     $fbResponse = curl_exec($ch);
     $fbResponse = json_decode($fbResponse, TRUE);
@@ -59,7 +61,6 @@ function tryAndLoginWithFacebook($get)
         $message = $get['error_description'] ?? '';
     } else {
         $accessTokenInfo = getAccessToken($get['code']);
-
         if ($accessTokenInfo['has_errors']) {
             $message = $get['error_description'] ?? '';
         } else {

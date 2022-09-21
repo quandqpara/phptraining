@@ -5,10 +5,10 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        User management
+                        <span class="active">User management</span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/management/user/searchPageUser">Search</a>
+                        <a class="dropdown-item active" href="/management/user/searchPageUser">Search</a>
                     </div>
                 </li>
                 <li class="nav-item active">
@@ -20,7 +20,7 @@
 </header>
 <section class="h-100 w-100 flex-column mb-auto admin-home-sect">
     <?php
-    $acceptableMessage = array('login', 'search', 'update', 'id', 'permission', 'delete', 'permission');
+    $acceptableMessage = array('login', 'update', 'id', 'permission', 'delete', 'permission');
     foreach ($_SESSION['flash_message'] as $key => $value) {
         if (in_array($key, $acceptableMessage)) {
             if (isset($_SESSION['flash_message'][$key])) {
@@ -103,7 +103,9 @@
             <nav aria-label="Page navigation example" class="page-nav">
                 <?php
                 error_reporting(E_ERROR | E_PARSE);
-                loadPaginator($data);
+                if(isset($data) and !empty($data['pagination']['totalPages'])){
+                    loadPaginator($data);
+                }
                 ?>
             </nav>
         </div>
@@ -112,14 +114,27 @@
             <table id="searchTable" class="result-table table table-sortable table-striped table-bordered table-hover">
                 <thead class="thead-dark">
                 <tr>
-                    <th class="thread-column" scope="col">ID <?php displayingSortIcon($data) ?>
+                    <th class="thread-column" scope="col" >
+
+                        <a href="<?php prepareColumnSort('id', 'ASC');?>">
+                            ID <?php displayingSortIcon($data)?>
+                        </a>
                     </th>
                     <th scope="col">Avatar</th>
-                    <th class="thread-column" scope="col">Name <?php displayingSortIcon($data) ?>
+                    <th class="thread-column" scope="col" >
+                        <a href="<?php prepareColumnSort('name', 'ASC');?>">
+                            Name <?php displayingSortIcon($data)?>
+                        </a>
                     </th>
-                    <th class="thread-column" scope="col">Email <?php displayingSortIcon($data) ?>
+                    <th class="thread-column" scope="col" >
+                        <a href="<?php prepareColumnSort('email', 'ASC');?>">
+                            Email <?php displayingSortIcon($data)?>
+                        </a>
                     </th>
-                    <th class="thread-column" scope="col">Status <?php displayingSortIcon($data) ?>
+                    <th class="thread-column" scope="col" >
+                        <a href="<?php prepareColumnSort('status', 'ASC');?>">
+                            Role <?php displayingSortIcon($data)?>
+                        </a>
                     </th>
                     <th scope="col">Action</th>
                 </tr>

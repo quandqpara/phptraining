@@ -5,10 +5,10 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        User management
+                        <span class="active">User management</span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/management/user/searchPageUser">Search</a>
+                        <a class="dropdown-item active" href="/management/user/searchPageUser">Search</a>
                     </div>
                 </li>
                 <li class="nav-item active">
@@ -18,19 +18,9 @@
         </div>
     </nav>
 </header>
-<?php
-if (isset($_SESSION['flash_message']['edit'])) {
-    echo "
-                    <div class=\"w-80 mt-3 mb-3 notification border border-success rounded\">
-                    <span class=\"noti-message h-100 d-flex align-text-center justify-content-center align-items-center\">"; ?>
-    <?php
-    if (isset($_SESSION['flash_message']['edit'])) {
-        echo handleFlashMessage('edit');
-    }
-    echo "</span>
-                    </div>";
-}
-?>
+<?php if(str_contains($_SESSION['previous-page'],'create')){
+    clearTemp();
+}?>
 <section class="d-flex flex-column align-items-center justify-content-start">
     <div class="outer-container">
         <div class="title mt-3"><strong>Admin Search ><span style="color:blue">Edit User</span></strong></div>
@@ -206,3 +196,4 @@ if (isset($_SESSION['flash_message']['edit'])) {
         </form>
     </div>
 </section>
+<?php savePreviousPageURI();?>

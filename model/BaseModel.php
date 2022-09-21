@@ -150,7 +150,7 @@ abstract class BaseModel implements QueryInterface
     }
 
     //need email and name
-    public function findByEmailAndName($email, $name, $page)
+    public function findByEmailAndName($email, $name, $page, $orderColumn, $direction)
     {
         $dataPackage = [];
         $resultFromSearch = [];
@@ -193,14 +193,27 @@ abstract class BaseModel implements QueryInterface
         $prev = ($page > 1) ? $page - 1 : 1;
 
         $selectThis = $this->setSelectItems($this->tableName);
+
+        $orderColumn = in_array($orderColumn, $this->fillable) ? $orderColumn : 'id';
+        $direction = in_array($direction, ['ASC', 'DESC']) ? $direction : 'ASC';
+
+
         try {
-            $query = "SELECT " . $selectThis . "
-                FROM {$this->tableName} 
-                WHERE email LIKE '%{$email}%'
-                    AND name LIKE '%{$name}%'
-                    AND del_flag = " . DEL_FLAG_OFF .
-                " LIMIT " . $start . "," . $limit;
+            $query = "SELECT ". $selectThis . "
+                        FROM {$this->tableName}
+                        WHERE `email` LIKE :email 
+                        AND `name` LIKE :name 
+                        AND `del_flag` = " . DEL_FLAG_OFF . "
+                        ORDER BY $orderColumn $direction
+                        LIMIT " . $start . "," . $limit;
+
             $stmt = $this->conn->prepare($query);
+            $email = str_replace('%', '\%', $email);
+            $name = str_replace('%', '\%', $name);
+            $email = "%{$email}%";
+            $name = "%{$name}%";
+            $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+            $stmt->bindParam(":name", $name, PDO::PARAM_STR);
             $stmt->execute();
 
             $resultFromSearch = $stmt->fetchAll(PDO::FETCH_ASSOC);

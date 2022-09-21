@@ -1,6 +1,17 @@
 @media screen and (max-width: 800px) {
 }
 
+.active{
+    color: purple;
+    font-weight: bold;
+}
+
+.dropdown-item.active {
+    color: purple;
+    text-decoration: none;
+    background-color: white;
+}
+
 body {
     height: 100vh;
 }

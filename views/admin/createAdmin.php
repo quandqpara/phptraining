@@ -5,18 +5,18 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Admin management
+                        <span class="active">Admin management</span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="/management/admin/home">Search</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="/management/admin/createPageAdmin">Create</a>
+                        <a class="dropdown-item active" href="/management/admin/createPageAdmin">Create</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        User management
+                        <span>User management</span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="/management/admin/searchPageUser">Search</a>
@@ -30,6 +30,9 @@
     </nav>
 </header>
 <?php
+if(str_contains($_SESSION['previous-page'],'edit')){
+    clearTemp();
+}
 $acceptableMessage = array('create', 'exist');
 foreach ($_SESSION['flash_message'] as $key => $value) {
     if (in_array($key, $acceptableMessage)) {
@@ -74,12 +77,12 @@ foreach ($_SESSION['flash_message'] as $key => $value) {
                     <div class="col-2"></div>
                     <div class="col-4 avatar-display border-round">
                         <?php
-                        if (isset($_SESSION['old_data']['avatar'])) {
-                            $imagPath = handleOldData('avatar');
+                        if (isset($_SESSION['avatar_temp'])) {
+                            $imagPath = $_SESSION['avatar_temp'];
                             $correctPath = strstr($imagPath, '/uploads');
                             echo "<img src=\"" . $correctPath . "\">";
                         } else {
-                            echo "<img src=\"/uploads/avatar/default-front-avatar.png\">";
+                            echo "<img src=\"/uploads/avatar/default-user-avatar.png\">";
                         }
                         ?>
                     </div>
@@ -203,4 +206,4 @@ foreach ($_SESSION['flash_message'] as $key => $value) {
         </form>
     </div>
 </section>
-<?php showLog($_SESSION['old_data']); ?>
+<?php savePreviousPageURI(); ?>

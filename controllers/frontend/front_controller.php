@@ -18,9 +18,6 @@ class frontController extends BaseController
     public function index()
     {
         isLoggedIn();
-        if (isset($_GET['state']) && FB_APP_STATE == $_GET['state']) {
-            $fbLogin = tryAndLoginWithFacebook($_GET);
-        }
         return $this->render('index');
     }
 
@@ -81,7 +78,7 @@ class frontController extends BaseController
         $email = $_SESSION['fb_user_info']['email'];
         $avatar = $_SESSION['fb_user_info']['picture']['data']['url'];
 
-
+        showLog($_SESSION);
         unset($_SESSION['fb_user_info']);
 
         $userInfoFromFacebook = array(

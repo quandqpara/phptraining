@@ -5,10 +5,10 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Admin management
+                        <span class="active">Admin management</span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/management/admin/home">Search</a>
+                        <a class="dropdown-item active" href="/management/admin/home">Search</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="/management/admin/createPageAdmin">Create</a>
                     </div>
@@ -16,7 +16,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        User management
+                        <span>User management</span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="/management/admin/searchPageUser">Search</a>
@@ -29,19 +29,9 @@
         </div>
     </nav>
 </header>
-<?php
-if (isset($_SESSION['flash_message']['edit'])) {
-    echo "
-                    <div class=\"w-80 mt-3 mb-3 notification border border-success rounded\">
-                    <span class=\"noti-message h-100 d-flex align-text-center justify-content-center align-items-center\">"; ?>
-    <?php
-    if (isset($_SESSION['flash_message']['edit'])) {
-        echo handleFlashMessage('edit');
-    }
-    echo "</span>
-                    </div>";
-}
-?>
+<?php if(str_contains($_SESSION['previous-page'],'create')){
+    clearTemp();
+}?>
 <section class="d-flex flex-column align-items-center justify-content-start">
     <div class="outer-container">
         <div class="title mt-3"><strong>Admin Search ><span style="color:blue">Edit Admin</span></strong></div>
@@ -70,25 +60,29 @@ if (isset($_SESSION['flash_message']['edit'])) {
                     <div class="col-data">
                         <input type="file" id="avatar" name="avatar" class="form-control"
                                accept="image/png, image/jpg, image/jpeg, image/svg, image/svg"/>
-                    </div>
-                    <div class="col-4">
-                            <span class="error-holder col-4">
-                                <?php
+                        <span class="error-holder col-4">
+                              <?php
                                 if (isset($_SESSION['flash_message']['avatar'])) {
                                     echo handleFlashMessage('avatar');
-                                } ?>
-                             </span>
+                              } ?>
+                        </span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-2"></div>
                     <div class="col-4 avatar-display border-round">
                         <?php
-                        if (isset($targetAdminToUpdate['0']['avatar'])) {
+                        if (isset($targetAdminToUpdate) && isset($_SESSION['avatar_temp'])){
+                            $imagePath= $_SESSION['avatar_temp'];
+                            $correctPath = strstr($imagePath, '/uploads');
+                            echo "<img src=\"" . $correctPath . "\">";
+                        }
+                        elseif (isset($targetAdminToUpdate) && !isset($_SESSION['avatar_temp'])) {
                             $imagePath = $targetAdminToUpdate['0']['avatar'];
                             $correctPath = strstr($imagePath, '/uploads');
                             echo "<img src=\"" . $correctPath . "\">";
-                        } else {
+                        }
+                        else {
                             echo "<img src=\"/uploads/avatar/default-front-avatar.png\">";
                         }
                         ?>
@@ -103,18 +97,19 @@ if (isset($_SESSION['flash_message']['edit'])) {
                     <div class="col-data">
                         <input type="text" id="name" name="name" class="form-control"
                                value="<?php
-                               if (isset($targetAdminToUpdate)) {
+                               if (isset($targetAdminToUpdate) && isset($_SESSION['old_data']['name'])){
+                                   echo $_SESSION['old_data']['name'];
+                               }
+                               elseif (isset($targetAdminToUpdate) && !isset($_SESSION['old_data']['name'])) {
                                    echo $targetAdminToUpdate['0']['name'];
                                }
                                ?>"/>
-                    </div>
-                    <div class="col-4">
-                            <span class="error-holder">
-                                <?php
-                                if (isset($_SESSION['flash_message']['name'])) {
-                                    echo handleFlashMessage('name');
-                                } ?>
-                            </span>
+                        <span class="error-holder">
+                            <?php
+                            if (isset($_SESSION['flash_message']['name'])) {
+                                echo handleFlashMessage('name');
+                            } ?>
+                        </span>
                     </div>
                 </div>
 
@@ -126,12 +121,13 @@ if (isset($_SESSION['flash_message']['edit'])) {
                     <div class="col-data">
                         <input type="email" id="email" name="email" class="form-control"
                                value="<?php
-                               if (isset($targetAdminToUpdate)) {
+                               if (isset($targetAdminToUpdate) && isset($_SESSION['old_data']['email'])){
+                                   echo $_SESSION['old_data']['email'];
+                               }
+                               elseif (isset($targetAdminToUpdate) && !isset($_SESSION['old_data']['email'])) {
                                    echo $targetAdminToUpdate['0']['email'];
                                }
                                ?>"/>
-                    </div>
-                    <div class="col-4">
                             <span class="error-holder">
                                 <?php
                                 if (isset($_SESSION['flash_message']['email'])) {
@@ -148,14 +144,12 @@ if (isset($_SESSION['flash_message']['edit'])) {
                     </div>
                     <div class="col-data">
                         <input type="password" id="password" name="password" class="form-control"/>
-                    </div>
-                    <div class="col-4">
-                            <span class="error-holder">
-                                <?php
-                                if (isset($_SESSION['flash_message']['password'])) {
-                                    echo handleFlashMessage('password');
-                                } ?>
-                            </span>
+                        <span class="error-holder">
+                            <?php
+                            if (isset($_SESSION['flash_message']['password'])) {
+                                echo handleFlashMessage('password');
+                            } ?>
+                        </span>
                     </div>
                 </div>
 
@@ -166,14 +160,12 @@ if (isset($_SESSION['flash_message']['edit'])) {
                     </div>
                     <div class="col-data">
                         <input type="password" id="verify" name="verify" class="col-data form-control"/>
-                    </div>
-                    <div class="col-4">
-                            <span class="error-holder col-4">
-                                <?php
-                                if (isset($_SESSION['flash_message']['verify_password'])) {
-                                    echo handleFlashMessage('verify_password');
-                                } ?>
-                            </span>
+                        <span class="error-holder col-4">
+                            <?php
+                            if (isset($_SESSION['flash_message']['verify_password'])) {
+                                echo handleFlashMessage('verify_password');
+                            } ?>
+                        </span>
                     </div>
                 </div>
 
@@ -211,10 +203,6 @@ if (isset($_SESSION['flash_message']['edit'])) {
                 </div>
             </div>
         </form>
-        <div class="d-flex flex-row-reverse back-btn-container">
-            <a href="<?php echo $_SESSION['previous-page']; ?>">
-                <button type="button" class="btn btn-secondary"> Back</button>
-            </a>
-        </div>
     </div>
+    <?php savePreviousPageURI();?>
 </section>

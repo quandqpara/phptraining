@@ -54,12 +54,24 @@ class userController extends BaseController
             $page = $_GET['page'];
         }
 
+        $column = 'id';
+        $direction = 'ASC';
+
+        if(isset($_GET['col'])){
+            $column = $_GET['col'];
+        }
+        if(isset($_GET['dir'])){
+            $direction = $_GET['dir'];
+        }
+
         //search
-        $result = $this->userModel->findByEmailAndName($emailPhrase, $namePhrase, $page);
+        $result = $this->userModel->findByEmailAndName($emailPhrase, $namePhrase, $page, $column, $direction);
         $_SESSION['flash_message']['search']['success'] = getMessage('search_success');
         if (isset($result)) {
+            retrieveOldFormData();
             $this->render('searchUser', ['data' => $result]);
         } else {
+            retrieveOldFormData();
             $this->render('searchUser');
         }
     }
@@ -76,28 +88,37 @@ class userController extends BaseController
         $id = $_SESSION['flash_message']['update_target']['id'];
         $location = '/management/user/editPageUser?id=' . $id;
 
-        $avatarLink = handleAvatar();
-
-        if (!validateUpdateFormForUser($method, $id, $avatarLink)) {
+        if (!validateUpdateFormForUser($method, $id)) {
             retrieveOldFormData();
             $_SESSION['flash_message']['edit']['failed'] = getMessage('update_failed');
             header('Location: ' . $location);
             exit;
         }
 
-        $_POST['avatar'] = $avatarLink;
         //try to update (input id and value to change)
         $rowAffected = $this->userModel->update($id, $_POST);
 
         if ($rowAffected == 0 || $rowAffected > 1) {
             $_SESSION['flash_message']['edit']['failed'] = getMessage('update_failed');
-        } else if ($rowAffected == 1) {
-            $_SESSION['flash_message']['edit']['success'] = getMessage('update_success');
+            retrieveOldFormData();
+            header('Location: ' . $location);
+            exit;
         }
-
-        retrieveOldFormData();
-        header('Location: ' . $location);
-        exit;
+        else if ($rowAffected == 1) {
+            $folder =  $_SESSION['avatar_folder_when_success_update'];
+            if (file_exists($folder)) {
+                unlink($folder);
+                rename($_SESSION['avatar_temp'], $folder);
+            } else {
+                rename($_SESSION['avatar_temp'], $folder);
+            }
+            $_SESSION['flash_message']['edit']['success'] = getMessage('update_success');
+            unset($_SESSION['avatar_folder_when_success_update']);
+            clearTemp();
+            retrieveOldFormData();
+            header('Location: /management/user/searchPageUser');
+            exit;
+        }
     }
 
     //delete - USER(admin)

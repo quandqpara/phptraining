@@ -54,8 +54,13 @@ function isUser()
 
 function isLoggedIn()
 {
-    if (isset($_SESSION['admin'])) {
-        header('Location: /management/admin/home');
+    if (isset($_SESSION['admin']['role']) == 1) {
+        header('Location: /management/user/searchPageUser');
+        exit;
+    }
+
+    if (isset($_SESSION['admin']['role']) == 2) {
+        header('Location: /management/admin/searchPageUser');
         exit;
     }
 
@@ -157,6 +162,15 @@ function savePreviousPageURI()
     $_SESSION['previous-page'] = $_SERVER['REQUEST_URI'];
 }
 
+function clearTemp(){
+    if(isset($_SESSION['avatar_temp'])){
+        if(file_exists($_SESSION['avatar_temp'])){
+            unlink($_SESSION['avatar_temp']);
+            unset($_SESSION['avatar_temp']);
+        }
+    }
+}
+
 //____________________________________________________handling notice message___________________________________________
 function getMessage()
 {
@@ -226,8 +240,13 @@ function retrieveOldFormData()
     }
 
     foreach ($_REQUEST as $key => $item) {
-        if (array_search($key, $_REQUEST) !== 'password' || array_search($key, $_REQUEST) !== 'role_type') {
             $_SESSION['old_data'][$key] = $item;
+    }
+
+    $ignoreData = array('password', 'verify', 'role_type', 'status');
+    foreach ($ignoreData as $item) {
+        if(isset($_SESSION['old_data'][$item])){
+            unset($_SESSION['old_data'][$item]);
         }
     }
 }
@@ -283,7 +302,12 @@ function loadPaginator($data)
         $pageLink .= "<li class='page-item'><a class='page-link' href='" . $href_first . "'>&laquo</a></li>";
         $pageLink .= "<li class='page-item'><a class='page-link' href='" . $href_prev . "'>Previous</a></li>";
         for ($i = 1; $i <= $data['pagination']['totalPages']; $i++) {
-            $pageLink .= "<li class='page-item'><a class='page-link' href='" . $href_page . $i . "'>" . $i . "</a></li>";
+            if($data['pagination']['page'] == $i){
+                $pageLink .= "<li class='page-item'><a class='page-link active' href='" . $href_page . $i . "'>" . $i . "</a></li>";
+            }
+            else {
+                $pageLink .= "<li class='page-item'><a class='page-link' href='" . $href_page . $i . "'>" . $i . "</a></li>";
+            }
         }
         $pageLink .= "<li class='page-item'><a class='page-link' href='" . $href_next . "'>Next</a></li>";
         $pageLink .= "<li class='page-item'><a class='page-link' href='" . $href_last . "'>&raquo</a></li>";
@@ -413,5 +437,45 @@ function displayTableResultForUserSearch($data, $controller)
                     </td>";
             echo $searchTable . "</tr>";
         }
+    }
+}
+
+function prepareColumnSort($columnName, $defaultDirection){
+    $orderDirection = !empty($_GET['dir']) ? $_GET['dir'] : 'ASC';
+
+    $href = $_SERVER['REQUEST_URI'];
+    if (!empty($_GET)) {
+        $href = $_SERVER['REQUEST_URI'];
+        $sortDirection = "&dir=";
+        $column = "&col=".$columnName;
+
+        //prepare sort direction
+        if(isset($_GET['col'])){
+            if($_GET['col'] == $columnName)   //if this col was selected previously
+            {
+                $correctDirection = ($_GET['dir'] == $defaultDirection) ? "DESC" : "ASC";
+                $sortDirection .= $correctDirection;
+            }
+            else  //if selected col is different from previous selected col
+            {
+                $sortDirection .= $defaultDirection;
+            }
+        }
+        else    //if col was never set
+        {
+            $sortDirection .= $defaultDirection;
+        }
+
+        //remove previous col and dir from url
+        $arr = explode( '&', $href);
+        foreach ($arr as $item){
+            if(str_contains($item, 'col') || str_contains($item, 'dir')){
+                $pattern = '&'.$item;
+                $href = str_replace($pattern, '', $href);
+            }
+        }
+
+        //rebuild url
+        echo $href. $column . $sortDirection;
     }
 }

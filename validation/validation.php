@@ -64,7 +64,7 @@ function validateAvatar($avatar): int
 {
     $flag = 0;
     //check possible errors: empty, error, sizing, type
-    if (!isset($_FILES[$avatar])) {
+    if (!isset($_FILES[$avatar]) || (isset($_FILES[$avatar]) && empty($_FILES[$avatar]['name']))) {
         $_SESSION['flash_message']['avatar']['empty'] = getMessage('avatar_empty');
         $flag += 1;
     };
@@ -88,26 +88,49 @@ function validateAvatar($avatar): int
 function handleAvatar()
 {
     $error = 0;
-    if (isset($_POST) && isset($_FILES)) {
+
+    //if there is no submission and the user has the data already, skip             (submit: no, user had it: yes)
+    if(isset($_FILES) && empty($_FILES['avatar']['name'])){
+        if(isset($_SESSION['targetToEdit']['0']['avatar']) && !empty($_SESSION['targetToEdit']['0']['avatar'])){
+            return $error;
+        }
+    }
+
+    //there is no submission nor user have it                                        (submit: no, user had it: no)
+    if(empty($_SESSION['targetToEdit']['0']['avatar']) && empty($_FILES['avatar']['name'])){
+        $error += validateAvatar('avatar');
+    }
+
+    //if there is submission, handle the submission                                 (submit: yes, user had it: dont care)
+    if(isset($_FILES) && !empty($_FILES['avatar']['name'])){
         $tempname = $_FILES['avatar']['tmp_name'];
         $folder = ROOT . "/uploads/avatar/";
+        $tempFolder = ROOT . "/uploads/temp/";
 
         $error += validateAvatar('avatar');
 
         //if no error was found, save the image to an actual folder.
         if ($error == 0) {
             $fileType = getFileType($_FILES['avatar']['type']);
-            $fileNameAfterSaved = renameUploadImage($_POST['email']) . '-avatar.' . $fileType;
-            $folder .= $fileNameAfterSaved;
-            if (file_exists($folder)) {
-                unlink($folder);
-                move_uploaded_file($tempname, $folder);
+
+            $fileNameBeforeSaved = renameUploadImage($_POST['email']) . '-avatar.' . $fileType;
+
+            $folder .= $fileNameBeforeSaved;
+            $tempFolder .= $fileNameBeforeSaved;
+
+            $_SESSION['avatar_folder_when_success_update'] = $folder;
+            $_SESSION['avatar_temp'] = $tempFolder;
+
+            if (file_exists($tempFolder)) {
+                unlink($tempFolder);
+                move_uploaded_file($tempname, $tempFolder);
             } else {
-                move_uploaded_file($tempname, $folder);
+                move_uploaded_file($tempname, $tempFolder);
             }
-            return $folder;
+            return $error;
         }
     }
+
     //else return error
     return $error;
 }
@@ -247,7 +270,7 @@ function validateAllInput(): int
     return $flag;
 }
 
-function validateAdminCreateForm($method, $avatarFlag): bool
+function validateAdminCreateForm($method): bool
 {
     $error_flag = 0;
     $error_flag += validateSubmitFormPostAndEmptyRequest($method, $_POST);
@@ -256,8 +279,12 @@ function validateAdminCreateForm($method, $avatarFlag): bool
         return false;
     }
 
-    if (is_numeric($avatarFlag)) {
-        $error_flag += $avatarFlag;
+    $theAvatar = handleAvatar();
+    if ($theAvatar > 0){
+        $error_flag += $theAvatar;
+    } else {
+        $_REQUEST['avatar'] = $theAvatar;
+        $_POST['avatar'] = $theAvatar;
     }
 
     $error_flag += validateAllInput();
@@ -277,7 +304,7 @@ function validateAdminCreateForm($method, $avatarFlag): bool
 //3.1 if not remove $_POST['password'] and ['verify_password']
 //3.2 if yes continue
 //4. validate others field normally
-function validateUpdateForm($method, $id, $avatarFlag): bool
+function validateUpdateForm($method, $id): bool
 {
     $error_flag = 0;
 
@@ -287,8 +314,12 @@ function validateUpdateForm($method, $id, $avatarFlag): bool
         return false;
     }
 
-    if (is_numeric($avatarFlag)) {
-        $error_flag += $avatarFlag;
+    $theAvatar = handleAvatar();
+    if ($theAvatar > 0){
+        $error_flag += $theAvatar;
+    } else {
+        $_REQUEST['avatar'] = $theAvatar;
+        $_POST['avatar'] = $theAvatar;
     }
 
     $error_flag += validateID($id);
@@ -410,7 +441,7 @@ function validateSearchFormForUser($method): bool
     return true;
 }
 
-function validateUpdateFormForUser($method, $id, $avatarFlag): bool
+function validateUpdateFormForUser($method, $id): bool
 {
     $error_flag = 0;
 
@@ -420,8 +451,12 @@ function validateUpdateFormForUser($method, $id, $avatarFlag): bool
         return false;
     }
 
-    if (is_numeric($avatarFlag)) {
-        $error_flag += $avatarFlag;
+    $theAvatar = handleAvatar();
+    if ($theAvatar > 0){
+        $error_flag += $theAvatar;
+    } else {
+        $_REQUEST['avatar'] = $theAvatar;
+        $_POST['avatar'] = $theAvatar;
     }
 
     $error_flag += validateID($id);

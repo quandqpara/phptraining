@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4ffbe23c-1fb7-4eed-8404-eb6eb824b742" name="Changes" comment="Completing all functions for all modules.&#10;Formatting folder controllers and views.&#10;Add sorting functions for search results.&#10;Add title to all pages.">
+    <list default="true" id="4ffbe23c-1fb7-4eed-8404-eb6eb824b742" name="Changes" comment="avatar images">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Helper/common.php" beforeDir="false" afterPath="$PROJECT_DIR$/helper/common.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/message.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/message.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Facebook/facebook_api.php" beforeDir="false" afterPath="$PROJECT_DIR$/Facebook/facebook_api.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/config.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/config.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controllers/default_controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/default_controller.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controllers/frontend/front_controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/frontend/front_controller.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controllers/management/admin_controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/management/admin_controller.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/management/auth_controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/management/auth_controller.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controllers/management/user_controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/management/user_controller.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helper/common.php" beforeDir="false" afterPath="$PROJECT_DIR$/helper/common.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/log.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/BaseModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/model/BaseModel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/UserModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/model/UserModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/interface/QueryInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/model/interface/QueryInterface.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/style.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/common.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/common.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/avatar/nekopeg12-avatar.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/uploads/avatar/nekopeg12-avatar.jpeg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/validation/validation.php" beforeDir="false" afterPath="$PROJECT_DIR$/validation/validation.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/admin/createAdmin.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/createAdmin.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/admin/editAdmin.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/editAdmin.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/admin/editUser.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/editUser.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/admin/home.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/home.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/admin/searchUser.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/searchUser.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/auth/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/auth/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/layouts/application.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/layouts/application.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/front/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/front/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/user/editUser.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/user/editUser.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/user/searchUser.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/user/searchUser.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -100,7 +101,8 @@
       <workItem from="1663208438427" duration="22913000" />
       <workItem from="1663292943086" duration="30374000" />
       <workItem from="1663549325234" duration="33596000" />
-      <workItem from="1663636042837" duration="31780000" />
+      <workItem from="1663636042837" duration="32726000" />
+      <workItem from="1663727867836" duration="38289000" />
     </task>
     <task id="LOCAL-00001" summary="Create DB,&#10;Create Login Interface">
       <created>1662418595991</created>
@@ -200,7 +202,21 @@
       <option name="project" value="LOCAL" />
       <updated>1663585692740</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Testing and Fixing Codes Based on SELFTEST file.&#10;Fixing Sorting Function.&#10;Add missing avatar field check for some functions earlier.">
+      <created>1663670150772</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1663670150772</updated>
+    </task>
+    <task id="LOCAL-00016" summary="avatar images">
+      <created>1663670252319</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1663670252319</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -237,6 +253,8 @@
     <MESSAGE value="Hoàn Thiện Module Admin" />
     <MESSAGE value="Format Code" />
     <MESSAGE value="Completing all functions for all modules.&#10;Formatting folder controllers and views.&#10;Add sorting functions for search results.&#10;Add title to all pages." />
-    <option name="LAST_COMMIT_MESSAGE" value="Completing all functions for all modules.&#10;Formatting folder controllers and views.&#10;Add sorting functions for search results.&#10;Add title to all pages." />
+    <MESSAGE value="Testing and Fixing Codes Based on SELFTEST file.&#10;Fixing Sorting Function.&#10;Add missing avatar field check for some functions earlier." />
+    <MESSAGE value="avatar images" />
+    <option name="LAST_COMMIT_MESSAGE" value="avatar images" />
   </component>
 </project>

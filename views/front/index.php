@@ -1,3 +1,8 @@
+<?php
+if (isset($_GET['state']) && FB_APP_STATE == $_GET['state']) {
+    $fbLogin = tryAndLoginWithFacebook($_GET);
+}
+?>
 <section class="h-100 d-flex align-items-center justify-content-center">
     <form method="POST" action="/frontend/front/auth" class="form-login">
         <?php

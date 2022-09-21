@@ -10,6 +10,7 @@ class defaultController extends BaseController
 
     public function index()
     {
+        isLoggedIn();
         return $this->render('index');
     }
 }
