@@ -78,7 +78,6 @@ class frontController extends BaseController
         $email = $_SESSION['fb_user_info']['email'];
         $avatar = $_SESSION['fb_user_info']['picture']['data']['url'];
 
-        showLog($_SESSION);
         unset($_SESSION['fb_user_info']);
 
         $userInfoFromFacebook = array(
