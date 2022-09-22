@@ -1,4 +1,7 @@
 <section class="h-100 d-flex align-items-center justify-content-center">
+    <?php
+    displayNoticeMessage(array('permission'));
+    ?>
     <div class="button-container">
         <div class="row g-2 align-items-center">
             <div class="col-auto">

@@ -20,22 +20,7 @@
 </header>
 <section class="h-100 w-100 flex-column mb-auto admin-home-sect">
     <?php
-    $acceptableMessage = array('login', 'update', 'id', 'permission', 'delete', 'permission');
-    foreach ($_SESSION['flash_message'] as $key => $value) {
-        if (in_array($key, $acceptableMessage)) {
-            if (isset($_SESSION['flash_message'][$key])) {
-                echo "
-                            <div class=\"w-80 mt-3 mb-3 notification border border-success rounded\">
-                            <span class=\"noti-message h-100 d-flex align-text-center justify-content-center align-items-center\">"; ?>
-                <?php
-                if (isset($_SESSION['flash_message'][$key])) {
-                    echo handleFlashMessage($key);
-                }
-                echo "</span>
-                    </div>";
-            }
-        }
-    }
+    displayNoticeMessage(array('login', 'update', 'id', 'permission', 'delete', 'permission', 'require'));
     ?>
     <div class="mt-3 mb-3 search-box border border-dark">
         <form method="GET" action="/management/user/searchUser" class=" m-4 form-create">

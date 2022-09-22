@@ -355,11 +355,16 @@ function optionalUpdateInputCheck(): int
         return $flag;
     }
 
-    if (isset($_POST['password']) && isset($_POST['verify'])) {
+    if (isset($_POST['password']) || isset($_POST['verify'])) {
         //they are set, it's ok,
         //first check their emptiness
         //----> if empty, just remove them from $_post, and return
         if (empty($_POST['password'])) {
+            if(empty($_POST['verify'])){
+                return $flag;
+            }
+
+            validateVerifyPassword($_POST['password'], $_POST['verify']);
             unset($_POST['password']);
             unset($_POST['verify']);
             return $flag;

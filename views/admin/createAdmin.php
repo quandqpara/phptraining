@@ -33,22 +33,7 @@
 if(str_contains($_SESSION['previous-page'],'edit')){
     clearTemp();
 }
-$acceptableMessage = array('create', 'exist');
-foreach ($_SESSION['flash_message'] as $key => $value) {
-    if (in_array($key, $acceptableMessage)) {
-        if (isset($_SESSION['flash_message'][$key])) {
-            echo "
-                            <div class=\"w-80 mt-3 mb-3 notification border border-success rounded\">
-                            <span class=\"noti-message h-100 d-flex align-text-center justify-content-center align-items-center\">"; ?>
-            <?php
-            if (isset($_SESSION['flash_message'][$key])) {
-                echo handleFlashMessage($key);
-            }
-            echo "</span>
-                    </div>";
-        }
-    }
-}
+displayNoticeMessage(array('create', 'exist'));
 ?>
 <section class="d-flex flex-column align-items-center justify-content-start">
     <div class="outer-container">

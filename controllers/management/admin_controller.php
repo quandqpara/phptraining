@@ -9,17 +9,9 @@ class adminController extends BaseController
 {
     public function __construct()
     {
-        if (!isSuperAdmin()) {
-            if (!isAdmin()) {
-                session_unset();
-                $_SESSION['flash_message']['permission']['no_permission'] = getMessage('no_permission_admin');
-                header('Location: /management/auth/index');
-                exit;
-            } elseif (isAdmin()) {
-                $_SESSION['flash_message']['permission']['no_permission'] = getMessage('no_permission_super_admin');
-                header('Location: /management/user/searchUser');
-                exit;
-            }
+        if (!isSuperAdmin()) {              //--> not superadmin
+            $_SESSION['flash_message']['permission']['no_permission'] = getMessage('no_permission_super_admin');
+            isLoggedIn();
         }
         $this->folder = 'admin';
         $this->adminModel = new AdminModel();

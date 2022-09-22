@@ -9,10 +9,8 @@ class userController extends BaseController
     public function __construct()
     {
         if (!isAdmin()) {
-            session_unset();
             $_SESSION['flash_message']['permission']['no_permission'] = getMessage('no_permission_admin');
-            header('Location: /management/auth/index');
-            exit;
+            isLoggedIn();
         }
         $this->folder = 'user';
         $this->userModel = new UserModel();
@@ -22,6 +20,10 @@ class userController extends BaseController
     //search front page
     public function searchPageUser()
     {
+        if(isSuperAdmin()){
+            header('Location: /management/admin/searchPageUser');
+            exit;
+        }
         return $this->render('searchUser');
     }
 
@@ -31,6 +33,10 @@ class userController extends BaseController
     {
         if (isset($_GET['id'])) {
             $updatingUserInfo = $this->userModel->searchOneByID($_GET['id']);
+        }
+        if(isSuperAdmin()){
+            header('Location: /management/admin/editPageUser?id='.$_GET['id']);
+            exit;
         }
         return $this->render('editUser', ['targetUserToUpdate' => $updatingUserInfo]);
     }

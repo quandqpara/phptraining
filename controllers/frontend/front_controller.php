@@ -18,11 +18,17 @@ class frontController extends BaseController
     public function index()
     {
         isLoggedIn();
+        if (isset($_GET['state']) && FB_APP_STATE == $_GET['state']) {
+            $fbLogin = tryAndLoginWithFacebook($_GET);
+        }
         return $this->render('index');
     }
 
     public function profile()
     {
+        if(isAdmin()){
+            header('Location: /management/auth/index');
+        }
         return $this->render('profile');
     }
 
@@ -68,6 +74,7 @@ class frontController extends BaseController
 
     function processingFacebookData()
     {
+        writeLog("in here!");
         if (!isset($_SESSION['fb_user_info'])) {
             $_SESSION['flash_message']['login']['failed'] = getMessage('login_fb_failed');
             header('Location: frontend/front/index');

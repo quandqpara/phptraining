@@ -63,7 +63,12 @@
                     <div class="col-2"></div>
                     <div class="col-4 avatar-display border-round">
                         <?php
-                        if (isset($targetUserToUpdate['0']['avatar'])) {
+                        if (isset($targetUserToUpdate['0']['avatar']) && isset($_SESSION['avatar_temp'])){
+                            $imagePath= $_SESSION['avatar_temp'];
+                            $correctPath = strstr($imagePath, '/uploads');
+                            echo "<img src=\"" . $correctPath . "\">";
+                        }
+                        elseif (isset($targetUserToUpdate['0']['avatar']) && !isset($_SESSION['avatar_temp'])) {
                             $imagePath = $targetUserToUpdate['0']['avatar'];
                             if (str_contains($imagePath, 'platform-lookaside.fbsbx.com')) {
                                 $correctPath = $imagePath;

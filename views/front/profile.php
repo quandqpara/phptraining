@@ -11,18 +11,7 @@
 </header>
 <section class="user-info-section d-flex flex-column align-items-center justify-content-start overflow-hidden">
     <?php
-
-    if (isset($_SESSION['flash_message']['login'])) {
-        echo "
-                <div class=\"w-80 mt-3 mb-3 notification border border-success rounded\">
-                    <span class=\"noti-message h-100 d-flex align-text-center justify-content-center align-items-center\">"; ?>
-        <?php
-        if (isset($_SESSION['flash_message']['login'])) {
-            echo handleFlashMessage('login');
-        }
-        echo "</span>
-                </div>";
-    }
+    displayNoticeMessage(array('login', 'permission', 'require'));
     ?>
     <div class="outer-container">
         <div class="title"><strong>My Profile</strong></div>

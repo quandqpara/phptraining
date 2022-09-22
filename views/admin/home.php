@@ -29,28 +29,12 @@
         </div>
     </nav>
 </header>
+<?php
+clearTemp();
+displayNoticeMessage(array('login', 'update', 'edit', 'create', 'id', 'permission', 'delete', 'data', 'require'));
+?>
 <section class="h-100 w-100 flex-column mb-auto admin-home-sect">
-    <?php
-    clearTemp();
-    savePreviousPageURI();
-    showLog($_SESSION['sort'], true);
-    $acceptableMessage = array('login', 'update', 'edit', 'create', 'id', 'permission', 'delete', 'data');
-    foreach ($_SESSION['flash_message'] as $key => $value) {
-        if (in_array($key, $acceptableMessage)) {
-            if (isset($_SESSION['flash_message'][$key])) {
-                echo "
-                            <div class=\"w-80 mt-3 mb-3 notification border border-success rounded\">
-                            <span class=\"noti-message h-100 d-flex align-text-center justify-content-center align-items-center\">"; ?>
-                <?php
-                if (isset($_SESSION['flash_message'][$key])) {
-                    echo handleFlashMessage($key);
-                }
-                echo "</span>
-                    </div>";
-            }
-        }
-    }
-    ?>
+
     <div class="mt-3 mb-3 search-box border border-dark">
         <form method="GET" action="/management/admin/searchAdmin" class=" m-4 form-create">
             <!-- Email input -->
@@ -153,3 +137,4 @@
         </div>
     </div>
 </section>
+<?php savePreviousPageURI(); ?>

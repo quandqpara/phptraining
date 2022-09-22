@@ -7,8 +7,6 @@ function makeFacebookApiCall($endPoint, $params)
     curl_setopt($ch, CURLOPT_URL, $endPoint . '?' . http_build_query($params));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-    curl_setopt($ch, CURLOPT_COOKIESESSION, false);
 
     $fbResponse = curl_exec($ch);
     $fbResponse = json_decode($fbResponse, TRUE);
@@ -35,7 +33,6 @@ function getFacebookLoginUrl()
         'scope' => 'email',
         'auth_type' => 'rerequest'
     );
-
     return $endPoint . '?' . http_build_query($params);
 }
 
@@ -61,18 +58,17 @@ function tryAndLoginWithFacebook($get)
         $message = $get['error_description'] ?? '';
     } else {
         $accessTokenInfo = getAccessToken($get['code']);
+
         if ($accessTokenInfo['has_errors']) {
             $message = $get['error_description'] ?? '';
         } else {
             $_SESSION['fb_access_token'] = $accessTokenInfo['fb_response']['access_token'];
-
             $fbUserInfo = getFacebookUserInfo($_SESSION['fb_access_token']);
 
             if (!$fbUserInfo['has_errors'] && !empty($fbUserInfo['fb_response']['id']) && !empty($fbUserInfo['fb_response']['email'])) {
                 $status = 'ok';
                 $_SESSION['fb_user_info'] = $fbUserInfo['fb_response'];
                 //REDIRECT TO LOGGED IN BY FACEBOOK PROCESSING PAGE
-
                 $host = $_SERVER['HTTP_HOST'];
                 header('Location: https://' . $host . '/frontend/front/processingFacebookData');
                 exit;
@@ -94,6 +90,5 @@ function getFacebookUserInfo($accessToken)
         'fields' => 'first_name, last_name, email, picture',
         'access_token' => $accessToken,
     );
-
     return makeFacebookApiCall($endPoint, $params);
 }

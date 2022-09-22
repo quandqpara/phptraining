@@ -54,17 +54,21 @@ function isUser()
 
 function isLoggedIn()
 {
-    if (isset($_SESSION['admin']['role']) == 1) {
+
+    if (isset($_SESSION['admin']['role']) && $_SESSION['admin']['role'] == 1) {
+        $_SESSION['flash_message']['require']['require_logout'] = getMessage('admin_logged_in');
         header('Location: /management/user/searchPageUser');
         exit;
     }
 
-    if (isset($_SESSION['admin']['role']) == 2) {
-        header('Location: /management/admin/searchPageUser');
+    if (isset($_SESSION['admin']['role']) && $_SESSION['admin']['role'] == 2) {
+        $_SESSION['flash_message']['require']['require_logout'] = getMessage('super_admin_logged_in');
+        header('Location: /management/admin/home');
         exit;
     }
 
     if (isset($_SESSION['user'])) {
+        $_SESSION['flash_message']['require']['require_logout'] = getMessage('user_logged_in');
         header('Location: /frontend/front/profile');
         exit;
     }
@@ -477,5 +481,25 @@ function prepareColumnSort($columnName, $defaultDirection){
 
         //rebuild url
         echo $href. $column . $sortDirection;
+    }
+}
+
+function displayNoticeMessage(array $possibleMessages){
+    error_reporting(E_PARSE || E_ERROR);
+    $acceptableMessage = $possibleMessages;
+    foreach ($_SESSION['flash_message'] as $key => $value) {
+        if (in_array($key, $acceptableMessage)) {
+            if (isset($_SESSION['flash_message'][$key])) {
+                echo "
+                            <div class=\"w-80 mt-3 mb-3 notification border border-success rounded\">
+                            <span class=\"noti-message h-100 d-flex align-text-center justify-content-center align-items-center\">"; ?>
+                <?php
+                if (isset($_SESSION['flash_message'][$key])) {
+                    echo handleFlashMessage($key);
+                }
+                echo "</span>
+                    </div>";
+            }
+        }
     }
 }

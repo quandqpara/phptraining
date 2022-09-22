@@ -47,6 +47,9 @@ return [
     'login_failed' => 'Your email or password might be incorrect.',
     'login_fb_failed' => 'Failed to login with faceboook!',
     'logout' => 'You have been logged out!',
+    'admin_logged_in' => 'Already logged in as Admin! Please logout before trying to log in to another account!',
+    'user_logged_in' => 'Already logged in as User! Please logout before trying to log in to another account!',
+    'super_admin_logged_in' => 'Already logged in as Super Admin! Please logout before trying to log in to another account!',
 
     //data
     'data-not-found' => 'Data does not exist!',

@@ -15,6 +15,7 @@ class authController extends BaseController
     //login
     public function index()
     {
+        isLoggedIn();
         return $this->render('index');
     }
 
