@@ -1,28 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4ffbe23c-1fb7-4eed-8404-eb6eb824b742" name="Changes" comment="..">
+    <list default="true" id="4ffbe23c-1fb7-4eed-8404-eb6eb824b742" name="Changes" comment="Fixing some minor mistakes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Facebook/facebook_api.php" beforeDir="false" afterPath="$PROJECT_DIR$/Facebook/facebook_api.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/config.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/config.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config/message.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/message.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/frontend/front_controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/frontend/front_controller.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/management/admin_controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/management/admin_controller.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/management/auth_controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/management/auth_controller.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/management/user_controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/management/user_controller.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/helper/common.php" beforeDir="false" afterPath="$PROJECT_DIR$/helper/common.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/log.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/validation/validation.php" beforeDir="false" afterPath="$PROJECT_DIR$/validation/validation.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/admin/createAdmin.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/createAdmin.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/admin/editUser.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/editUser.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/admin/home.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/home.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/admin/searchUser.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/searchUser.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/auth/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/auth/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/default/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/default/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/front/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/front/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/front/profile.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/front/profile.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/user/editUser.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/user/editUser.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/user/searchUser.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/user/searchUser.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,7 +46,7 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/xampp/htdocs/PHPtraining/views/admin&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/xampp/htdocs/PHPtraining&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.general&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
@@ -101,7 +83,9 @@
       <workItem from="1663549325234" duration="33596000" />
       <workItem from="1663636042837" duration="32726000" />
       <workItem from="1663727867836" duration="38571000" />
-      <workItem from="1663806710571" duration="13964000" />
+      <workItem from="1663806710571" duration="14638000" />
+      <workItem from="1663915286063" duration="118000" />
+      <workItem from="1663919912417" duration="300000" />
     </task>
     <task id="LOCAL-00001" summary="Create DB,&#10;Create Login Interface">
       <created>1662418595991</created>
@@ -229,7 +213,14 @@
       <option name="project" value="LOCAL" />
       <updated>1663806941568</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Fixing some minor mistakes">
+      <created>1663822139974</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1663822139974</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -270,6 +261,7 @@
     <MESSAGE value="avatar images" />
     <MESSAGE value="Complete 8/8 Feedbacks for day 21/09" />
     <MESSAGE value=".." />
-    <option name="LAST_COMMIT_MESSAGE" value=".." />
+    <MESSAGE value="Fixing some minor mistakes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixing some minor mistakes" />
   </component>
 </project>

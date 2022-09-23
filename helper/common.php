@@ -54,7 +54,6 @@ function isUser()
 
 function isLoggedIn()
 {
-
     if (isset($_SESSION['admin']['role']) && $_SESSION['admin']['role'] == 1) {
         $_SESSION['flash_message']['require']['require_logout'] = getMessage('admin_logged_in');
         header('Location: /management/user/searchPageUser');
@@ -70,6 +69,11 @@ function isLoggedIn()
     if (isset($_SESSION['user'])) {
         $_SESSION['flash_message']['require']['require_logout'] = getMessage('user_logged_in');
         header('Location: /frontend/front/profile');
+        exit;
+    }
+    elseif(!isset($_SESSION['admin']) && !isset($_SESSION['user'])) {
+        $_SESSION['flash_message']['login']['not_logged_in'] = getMessage('not_logged_in');
+        header('Location: /frontend/front/index');
         exit;
     }
 }

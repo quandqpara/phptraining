@@ -45,6 +45,7 @@ return [
     'invalid_account_status' => 'You has been banned. Contact for support.',
     'login_success' => ' has been logged in.',
     'login_failed' => 'Your email or password might be incorrect.',
+    'not_logged_in' => 'You have not logged in',
     'login_fb_failed' => 'Failed to login with faceboook!',
     'logout' => 'You have been logged out!',
     'admin_logged_in' => 'Already logged in as Admin! Please logout before trying to log in to another account!',
